@@ -244,7 +244,7 @@ def test_flock_translates_as_a_group():
 
 
 def test_gravity_topology_pulls_affine_devices_together():
-    """The CGKAR attract step, now expressed as somewhere to fly to."""
+    """The force-directed attract step, now expressed as somewhere to fly to."""
     top = create("topology", "gravity", learning_rate=0.3, separation_margin=1.0)
     p = np.array([[0.0, 0.0, 0.0], [10.0, 0.0, 0.0], [0.0, 10.0, 0.0]])
     w = np.array([[0.0, 5.0, 0.0], [5.0, 0.0, 0.0], [0.0, 0.0, 0.0]])

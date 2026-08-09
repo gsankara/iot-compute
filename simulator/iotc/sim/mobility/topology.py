@@ -5,8 +5,8 @@ move"; topology dynamics answers "where should it be going", and the two are
 deliberately independent -- the same flocking law runs on drones and on floats,
 and the float simply takes longer to get there.
 
-The interesting plugin is :class:`GravityDynamics`.  It is the attract/repel law
-from ``cgkar_gravity.py`` lifted out of an abstract embedding space and into the
+The interesting plugin is :class:`GravityDynamics`.  It is a force-directed
+attract/repel law lifted out of an abstract embedding space and into the
 physical one, so that "these vertices are mutually adjacent" is expressed by the
 devices actually flying together.  Two things change when you do that, and both
 are modelled here: bodies have volume and cannot occupy the same point, and they
@@ -229,12 +229,12 @@ class FlockTopology(TopologyDynamics):
 
 
 # --------------------------------------------------------------------------
-@register("topology", "gravity", "cgkar", "attract_repel")
+@register("topology", "gravity", "attract_repel")
 class GravityTopology(TopologyDynamics):
-    """The CGKAR attract/repel law, physically realized.
+    """A force-directed attract/repel law, physically realized.
 
     Each device is drawn toward the affinity-weighted centroid of its partners,
-    exactly as in ``cgkar_gravity.attract_step``::
+    exactly as in the abstract attraction step::
 
         target[i] = p[i] + lr * (sum_j W[i,j] p[j] / sum_j W[i,j] - p[i])
 

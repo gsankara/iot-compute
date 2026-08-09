@@ -83,23 +83,24 @@ whose absence the drift fault exposes.
 `REPLICATE`, `CHECK`) plus a per-device `DeviceProgram` and a global `Manifest`.
 `iotc/sim/node.py` becomes the VM that executes it.
 
-**B10 The clique workload, end to end** — the flagship demonstration that
-physical proximity *is* the adjacency test.  Based on the author's prior CGKAR
-clique-finding work (separate repository):
+**B10 Maximum clique, end to end** — the flagship demonstration that physical
+proximity *is* the adjacency test:
 
-1. FastMap-embed under the CGKAR attraction weight
-   `W[i,j] = |N(i) ∩ N(j)| + A[i,j]`, replacing `cgkar_gravity.spectral_init` —
+1. FastMap-embed under the **common-neighbour attraction weight**
+   `W[i,j] = |N(i) ∩ N(j)| + A[i,j]`, replacing spectral initialization —
    near-linear instead of eigendecomposition;
-2. LSH buckets nominate dense balls as candidate cliques;
+2. **LSH** buckets nominate dense balls as candidate cliques;
 3. the devices holding those vertices **physically converge**, forming an
    all-to-all optical mesh, so O(k²) mutual-adjacency verification becomes **one
    physical broadcast round**;
-4. non-members are repelled and their affinity decayed — the `cgkar_gravity`
-   law, now flown.  `GravityTopology.repel()` already implements this.
+4. non-members are repelled and their affinity decayed — a **force-directed
+   attraction/repulsion** law, now flown.  `GravityTopology.repel()` already
+   implements this.
 
-Evaluated against Bron–Kerbosch, colour-bound branch and bound, simulated
-annealing and the existing RINGS/GRAVITY baselines, on solution quality,
-wall-clock, *and* the new physical axes (rounds, motion energy, photons).
+Evaluated against **Bron–Kerbosch**, **colour-bound branch and bound**,
+**simulated annealing** and a **greedy degeneracy-order** baseline, on solution
+quality, wall-clock, *and* the new physical axes (rounds, motion energy,
+photons).
 
 ---
 

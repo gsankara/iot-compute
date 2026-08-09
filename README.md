@@ -69,7 +69,8 @@ python -m iotc.cli sim configs/liquid_swarm.yaml --connect --traffic 30 --until 
 The compiler's placement pass is built on graph FastMap (Li & Kumar, *Revisiting
 FastMap: New Applications*, arXiv:2503.11908), which embeds a graph into ℝ^κ in
 near-linear time preserving shortest-path distance.  The NP-hard workload family
-derives from the author's CGKAR clique-finding work.
+is the standard one — maximum clique, maximum independent set, graph colouring,
+capacitated k-median and max-cut.
 
 ## Licence
 
