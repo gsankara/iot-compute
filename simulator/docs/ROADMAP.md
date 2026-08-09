@@ -84,8 +84,8 @@ whose absence the drift fault exposes.
 `iotc/sim/node.py` becomes the VM that executes it.
 
 **B10 The clique workload, end to end** — the flagship demonstration that
-physical proximity *is* the adjacency test.  Based on the user's CGKAR work in
-`C:\Users\Ganesh C S\Documents\cgkar\`:
+physical proximity *is* the adjacency test.  Based on the author's prior CGKAR
+clique-finding work (separate repository):
 
 1. FastMap-embed under the CGKAR attraction weight
    `W[i,j] = |N(i) ∩ N(j)| + A[i,j]`, replacing `cgkar_gravity.spectral_init` —
