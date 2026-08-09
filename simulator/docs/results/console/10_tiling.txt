@@ -1,0 +1,82 @@
+workload    class   tiler             tasks        cut  halos        MiB x traffic       AI  fit
+------------------------------------------------------------------------------------------------
+allreduce   mote-c  geometric         8->64          8     56      224.0      8.00     0.04   NO
+allreduce   mote-c  planar            8->64          8     56      224.0      8.00     0.04   NO
+allreduce   mote-c  slab              8->64          8     56      224.0      8.00     0.04   NO
+bfs         mote-c  geometric         8->11          3      3        5.3      1.21     0.51   ok
+bfs         mote-c  planar            8->11          3      3        5.3      1.21     0.51   ok
+bfs         mote-c  slab              8->11          3      3        5.3      1.21     0.51   ok
+coloring    mote-c  geometric          8->8          1      0       16.4      1.00     0.92   ok
+coloring    mote-c  planar             8->8          1      0       16.4      1.00     0.92   ok
+coloring    mote-c  slab               8->8          1      0       16.4      1.00     0.92   ok
+fft         mote-c  geometric      4->25920       6480  25916   103680.0   6480.00     0.00   NO
+fft         mote-c  planar         4->25920       6480  25916   103680.0   6480.00     0.00   NO
+fft         mote-c  slab           4->25920       6480  25916   103680.0   6480.00     0.00   NO
+summa       mote-c  geometric      4->19600      70x70    552     8896.0    139.00    14.73   ok
+summa       mote-c  planar         4->19600      70x70    552     8896.0    139.00    14.73   ok
+summa       mote-c  slab           4->73920      18480  73916  1182720.0  18480.00     0.11   NO
+kmedian     mote-c  geometric          8->8          1      0       13.3      1.00     3.06   ok
+kmedian     mote-c  planar             8->8          1      0       13.3      1.00     3.06   ok
+kmedian     mote-c  slab               8->8          1      0       13.3      1.00     3.06   ok
+maxclique   mote-c  geometric          8->8          1      0       13.3      1.00     1.18   ok
+maxclique   mote-c  planar             8->8          1      0       13.3      1.00     1.18   ok
+maxclique   mote-c  slab               8->8          1      0       13.3      1.00     1.18   ok
+maxcut      mote-c  geometric          8->8          1      0       16.4      1.00     0.95   ok
+maxcut      mote-c  planar             8->8          1      0       16.4      1.00     0.95   ok
+maxcut      mote-c  slab               8->8          1      0       16.4      1.00     0.95   ok
+mis         mote-c  geometric          8->8          1      0       26.3      1.00     0.31   ok
+mis         mote-c  planar             8->8          1      0       26.3      1.00     0.31   ok
+mis         mote-c  slab               8->8          1      0       26.3      1.00     0.31   ok
+spmv        mote-c  geometric         8->32          4     24      325.6      1.86     0.69   ok
+spmv        mote-c  planar            8->32          4     24      325.6      1.86     0.69   ok
+spmv        mote-c  slab              8->32          4     24      325.6      1.86     0.69   ok
+stencil2d   mote-c  geometric        4->144        6x6     40       34.4     11.00   279.27   ok
+stencil2d   mote-c  planar           4->144        6x6     40       34.4     11.00   279.27   ok
+stencil2d   mote-c  slab             4->132         33    128      103.1     33.00    93.09   ok
+stencil3d   mote-c  geometric        8->144      3x3x2     40      325.0      4.33    39.38   ok
+stencil3d   mote-c  planar           8->160        5x4     56      425.0      5.67    30.12   ok
+stencil3d   mote-c  slab             8->272         34    264     1725.0     23.00     7.42   ok
+
+workload    class   tiler             tasks        cut  halos        MiB x traffic       AI  fit
+------------------------------------------------------------------------------------------------
+allreduce   mote-m  geometric          8->8          1      0       28.0      1.00     0.29   ok
+allreduce   mote-m  planar             8->8          1      0       28.0      1.00     0.29   ok
+allreduce   mote-m  slab               8->8          1      0       28.0      1.00     0.29   ok
+bfs         mote-m  geometric          8->8          1      0        4.4      1.00     0.62   ok
+bfs         mote-m  planar             8->8          1      0        4.4      1.00     0.62   ok
+bfs         mote-m  slab               8->8          1      0        4.4      1.00     0.62   ok
+coloring    mote-m  geometric          8->8          1      0       16.4      1.00     0.92   ok
+coloring    mote-m  planar             8->8          1      0       16.4      1.00     0.92   ok
+coloring    mote-m  slab               8->8          1      0       16.4      1.00     0.92   ok
+fft         mote-m  geometric         4->16          4     12       64.0      4.00     6.88   NO
+fft         mote-m  planar            4->16          4     12       64.0      4.00     6.88   NO
+fft         mote-m  slab              4->16          4     12       64.0      4.00     6.88   NO
+summa       mote-m  geometric        4->484      11x11     80     1344.0     21.00    97.52   ok
+summa       mote-m  planar           4->484      11x11     80     1344.0     21.00    97.52   ok
+summa       mote-m  slab            4->5000       1250   4996    80000.0   1250.00     1.64   NO
+kmedian     mote-m  geometric          8->8          1      0       13.3      1.00     3.06   ok
+kmedian     mote-m  planar             8->8          1      0       13.3      1.00     3.06   ok
+kmedian     mote-m  slab               8->8          1      0       13.3      1.00     3.06   ok
+maxclique   mote-m  geometric          8->8          1      0       13.3      1.00     1.18   ok
+maxclique   mote-m  planar             8->8          1      0       13.3      1.00     1.18   ok
+maxclique   mote-m  slab               8->8          1      0       13.3      1.00     1.18   ok
+maxcut      mote-m  geometric          8->8          1      0       16.4      1.00     0.95   ok
+maxcut      mote-m  planar             8->8          1      0       16.4      1.00     0.95   ok
+maxcut      mote-m  slab               8->8          1      0       16.4      1.00     0.95   ok
+mis         mote-m  geometric          8->8          1      0       26.3      1.00     0.31   ok
+mis         mote-m  planar             8->8          1      0       26.3      1.00     0.31   ok
+mis         mote-m  slab               8->8          1      0       26.3      1.00     0.31   ok
+spmv        mote-m  geometric          8->8          1      0      175.3      1.00     1.28   ok
+spmv        mote-m  planar             8->8          1      0      175.3      1.00     1.28   ok
+spmv        mote-m  slab               8->8          1      0      175.3      1.00     1.28   ok
+stencil2d   mote-m  geometric         4->24        3x2     12       12.5      4.00   768.00   ok
+stencil2d   mote-m  planar            4->24        3x2     12       12.5      4.00   768.00   ok
+stencil2d   mote-m  slab              4->20          5     16       15.6      5.00   614.40   ok
+stencil3d   mote-m  geometric         8->32      2x2x1     16      175.0      2.33    73.14   ok
+stencil3d   mote-m  planar            8->32        2x2     16      175.0      2.33    73.14   ok
+stencil3d   mote-m  slab              8->24          3     16      175.0      2.33    73.14   ok
+
+geometric vs slab over 11 tiled cases: 18.91x less traffic on average (best 132.95x), 2.14x fewer pieces
+cannot be tiled onto the part at all (halo exceeds RAM): allreduce on mote-c, fft on mote-c, fft on mote-m, summa on mote-c, summa on mote-m
+worst traffic amplification: summa under slab on mote-c, 18480.0x
+58 of 61 fitted tilings are still aim-dominated -- tiling does not rescue B6

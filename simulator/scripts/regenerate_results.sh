@@ -120,4 +120,14 @@ echo "== 8. a single link budget =="
     | tee "$OUT/console/08_link_budget.txt"
 
 echo
+echo "== 9. B0 -- what each workload demands of the hardware =="
+"${PY[@]}" -m iotc.cli graph --out "$OUT/compiler/b0" \
+    | tee "$OUT/console/09_workload_characterization.txt"
+
+echo
+echo "== 10. B1 -- what making it fit costs =="
+"${PY[@]}" -m iotc.cli tile --out "$OUT/compiler/b1" \
+    | tee "$OUT/console/10_tiling.txt"
+
+echo
 echo "done -- artefacts in $OUT/"

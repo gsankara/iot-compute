@@ -74,7 +74,10 @@ class Stencil2D(Workload):
             flop, ws, src, dst, pay,
             name=f"stencil2d[{self.nx}x{self.ny}/{self.tx}x{self.ty}]",
             iterations=self.iterations,
-            kind="stencil",
+            # The kind carries the dimensionality because B1 cuts along the axes
+            # a task actually has; calling both stencils "stencil" would let the
+            # tiler invent a third axis for a 2D grid.
+            kind="stencil2d",
             label=label,
         )
 
@@ -132,7 +135,7 @@ class Stencil3D(Workload):
             flop, ws, src, dst, pay,
             name=f"stencil3d[{self.nx}x{self.ny}x{self.nz}/{self.tx}x{self.ty}x{self.tz}]",
             iterations=self.iterations,
-            kind="stencil",
+            kind="stencil3d",
             label=label,
         )
 

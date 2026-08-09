@@ -232,6 +232,24 @@ def _cmd_graph(args) -> int:
 
 
 # --------------------------------------------------------------------------
+def _cmd_tile(args) -> int:
+    """Tile workloads onto a device class and report what the cut costs."""
+    from .bench import tile_bench
+
+    rows = tile_bench.run(
+        args.workloads or None,
+        tuple(args.classes or tile_bench.DEFAULT_CLASSES),
+        tuple(args.tiler or tile_bench.DEFAULT_MODELS),
+        out=args.out,
+    )
+    for cls in sorted({r["device_class"] for r in rows}):
+        print(tile_bench.report(rows, cls))
+        print()
+    print(tile_bench.verdict(rows))
+    return 0
+
+
+# --------------------------------------------------------------------------
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="iotc", description=__doc__)
     sub = p.add_subparsers(dest="command", required=True)
@@ -299,6 +317,18 @@ def build_parser() -> argparse.ArgumentParser:
     graph.add_argument("--dump", default=None, metavar="PATH",
                        help="write the first workload's task graph as JSON and stop")
     graph.set_defaults(func=_cmd_graph)
+
+    tile = sub.add_parser(
+        "tile", help="split workloads to fit a device class and score the cut (B1)"
+    )
+    tile.add_argument("workloads", nargs="*",
+                      help="workload names; default is every registered one")
+    tile.add_argument("--class", dest="classes", action="append",
+                      help="device class to tile onto (repeatable)")
+    tile.add_argument("--tiler", action="append",
+                      help="tiler plugin to compare (repeatable)")
+    tile.add_argument("--out", default=None, help="directory for CSV and JSON output")
+    tile.set_defaults(func=_cmd_tile)
 
     return p
 

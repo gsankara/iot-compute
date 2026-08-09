@@ -276,6 +276,91 @@ obvious *which* term killed it.
 
 ---
 
+## 9. B0 — what each workload demands of the hardware
+
+```bash
+python -m iotc.cli graph --class mote-c
+```
+
+```
+workload    class      tasks  edges  deg  ws/RAM   fit tiles        AI    aim deg/tx
+------------------------------------------------------------------------------------
+allreduce   mote-c        16     16    2    0.50  1.00     1      0.27  0.963    1.0
+bfs         mote-c        16    120   15    0.02  1.00     1      0.56  1.000    7.5
+coloring    mote-c        16    120   15    0.00  1.00     1      0.85  1.000    7.5
+fft         mote-c         8     12    3    2.00  0.00     2     16.67  0.924    1.5
+summa       mote-c        16     48    6    0.75  1.00     1    170.67  0.961    3.0
+kmedian     mote-c        16    120   15    0.00  1.00     1      1.23  1.000    7.5
+maxclique   mote-c        16    120   15    0.00  1.00     1      0.78  1.000    7.5
+maxcut      mote-c        16    120   15    0.00  1.00     1      0.88  1.000    7.5
+mis         mote-c        16    120   15    0.00  1.00     1      0.29  1.000    7.5
+spmv        mote-c        16    120   15    0.02  1.00     1      1.20  1.000    7.5
+stencil2d   mote-c        16     24    4    0.13  1.00     1    128.00  1.000    2.0
+stencil3d   mote-c         8     12    3    0.27  1.00     1     42.67  0.999    1.5
+```
+
+Three things fall out, and each names a later pass rather than a statistic.
+
+**Every one of the twelve is aim-dominated** — the least affected still spends
+92% of its link time slewing rather than sending.  Nothing available to B0 or B1
+changes this; only amortising the retarget does, which is B6.
+
+**Eleven of twelve want more simultaneous neighbours than the part has
+transceivers**, by up to 7.5×.  B5 cannot solve beam assignment as a matching;
+it has to time-share.
+
+**Arithmetic intensity spans 630×**, from 0.27 FLOP/B for an all-reduce to 170.7
+for SUMMA.  One scheduling strategy will not serve that range.
+
+---
+
+## 10. B1 — what making it fit costs
+
+```bash
+python -m iotc.cli tile --class mote-c
+```
+
+Instances sized to overflow the part; every tiler is asked for the same fit, and
+they are scored on the traffic it took to get there.
+
+```
+workload    class   tiler             tasks        cut  halos        MiB x traffic       AI  fit
+------------------------------------------------------------------------------------------------
+stencil2d   mote-c  geometric        4->144        6x6     40       34.4     11.00   279.27   ok
+stencil2d   mote-c  slab             4->132         33    128      103.1     33.00    93.09   ok
+stencil3d   mote-c  geometric        8->144      3x3x2     40      325.0      4.33    39.38   ok
+stencil3d   mote-c  planar           8->160        5x4     56      425.0      5.67    30.12   ok
+stencil3d   mote-c  slab             8->272         34    264     1725.0     23.00     7.42   ok
+summa       mote-c  geometric      4->19600      70x70    552     8896.0    139.00    14.73   ok
+summa       mote-c  slab           4->73920      18480  73916  1182720.0  18480.00     0.11   NO
+```
+
+```
+geometric vs slab over 11 tiled cases: 18.91x less traffic on average (best 132.95x),
+2.14x fewer pieces
+cannot be tiled onto the part at all (halo exceeds RAM): allreduce on mote-c,
+fft on mote-c, fft on mote-m, summa on mote-c, summa on mote-m
+worst traffic amplification: summa under slab on mote-c, 18480.0x
+58 of 61 fitted tilings are still aim-dominated -- tiling does not rescue B6
+```
+
+**The shape of the cut is the whole cost.**  Added traffic is `halo × Σ(fᵢ − 1)`,
+so cutting *k* ways along one axis costs `(k−1)` halos while cutting a cube costs
+`d·(k^(1/d) − 1)`.  For SUMMA that is the difference between a tiling that fits
+(70×70, 139× traffic) and one that does not fit at all after 18,480 slices.
+Geometric cutting averages **18.9× less traffic** than slab across the family.
+
+**Some workloads cannot be tiled onto a part at any granularity.**  The FFT
+butterfly exchanges half its points every crossing stage and slicing a rank does
+not shrink that, so the halo alone exceeds RAM.  B1 reports this as a halo floor
+rather than subdividing forever — the answer is a bigger part, not a finer cut.
+
+**Tiling does not rescue B6.**  58 of the 61 tilings that fit are still
+aim-dominated, and every one of them has *more* edges than before.  Making a
+problem fit makes the scheduling problem harder, not easier.
+
+---
+
 ## Reproducibility
 
 Every run is seeded, and determinism is treated as a correctness property rather

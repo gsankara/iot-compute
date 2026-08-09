@@ -27,10 +27,11 @@ problem graph ──FastMap──▶ 3D placement ──▶ motion plan ──�
 
 ## Status
 
-**Phase A (simulator) is complete and tested.**  Phase B has started: **B0**,
-the compiler IR and its twelve workload frontends, is implemented, tested and
-benched (`iotc graph`).  The remaining compiler passes and the large-scale
-testbench follow; see `docs/ROADMAP.md`.
+**Phase A (simulator) is complete and tested.**  Phase B is under way: **B0**
+(the compiler IR and its twelve workload frontends, `iotc graph`) and **B1**
+(tiling to fit a target part, `iotc tile`) are implemented, tested and benched.
+The remaining compiler passes and the large-scale testbench follow; see
+`docs/ROADMAP.md`.
 
 ## Install
 
@@ -71,6 +72,12 @@ Ask what a problem demands of the hardware before compiling it:
 
 ```bash
 iotc graph stencil3d maxclique --class mote-c
+```
+
+Split it to fit a part, and see what the shape of the cut costs:
+
+```bash
+iotc tile stencil3d gemm --class mote-c
 ```
 
 In Python:
@@ -121,6 +128,7 @@ iotc/
   compiler/
     ir.py       the TaskGraph every pass consumes                    (B0)
     frontends/  twelve stock workloads and their graph generators    (B0)
+    tile.py     split tasks to fit a part; the cut's shape is its cost (B1)
   bench/        design-space sweeps, fault campaigns, per-pass evaluation
 configs/  examples/  tests/  docs/
 ```
@@ -170,7 +178,8 @@ which is gitignored.  The curated versions are committed in `docs/RESULTS.md`.
 python -m pytest -q
 ```
 
-241 tests.  They are written as invariants rather than golden values — monotonic
+291 tests.  They are written as invariants rather than golden values — monotonic
 link budgets, unit-mean fading, energy conservation, quantization bounds, seeded
 determinism, five-point and seven-point stencil neighbourhoods, surface-to-volume
-scaling — so a new plugin or frontend has to satisfy them too.
+scaling, FLOP and external-traffic conservation under tiling — so a new plugin,
+frontend or tiler has to satisfy them too.

@@ -50,6 +50,7 @@ KINDS = (
     "store",  # energy buffer
     "fault",  # fault injector
     # --- compiler --------------------------------------------------------
+    "tiler",  # how an oversized task is split into pieces
     "partitioner",  # task graph -> per-device groups
     "placer",  # task graph -> 3D coordinates
     "scheduler",  # traffic matrix -> time slots

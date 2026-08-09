@@ -18,18 +18,19 @@ realizes.  That is the thesis — **mobility buys dynamic proximity**.
 | Path | Contents |
 |---|---|
 | [`simulator/`](simulator/) | Phase A — the simulator, its testbench and evaluation harness. Complete. |
-| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends) complete. |
+| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends) and B1 (tiling) complete. |
 | `testbench/` | Phase C — large-scale emulation and fault campaigns. Not started. |
 
 Start at [`simulator/README.md`](simulator/README.md).
 
 ## Status
 
-**Phase A is complete** and **Phase B has begun**: 241 tests passing.  Sequencing
-follows the project plan — simulator first, then the compiler built pass by pass
-with each pass shipping its own testbench and evaluation, then the large-scale
-testbench.  B0, the compiler IR and its twelve workload frontends, is done and
-benched.  See [`simulator/docs/ROADMAP.md`](simulator/docs/ROADMAP.md).
+**Phase A is complete** and **Phase B is under way**: 291 tests passing.
+Sequencing follows the project plan — simulator first, then the compiler built
+pass by pass with each pass shipping its own testbench and evaluation, then the
+large-scale testbench.  B0 (the compiler IR and its twelve workload frontends)
+and B1 (tiling onto a target part) are done and benched.  See
+[`simulator/docs/ROADMAP.md`](simulator/docs/ROADMAP.md).
 
 ## What the simulator already establishes
 
@@ -53,6 +54,18 @@ Measured outputs, not design intentions — every one is reproduced in
   the scheduler.
 - Without a closed-loop pointing tracker, a 0.04 m/√s current destroys every
   link.  Open-loop pointing has a tolerance of centimetres.
+
+## What the compiler establishes so far
+
+- Every one of the twelve stock workloads is **aim-dominated** on the small part
+  — the least affected still spends 92% of its link time slewing.  No tiling
+  choice changes that; only the scheduler can.
+- **How you cut a task is worth more than how finely you cut it.**  Added traffic
+  is `halo × Σ(fᵢ − 1)`, so geometric cutting moves 18.9× less traffic than
+  slicing on average and 133× in the best case, for the same fit.
+- Some workloads **cannot be tiled onto a part at any granularity**: an FFT
+  butterfly's exchange alone exceeds the RAM, so the answer is a bigger part
+  rather than a finer cut.
 
 ## Quick start
 

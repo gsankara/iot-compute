@@ -68,7 +68,33 @@ real device classes and reports which later pass has to act.  Its results:
 - the FFT is the only stock workload that fails to fit a mote-c at default size,
   which makes it B1's first customer.
 
-**B1 Tile** — split until the working set fits the target class's RAM.
+**B1 Tile** ✅ **complete** — split until the working set fits the target class's
+RAM, in `iotc/compiler/tile.py`.  The stopping condition is `TaskGraph.fits`,
+read straight from the `DeviceClass`.
+
+The pass is not a division, it is a choice of *shape*.  Model a task as a
+d-dimensional block cut into `f₁ × … × f_d` pieces; the added traffic telescopes
+to `halo × Σ(fᵢ − 1)`, so cutting `k` ways along one axis costs `(k−1)` halos
+while cutting a cube costs `d·(k^(1/d) − 1)`.  Three tilers are registered under
+the `tiler` kind — `geometric` (the pass), `planar`, and `slab` (the naive
+comparator) — and the halo is *measured* from the task's existing edges rather
+than assumed.  Halo counts against RAM, so the fit is a fixed point and the pass
+iterates to convergence.
+
+Bench: `iotc tile` (`iotc/bench/tile_bench.py`), on instances sized to overflow
+the part.  Its results:
+
+- **geometric cutting moves 18.9× less traffic than slab on average**, best case
+  133×, with 2.1× fewer pieces — same workload, same target, same fit;
+- for SUMMA that gap is the difference between fitting (70×70, 139× traffic) and
+  **not fitting at all** after 18,480 slices;
+- **some workloads cannot be tiled onto a part at any granularity**: the FFT
+  butterfly and the all-reduce hit a halo floor, where the boundary exchange
+  alone exceeds RAM.  The pass reports that rather than subdividing forever —
+  the answer is a bigger part, not a finer cut;
+- **tiling does not rescue B6**: 58 of the 61 tilings that fit are still
+  aim-dominated, and every one has more edges than before.  Making a problem fit
+  makes the scheduling problem harder.
 
 **B2 Partition** — `fmbm` by default, with Kernighan–Lin and spectral as
 comparators. Must demonstrate near-linear runtime.

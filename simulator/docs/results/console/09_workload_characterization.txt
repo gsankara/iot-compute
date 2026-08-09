@@ -1,0 +1,49 @@
+workload    class      tasks  edges  deg  ws/RAM   fit tiles        AI    aim deg/tx
+------------------------------------------------------------------------------------
+allreduce   mote-c        16     16    2    0.50  1.00     1      0.27  0.963    1.0
+bfs         mote-c        16    120   15    0.02  1.00     1      0.56  1.000    7.5
+coloring    mote-c        16    120   15    0.00  1.00     1      0.85  1.000    7.5
+fft         mote-c         8     12    3    2.00  0.00     2     16.67  0.924    1.5
+summa       mote-c        16     48    6    0.75  1.00     1    170.67  0.961    3.0
+kmedian     mote-c        16    120   15    0.00  1.00     1      1.23  1.000    7.5
+maxclique   mote-c        16    120   15    0.00  1.00     1      0.78  1.000    7.5
+maxcut      mote-c        16    120   15    0.00  1.00     1      0.88  1.000    7.5
+mis         mote-c        16    120   15    0.00  1.00     1      0.29  1.000    7.5
+spmv        mote-c        16    120   15    0.02  1.00     1      1.20  1.000    7.5
+stencil2d   mote-c        16     24    4    0.13  1.00     1    128.00  1.000    2.0
+stencil3d   mote-c         8     12    3    0.27  1.00     1     42.67  0.999    1.5
+
+workload    class      tasks  edges  deg  ws/RAM   fit tiles        AI    aim deg/tx
+------------------------------------------------------------------------------------
+allreduce   mote-m        16     16    2    0.06  1.00     1      0.27  0.988    1.0
+bfs         mote-m        16    120   15    0.00  1.00     1      0.56  1.000    7.5
+coloring    mote-m        16    120   15    0.00  1.00     1      0.85  1.000    7.5
+fft         mote-m         8     12    3    0.25  1.00     1     16.67  0.976    1.5
+summa       mote-m        16     48    6    0.09  1.00     1    170.67  0.988    3.0
+kmedian     mote-m        16    120   15    0.00  1.00     1      1.23  1.000    7.5
+maxclique   mote-m        16    120   15    0.00  1.00     1      0.78  1.000    7.5
+maxcut      mote-m        16    120   15    0.00  1.00     1      0.88  1.000    7.5
+mis         mote-m        16    120   15    0.00  1.00     1      0.29  1.000    7.5
+spmv        mote-m        16    120   15    0.00  1.00     1      1.20  1.000    7.5
+stencil2d   mote-m        16     24    4    0.02  1.00     1    128.00  1.000    2.0
+stencil3d   mote-m         8     12    3    0.03  1.00     1     42.67  1.000    1.5
+
+workload    class      tasks  edges  deg  ws/RAM   fit tiles        AI    aim deg/tx
+------------------------------------------------------------------------------------
+allreduce   relay         16     16    2    0.25  1.00     1      0.27  0.956    0.3
+bfs         relay         16    120   15    0.01  1.00     1      0.56  1.000    2.5
+coloring    relay         16    120   15    0.00  1.00     1      0.85  1.000    2.5
+fft         relay          8     12    3    1.00  1.00     1     16.67  0.911    0.5
+summa       relay         16     48    6    0.38  1.00     1    170.67  0.953    1.0
+kmedian     relay         16    120   15    0.00  1.00     1      1.23  1.000    2.5
+maxclique   relay         16    120   15    0.00  1.00     1      0.78  1.000    2.5
+maxcut      relay         16    120   15    0.00  1.00     1      0.88  1.000    2.5
+mis         relay         16    120   15    0.00  1.00     1      0.29  1.000    2.5
+spmv        relay         16    120   15    0.01  1.00     1      1.20  1.000    2.5
+stencil2d   relay         16     24    4    0.06  1.00     1    128.00  1.000    0.7
+stencil3d   relay          8     12    3    0.14  1.00     1     42.67  0.999    0.5
+
+B1 must tile (1): fft
+B6 must amortise aiming (12): allreduce, bfs, coloring, fft, kmedian, maxclique, maxcut, mis, spmv, stencil2d, stencil3d, summa
+B5 must time-share beams (11): bfs, coloring, fft, kmedian, maxclique, maxcut, mis, spmv, stencil2d, stencil3d, summa
+intensity spans 0.27 (allreduce) to 170.7 (summa) FLOP/B

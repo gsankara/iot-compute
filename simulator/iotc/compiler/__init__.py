@@ -10,23 +10,33 @@ Implemented:
     :class:`~iotc.compiler.ir.TaskGraph` every later pass consumes, plus the
     stock workload family that produces one.
 
-Still to come: tile, partition, place (FastMap), motion, beam assignment,
-schedule, energy feasibility, resilience and codegen.  See ``docs/ROADMAP.md``.
+``B1`` -- :mod:`iotc.compiler.tile`.  Splits tasks until their working set fits
+    the target class's RAM, choosing the *shape* of the cut rather than only its
+    size, because added traffic depends on the factorization and not on the
+    piece count.
+
+Still to come: partition, place (FastMap), motion, beam assignment, schedule,
+energy feasibility, resilience and codegen.  See ``docs/ROADMAP.md``.
 """
 
 from __future__ import annotations
 
-from . import frontends, ir
+from . import frontends, ir, tile
 from .frontends import Workload
 from .ir import Task, TaskGraph, TaskGraphError
+from .tile import TileModel, TileResult, balanced_factors
 
 __all__ = [
     "ir",
     "frontends",
+    "tile",
     "Task",
     "TaskGraph",
     "TaskGraphError",
     "Workload",
+    "TileModel",
+    "TileResult",
+    "balanced_factors",
     "build_workload",
 ]
 
