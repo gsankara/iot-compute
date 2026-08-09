@@ -1,0 +1,48 @@
+# A free-flying swarm in air.
+#
+# All three axes are fast and isotropic, and near-infrared optics reach tens of
+# metres.  The catch is energy: hovering costs watts while a 100 square
+# centimetre cell harvests barely one, so this platform is never energy neutral
+# and every schedule compiled for it is bounded by pack endurance.
+#
+# Run:  iotc sim configs/aerial_swarm.yaml --connect --until 60
+
+name: aerial_swarm
+seed: 3
+
+medium:
+  type: air
+  visibility_km: 20.0        # light haze
+  cn2: 1.0e-14
+
+channel:
+  type: fso
+  turbulence: {type: gamma_gamma}
+  receiver: {type: apd, gain: 40}
+  modulation: ook
+  coding: {type: rs}
+
+rf: rf_omni                  # the radio actually works up here
+topology: {type: flock, link_range: 25.0, neighbour_radius: 20.0}
+
+world:
+  dt: 0.02                   # flight needs a finer tick than flotation
+  bounds: [[-80, -80, 2], [80, 80, 60]]
+  resync_interval: 0.5
+  payload_bits: 8192
+
+swarm:
+  - class: mote-c
+    variant: aerial
+    count: 16
+    layout: {type: lattice, spacing: 9.0, centre: [0, 0, 25]}
+  - class: mote-s
+    variant: aerial
+    count: 8
+    layout: {type: sphere, radius: 14.0, centre: [0, 0, 25]}
+  - class: anchor            # ground station
+    count: 1
+    layout: [[0, 0, 3]]
+
+run:
+  until: 60.0

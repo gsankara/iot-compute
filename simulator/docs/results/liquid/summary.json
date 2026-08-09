@@ -1,0 +1,18 @@
+{
+  "time": 21.50000000000017,
+  "devices": 31,
+  "alive": 31,
+  "links": 36,
+  "mean_energy_fraction": 0.7991811193492359,
+  "min_energy_fraction": 0.6648074051130712,
+  "brownouts": 0,
+  "clock_skew": 3.6524141194149706e-05,
+  "guard_band": 0.00010509989464248912,
+  "delivered": 1017,
+  "lost": 1,
+  "delivery_rate": 0.9990176817288802,
+  "bits_delivered": 8331264,
+  "pending_events": 0,
+  "optical_share": 1.0,
+  "retarget_overhead": 0.9998014951066736
+}

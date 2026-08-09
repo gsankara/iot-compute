@@ -1,0 +1,528 @@
+[
+  {
+    "id": 0,
+    "name": "mote-c-aq-0",
+    "class": "mote-c-aq",
+    "position": [
+      -3.5,
+      -7.0,
+      -11.5
+    ],
+    "energy_fraction": 0.7398813937425356,
+    "alive": true,
+    "links": [
+      23.0,
+      2.0
+    ]
+  },
+  {
+    "id": 1,
+    "name": "mote-c-aq-1",
+    "class": "mote-c-aq",
+    "position": [
+      -3.5,
+      -7.0,
+      -4.5
+    ],
+    "energy_fraction": 0.8855694459168825,
+    "alive": true,
+    "links": [
+      28.0,
+      23.0
+    ]
+  },
+  {
+    "id": 2,
+    "name": "mote-c-aq-2",
+    "class": "mote-c-aq",
+    "position": [
+      -3.5,
+      0.0,
+      -11.5
+    ],
+    "energy_fraction": 0.7402810757089869,
+    "alive": true,
+    "links": [
+      0,
+      4.0
+    ]
+  },
+  {
+    "id": 3,
+    "name": "mote-c-aq-3",
+    "class": "mote-c-aq",
+    "position": [
+      -3.5,
+      0.0,
+      -4.5
+    ],
+    "energy_fraction": 0.885927779250216,
+    "alive": true,
+    "links": [
+      28.0,
+      27.0
+    ]
+  },
+  {
+    "id": 4,
+    "name": "mote-c-aq-4",
+    "class": "mote-c-aq",
+    "position": [
+      -3.5,
+      7.0,
+      -11.5
+    ],
+    "energy_fraction": 0.7406060988386995,
+    "alive": true,
+    "links": [
+      2,
+      24.0
+    ]
+  },
+  {
+    "id": 5,
+    "name": "mote-c-aq-5",
+    "class": "mote-c-aq",
+    "position": [
+      -3.5,
+      7.0,
+      -4.5
+    ],
+    "energy_fraction": 0.8854037051761418,
+    "alive": true,
+    "links": [
+      27.0,
+      21.0
+    ]
+  },
+  {
+    "id": 6,
+    "name": "mote-c-aq-6",
+    "class": "mote-c-aq",
+    "position": [
+      3.5,
+      -7.0,
+      -11.5
+    ],
+    "energy_fraction": 0.7404888156060134,
+    "alive": true,
+    "links": [
+      25.0,
+      8.0
+    ]
+  },
+  {
+    "id": 7,
+    "name": "mote-c-aq-7",
+    "class": "mote-c-aq",
+    "position": [
+      3.5,
+      -7.0,
+      -4.5
+    ],
+    "energy_fraction": 0.8847272870064021,
+    "alive": true,
+    "links": [
+      20.0,
+      28.0
+    ]
+  },
+  {
+    "id": 8,
+    "name": "mote-c-aq-8",
+    "class": "mote-c-aq",
+    "position": [
+      3.5,
+      0.0,
+      -11.5
+    ],
+    "energy_fraction": 0.7404782950399951,
+    "alive": true,
+    "links": [
+      6,
+      25.0
+    ]
+  },
+  {
+    "id": 9,
+    "name": "mote-c-aq-9",
+    "class": "mote-c-aq",
+    "position": [
+      3.5,
+      0.0,
+      -4.5
+    ],
+    "energy_fraction": 0.886554631102068,
+    "alive": true,
+    "links": [
+      26.0,
+      11.0
+    ]
+  },
+  {
+    "id": 10,
+    "name": "mote-c-aq-10",
+    "class": "mote-c-aq",
+    "position": [
+      3.5,
+      7.0,
+      -11.5
+    ],
+    "energy_fraction": 0.740233260050458,
+    "alive": true,
+    "links": [
+      24.0,
+      13.0
+    ]
+  },
+  {
+    "id": 11,
+    "name": "mote-c-aq-11",
+    "class": "mote-c-aq",
+    "position": [
+      3.5,
+      7.0,
+      -4.5
+    ],
+    "energy_fraction": 0.885135765637857,
+    "alive": true,
+    "links": [
+      9,
+      27.0
+    ]
+  },
+  {
+    "id": 12,
+    "name": "mote-m-aq-0",
+    "class": "mote-m-aq",
+    "position": [
+      16.0,
+      0.0,
+      -8.0
+    ],
+    "energy_fraction": 0.7096831981569192,
+    "alive": true,
+    "links": [
+      22.0,
+      26.0
+    ]
+  },
+  {
+    "id": 13,
+    "name": "mote-m-aq-1",
+    "class": "mote-m-aq",
+    "position": [
+      11.313708498984761,
+      11.31370849898476,
+      -8.0
+    ],
+    "energy_fraction": 0.7098182404701021,
+    "alive": true,
+    "links": [
+      10,
+      22.0
+    ]
+  },
+  {
+    "id": 14,
+    "name": "mote-m-aq-2",
+    "class": "mote-m-aq",
+    "position": [
+      9.797174393178826e-16,
+      16.0,
+      -8.0
+    ],
+    "energy_fraction": 0.7098759903506413,
+    "alive": true,
+    "links": [
+      24.0,
+      27.0
+    ]
+  },
+  {
+    "id": 15,
+    "name": "mote-m-aq-3",
+    "class": "mote-m-aq",
+    "position": [
+      -11.31370849898476,
+      11.313708498984761,
+      -8.0
+    ],
+    "energy_fraction": 0.7100456528008654,
+    "alive": true,
+    "links": [
+      21.0,
+      27.0
+    ]
+  },
+  {
+    "id": 16,
+    "name": "mote-m-aq-4",
+    "class": "mote-m-aq",
+    "position": [
+      -16.0,
+      1.959434878635765e-15,
+      -8.0
+    ],
+    "energy_fraction": 0.7100536449945875,
+    "alive": true,
+    "links": [
+      21.0,
+      17.0
+    ]
+  },
+  {
+    "id": 17,
+    "name": "mote-m-aq-5",
+    "class": "mote-m-aq",
+    "position": [
+      -11.313708498984763,
+      -11.31370849898476,
+      -8.0
+    ],
+    "energy_fraction": 0.7100014935527929,
+    "alive": true,
+    "links": [
+      16,
+      23.0
+    ]
+  },
+  {
+    "id": 18,
+    "name": "mote-m-aq-6",
+    "class": "mote-m-aq",
+    "position": [
+      -2.9391523179536475e-15,
+      -16.0,
+      -8.0
+    ],
+    "energy_fraction": 0.7100088528008655,
+    "alive": true,
+    "links": [
+      28.0,
+      19.0
+    ]
+  },
+  {
+    "id": 19,
+    "name": "mote-m-aq-7",
+    "class": "mote-m-aq",
+    "position": [
+      11.313708498984758,
+      -11.313708498984763,
+      -8.0
+    ],
+    "energy_fraction": 0.7097775919118962,
+    "alive": true,
+    "links": [
+      18,
+      26.0
+    ]
+  },
+  {
+    "id": 20,
+    "name": "mote-s-aq-0",
+    "class": "mote-s-aq",
+    "position": [
+      2.2034128303792593,
+      -5.667203377428966,
+      -0.5
+    ],
+    "energy_fraction": 0.9999072222222223,
+    "alive": true,
+    "links": [
+      7,
+      28.0,
+      26.0
+    ]
+  },
+  {
+    "id": 21,
+    "name": "mote-s-aq-1",
+    "class": "mote-s-aq",
+    "position": [
+      -8.543003764304206,
+      4.215102215022094,
+      -2.500000000000001
+    ],
+    "energy_fraction": 0.9393065025116204,
+    "alive": true,
+    "links": [
+      5,
+      15,
+      16
+    ]
+  },
+  {
+    "id": 22,
+    "name": "mote-s-aq-2",
+    "class": "mote-s-aq",
+    "position": [
+      10.413868739924096,
+      3.0315386780512323,
+      -6.166666666666666
+    ],
+    "energy_fraction": 0.8375600645099509,
+    "alive": true,
+    "links": [
+      12,
+      13,
+      26.0
+    ]
+  },
+  {
+    "id": 23,
+    "name": "mote-s-aq-3",
+    "class": "mote-s-aq",
+    "position": [
+      -5.631087755510691,
+      -9.269829533417886,
+      -9.833333333333336
+    ],
+    "energy_fraction": 0.7618634878276346,
+    "alive": true,
+    "links": [
+      0,
+      1,
+      17
+    ]
+  },
+  {
+    "id": 24,
+    "name": "mote-s-aq-4",
+    "class": "mote-s-aq",
+    "position": [
+      -1.8527871950785142,
+      9.344366196257138,
+      -13.500000000000004
+    ],
+    "energy_fraction": 0.7076252317094517,
+    "alive": true,
+    "links": [
+      4,
+      10,
+      14
+    ]
+  },
+  {
+    "id": 25,
+    "name": "mote-s-aq-5",
+    "class": "mote-s-aq",
+    "position": [
+      4.9008882748948155,
+      -3.5990993789031114,
+      -17.166666666666664
+    ],
+    "energy_fraction": 0.6648074051130712,
+    "alive": true,
+    "links": [
+      6,
+      8,
+      26.0
+    ]
+  },
+  {
+    "id": 26,
+    "name": "relay-aq-0",
+    "class": "relay-aq",
+    "position": [
+      6.0,
+      0.0,
+      -4.0
+    ],
+    "energy_fraction": 0.8094380371291279,
+    "alive": true,
+    "links": [
+      9,
+      12,
+      19,
+      20,
+      22,
+      25
+    ]
+  },
+  {
+    "id": 27,
+    "name": "relay-aq-1",
+    "class": "relay-aq",
+    "position": [
+      -2.9999999999999987,
+      5.196152422706632,
+      -4.0
+    ],
+    "energy_fraction": 0.8094812317953145,
+    "alive": true,
+    "links": [
+      3,
+      5,
+      11,
+      14,
+      15,
+      28.0
+    ]
+  },
+  {
+    "id": 28,
+    "name": "relay-aq-2",
+    "class": "relay-aq",
+    "position": [
+      -3.0000000000000027,
+      -5.19615242270663,
+      -4.0
+    ],
+    "energy_fraction": 0.8100753028930007,
+    "alive": true,
+    "links": [
+      1,
+      3,
+      7,
+      18,
+      20,
+      27
+    ]
+  },
+  {
+    "id": 29,
+    "name": "anchor-aq-0",
+    "class": "anchor-aq",
+    "position": [
+      -15.0,
+      0.0,
+      -1.0
+    ],
+    "energy_fraction": 0.999998998,
+    "alive": true,
+    "links": [
+      30.0,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "id": 30,
+    "name": "anchor-aq-1",
+    "class": "anchor-aq",
+    "position": [
+      15.0,
+      0.0,
+      -1.0
+    ],
+    "energy_fraction": 0.999998998,
+    "alive": true,
+    "links": [
+      29,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  }
+]

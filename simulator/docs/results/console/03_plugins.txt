@@ -1,0 +1,22 @@
+Both plugins are now selectable by name:
+
+  turbulence : ['bubble_curtain', 'gamma_gamma', 'kolmogorov_ts', 'lognormal', 'none']
+  topology   : ['annealed', 'flock', 'formation_seq', 'gradient', 'gravity', 'helix', 'static']
+
+bubble curtain: 36.4% of packets hit an obscuration
+
+helix topology, floats starting from one point:
+    t [s]             span x,y,z [m]   charge
+       60           [4.27 4.27 0.45]    0.058
+      300           [3.87 4.08 4.02]    0.117
+      900        [ 1.89  2.24 12.86]    0.086
+     1800        [ 2.19  1.69 16.  ]    0.103
+
+The swarm converges far more slowly than its thrusters could manage,
+and the charge column says why: a 10 cm^2 cell at 10 m depth harvests
+around 40 mW while a thruster draws 500, so the float cannot power
+continuous motion.  It moves in bursts and spends the rest of the time
+recharging.  That is a constraint the motion planner has to respect --
+travel time here is set by the energy budget, not by terminal velocity.
+
+Neither model required editing anything inside iotc.

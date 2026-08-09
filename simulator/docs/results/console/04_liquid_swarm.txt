@@ -1,0 +1,55 @@
+configuration : liquid_swarm
+medium        : water        rho= 1025.0 kg/m3  mu=1.08e-03 Pa.s  Cn2=1.0e-09  sigma=4 S/m
+channel       : fso
+topology      : static
+devices       : 31
+      2 x anchor-aq  2000.0 MFLOP/s    65536 KiB RAM  8x optical @ 10.00 Gb/s  step 0.020 deg  static
+     12 x mote-c-aq   480.0 MFLOP/s     1024 KiB RAM  2x optical @ 1.00 Gb/s  step 0.100 deg  buoyant
+      8 x mote-m-aq    60.0 MFLOP/s     8192 KiB RAM  2x optical @ 1.00 Gb/s  step 0.500 deg  buoyant
+      6 x mote-s-aq    60.0 MFLOP/s      512 KiB RAM  3x optical @ 2.50 Gb/s  step 0.020 deg  buoyant
+      3 x relay-aq    100.0 MFLOP/s     2048 KiB RAM  6x optical @ 2.50 Gb/s  step 0.020 deg  buoyant
+
+class          lambda    optical reach    rf reach
+anchor-aq         470 nm      135.42 m       15.38 m
+mote-c-aq         470 nm       43.41 m       15.38 m
+mote-m-aq         470 nm       43.41 m       15.38 m
+mote-s-aq         470 nm       83.77 m       15.38 m
+relay-aq          470 nm       84.46 m       15.38 m
+
+established 39 optical links
+
+running to t = 20 s (dt = 0.05 s) ...
+
+{
+  "time": 21.50000000000017,
+  "devices": 31,
+  "alive": 31,
+  "links": 36,
+  "mean_energy_fraction": 0.7991811193492359,
+  "min_energy_fraction": 0.6648074051130712,
+  "brownouts": 0,
+  "clock_skew": 3.6524141194149706e-05,
+  "guard_band": 0.00010509989464248912,
+  "delivered": 1017,
+  "lost": 1,
+  "delivery_rate": 0.9990176817288802,
+  "bits_delivered": 8331264,
+  "pending_events": 0,
+  "optical_share": 1.0,
+  "retarget_overhead": 0.9998014951066736
+}
+
+trace:
+  aim                                          78
+  delivered                                  1017
+  lost                                          1
+  packet_lost                                   1
+  send.optical                               1018
+  send_failed                                  62
+  send_failed.optical                          62
+  optical_bits                        8.33946e+06
+  optical_time                         0.00877738
+  retarget_energy                        0.634949
+  retarget_time                           44.2087
+
+wrote docs/results/liquid/events.csv, series.csv, summary.json, devices.json

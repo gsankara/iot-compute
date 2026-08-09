@@ -1,0 +1,61 @@
+"""Device capability profiles and the stock class library."""
+
+from __future__ import annotations
+
+from .library import (
+    ANCHOR,
+    COARSE_GIMBAL,
+    FINE_GIMBAL,
+    LIBRARY,
+    MOTE_C,
+    MOTE_M,
+    MOTE_S,
+    RELAY,
+    STANDARD_GIMBAL,
+    aerial,
+    aquatic,
+    describe_library,
+    get_class,
+    register_class,
+    tethered,
+)
+from .profile import (
+    BodySpec,
+    ComputeSpec,
+    DeviceClass,
+    GimbalSpec,
+    HarvestSpec,
+    OpticalSpec,
+    PowerSpec,
+    RadioSpec,
+    StoreSpec,
+    TetherSpec,
+)
+
+__all__ = [
+    "DeviceClass",
+    "ComputeSpec",
+    "GimbalSpec",
+    "OpticalSpec",
+    "RadioSpec",
+    "HarvestSpec",
+    "StoreSpec",
+    "TetherSpec",
+    "PowerSpec",
+    "BodySpec",
+    "LIBRARY",
+    "MOTE_C",
+    "MOTE_M",
+    "MOTE_S",
+    "RELAY",
+    "ANCHOR",
+    "COARSE_GIMBAL",
+    "STANDARD_GIMBAL",
+    "FINE_GIMBAL",
+    "get_class",
+    "register_class",
+    "aerial",
+    "aquatic",
+    "tethered",
+    "describe_library",
+]

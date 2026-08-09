@@ -1,0 +1,27 @@
+A 10 m change of depth or altitude
+
+platform           time [s]   node energy [J]  final z [m]
+----------------------------------------------------------
+buoyant float         136.5             9.420      -11.952
+aerial drone            5.5            24.005       11.964
+tethered head          20.0             0.000      -11.970
+
+Ten minutes of station keeping
+
+platform          charge left
+------------------------------
+buoyant float           1.000
+aerial drone            0.857
+tethered head           1.000
+
+Immersed body size, which sets how tightly the swarm can pack
+
+  buoyant float    radius   30.0 mm   volume    113.10 cm^3
+  aerial drone     radius   30.0 mm   volume    113.10 cm^3
+  tethered head    radius    8.0 mm   volume      2.14 cm^3
+
+Read it as three different limits, not three scores.  The float is
+slow in z but sustainable; the drone is fast everywhere and running
+down a battery from the moment it lifts off; the tethered head is fast,
+free to the node and tiny -- and pays for it in the fibre it trails,
+which blocks other nodes' beams.

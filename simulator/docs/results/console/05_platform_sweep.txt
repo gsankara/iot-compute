@@ -1,0 +1,20 @@
+8 configurations x 2 seeds = 16 runs
+  [   1/16] swarm.0.variant=aquatic, swarm.0.layout.spacing=8.0 seed=0 links=24 delivered=480 (1.35 s)
+  [   2/16] swarm.0.variant=aquatic, swarm.0.layout.spacing=8.0 seed=1 links=24 delivered=480 (1.31 s)
+  [   3/16] swarm.0.variant=aquatic, swarm.0.layout.spacing=20.0 seed=0 links=23 delivered=460 (1.48 s)
+  [   4/16] swarm.0.variant=aquatic, swarm.0.layout.spacing=20.0 seed=1 links=23 delivered=459 (1.58 s)
+  [   5/16] swarm.0.variant=aquatic, swarm.0.layout.spacing=35.0 seed=0 links=21 delivered=383 (1.40 s)
+  [   6/16] swarm.0.variant=aquatic, swarm.0.layout.spacing=35.0 seed=1 links=21 delivered=380 (1.31 s)
+  [   7/16] swarm.0.variant=aquatic, swarm.0.layout.spacing=60.0 seed=0 links=0 delivered=0 (1.13 s)
+  [   8/16] swarm.0.variant=aquatic, swarm.0.layout.spacing=60.0 seed=1 links=0 delivered=0 (1.09 s)
+  [   9/16] swarm.0.variant=aquatic+tethered, swarm.0.layout.spacing=8.0 seed=0 links=24 delivered=160 (1.01 s)
+  [  10/16] swarm.0.variant=aquatic+tethered, swarm.0.layout.spacing=8.0 seed=1 links=24 delivered=160 (0.99 s)
+  [  11/16] swarm.0.variant=aquatic+tethered, swarm.0.layout.spacing=20.0 seed=0 links=23 delivered=140 (1.16 s)
+  [  12/16] swarm.0.variant=aquatic+tethered, swarm.0.layout.spacing=20.0 seed=1 links=23 delivered=140 (1.12 s)
+  [  13/16] swarm.0.variant=aquatic+tethered, swarm.0.layout.spacing=35.0 seed=0 links=21 delivered=90 (0.98 s)
+  [  14/16] swarm.0.variant=aquatic+tethered, swarm.0.layout.spacing=35.0 seed=1 links=21 delivered=100 (0.97 s)
+  [  15/16] swarm.0.variant=aquatic+tethered, swarm.0.layout.spacing=60.0 seed=0 links=0 delivered=0 (0.85 s)
+  [  16/16] swarm.0.variant=aquatic+tethered, swarm.0.layout.spacing=60.0 seed=1 links=0 delivered=0 (0.90 s)
+
+wrote docs/results/platform/sweep.csv and sweep_summary.csv (16 rows)
+wrote figures to docs/results/platform

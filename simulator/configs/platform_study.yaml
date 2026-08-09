@@ -1,0 +1,57 @@
+# The flotation study: free-swimming float, or remote head on a wire?
+#
+# Both are in the same water with the same blue-green optics, so the only thing
+# that differs is the platform.  Note that ``variant`` is a *list*: ``aquatic``
+# fixes the optics for a liquid and ``tethered`` fixes the platform, and they
+# compose.  Writing ``tethered`` on its own would leave a near-infrared
+# transceiver under water, which cannot cross two metres -- the sweep would then
+# be measuring that mistake rather than the platform.
+#
+# Spacing is swept out to where it actually binds.  Below the optical reach the
+# swarm is limited by how many transceivers each node has, not by range, and the
+# spacing column is flat; past it, links start failing to close.
+#
+# What to read in sweep_summary.csv:
+#   links_established    -- reach and transceiver count, minus tether occlusion
+#   mean_motion_share    -- how much of the energy budget the platform eats
+#   mean_energy_fraction -- whether the swarm is sustainable at all
+#   retarget_overhead    -- share of link time spent aiming rather than sending
+#
+# Run:  iotc bench configs/platform_study.yaml --out results/platform --plot
+
+name: platform_study
+seeds: 3
+
+base:
+  seed: 0
+  medium: {type: water, turbidity: 0.02}
+  channel:
+    type: fso
+    turbulence: none
+    receiver: {type: apd, gain: 40}
+    coding: {type: rs}
+  rf: rf_omni
+  topology: static
+  world:
+    dt: 0.05
+    bounds: [[-120, -120, -40], [120, 120, 0]]
+  swarm:
+    - class: mote-c
+      variant: [aquatic]
+      variant_args:
+        tethered: {length: 30.0, head_radius: 0.008}
+      count: 24
+      layout: {type: lattice, spacing: 8.0, centre: [0, 0, -12]}
+
+sweep:
+  - path: swarm.0.variant
+    values:
+      - [aquatic]              # free-swimming ballast float
+      - [aquatic, tethered]    # remote head on a wire, box outside the medium
+  - path: swarm.0.layout.spacing
+    values: [8.0, 20.0, 35.0, 60.0]
+
+run:
+  until: 25.0
+  connect: true
+  traffic: 20

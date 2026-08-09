@@ -1,0 +1,48 @@
+configuration : liquid_swarm
+medium        : water        rho= 1025.0 kg/m3  mu=1.08e-03 Pa.s  Cn2=1.0e-09  sigma=4 S/m
+channel       : surrogate
+topology      : static
+devices       : 31
+      2 x anchor-aq  2000.0 MFLOP/s    65536 KiB RAM  8x optical @ 10.00 Gb/s  step 0.020 deg  static
+     12 x mote-c-aq   480.0 MFLOP/s     1024 KiB RAM  2x optical @ 1.00 Gb/s  step 0.100 deg  buoyant
+      8 x mote-m-aq    60.0 MFLOP/s     8192 KiB RAM  2x optical @ 1.00 Gb/s  step 0.500 deg  buoyant
+      6 x mote-s-aq    60.0 MFLOP/s      512 KiB RAM  3x optical @ 2.50 Gb/s  step 0.020 deg  buoyant
+      3 x relay-aq    100.0 MFLOP/s     2048 KiB RAM  6x optical @ 2.50 Gb/s  step 0.020 deg  buoyant
+
+class          lambda    optical reach    rf reach
+anchor-aq         470 nm      135.42 m       15.38 m
+mote-c-aq         470 nm       41.62 m       15.38 m
+mote-m-aq         470 nm       41.62 m       15.38 m
+mote-s-aq         470 nm       82.32 m       15.38 m
+relay-aq          470 nm       83.01 m       15.38 m
+
+surrogate check against the exact model:
+  samples 400  max |error| 0.106 dB  rms 0.067 dB  bias -0.056 dB
+
+established 39 optical links
+
+running to t = 2 s (dt = 0.05 s) ...
+
+{
+  "time": 2.000000000000001,
+  "devices": 31,
+  "alive": 31,
+  "links": 36,
+  "mean_energy_fraction": 0.6396770379985942,
+  "min_energy_fraction": 0.5985290834090883,
+  "brownouts": 0,
+  "clock_skew": 5.053065619842201e-05,
+  "guard_band": 0.00016144102117829768,
+  "delivered": 0,
+  "lost": 0,
+  "delivery_rate": 1.0,
+  "bits_delivered": 0,
+  "pending_events": 0,
+  "optical_share": 0.0,
+  "retarget_overhead": 1.0
+}
+
+trace:
+  aim                                          78
+  retarget_energy                        0.634949
+  retarget_time                           44.2087

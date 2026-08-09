@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "iot-compute"
+version = "0.1.0"
+description = "Mobility-driven IoT computation substrate: simulator, compiler and testbench for computing across thousands of small energy-harvesting devices linked by steerable free-space photonics"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "BSD-3-Clause"
+authors = [{ name = "Ganesh Chennimalai Sankaran", email = "sankarang@renci.org" }]
+keywords = [
+    "iot", "free-space optics", "swarm", "distributed computing",
+    "energy harvesting", "fastmap", "graph embedding", "fault tolerance",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = ["numpy>=1.24"]
+
+[project.optional-dependencies]
+full = ["scipy>=1.10", "networkx>=3.0", "matplotlib>=3.7", "pyyaml>=6.0"]
+dev = ["pytest>=7", "scipy>=1.10", "networkx>=3.0", "matplotlib>=3.7", "pyyaml>=6.0"]
+
+[project.scripts]
+iotc = "iotc.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["iotc*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::RuntimeWarning"]

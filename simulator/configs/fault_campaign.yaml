@@ -1,0 +1,91 @@
+# A fault campaign: the same swarm, run with and without each fault class.
+#
+# The first value of every axis is the healthy case, so each column of the
+# resulting table is directly comparable against a clean baseline -- which is
+# the whole point of asking "correctness with and without faults".
+#
+# Run:  iotc bench configs/fault_campaign.yaml --out results/faults --plot
+
+name: fault_campaign
+seeds: 5
+
+base:
+  seed: 0
+  medium: {type: water, turbidity: 0.02}
+  channel:
+    type: fso
+    turbulence: {type: gamma_gamma}
+    receiver: {type: apd, gain: 40}
+    coding: {type: rs}
+  rf: rf_omni
+  topology: static
+  world:
+    dt: 0.05
+    bounds: [[-40, -40, -30], [40, 40, 0]]
+  swarm:
+    - class: mote-c
+      variant: [aquatic]
+      count: 16
+      layout: {type: lattice, spacing: 6.0, centre: [0, 0, -8]}
+    - class: mote-s
+      variant: [aquatic]
+      count: 8
+      layout: {type: sphere, radius: 10.0, centre: [0, 0, -8]}
+  faults: []
+
+sweep:
+  - path: faults
+    # Explicit labels, because two entries can otherwise flatten to the same
+    # string in the summary and be averaged together.
+    labels:
+      - healthy
+      - node_crash
+      - node_stall
+      - gimbal_stuck
+      - laser_degradation
+      - link_loss
+      - channel_noise_uniform
+      - channel_noise_bursty
+      - harvest_dropout
+      - drift_weak
+      - drift_strong
+      - combined
+    values:
+      # healthy baseline
+      - []
+      # nodes fail permanently
+      - [{type: node_crash, rate: 0.004, onset: 5.0}]
+      # nodes hang and come back, which is worse for a timed schedule
+      - [{type: node_stall, rate: 0.05, duration: 1.5, onset: 5.0}]
+      # a head freezes and keeps firing at empty water.  In a *static* swarm
+      # this costs almost nothing, because a head that never needed to move is
+      # still pointing correctly -- the damage appears once the formation moves
+      # or the schedule wants to retarget.
+      - [{type: gimbal_stuck, rate: 0.01, duration: 8.0, onset: 5.0}]
+      # margin erodes rather than the link dropping outright
+      - [{type: laser_degradation, half_life: 30.0, onset: 5.0}]
+      # individual pairs die; the nodes stay healthy and should reroute
+      - [{type: link_loss, rate: 0.01, onset: 5.0}]
+      # the channel simply gets worse
+      - [{type: channel_noise, loss: 0.2, onset: 5.0}]
+      # correlated loss, which is much harder than the same average
+      - [{type: channel_noise, loss: 0.6, burst: 1.0, onset: 5.0}]
+      # the light goes away and the swarm lives off its buffers
+      - [{type: harvest_dropout, rate: 0.02, duration: 20.0, onset: 5.0}]
+      # an unmodelled current pulls the formation apart.  There is no re-aiming
+      # loop yet -- that is what the compiled runtime adds -- so this measures
+      # how long an *open-loop* pointing solution survives.  A beam spot is a
+      # few centimetres across at these ranges, so the tolerance is small and
+      # the cliff between the two rates below is steep.
+      - [{type: position_drift, sigma: 0.004, onset: 5.0}]
+      - [{type: position_drift, sigma: 0.04, onset: 5.0}]
+      # everything at once
+      - [{type: node_crash, rate: 0.002, onset: 5.0},
+         {type: gimbal_stuck, rate: 0.005, duration: 8.0, onset: 5.0},
+         {type: channel_noise, loss: 0.15, burst: 1.0, onset: 5.0},
+         {type: position_drift, sigma: 0.004, onset: 5.0}]
+
+run:
+  until: 40.0
+  connect: true
+  traffic: 40

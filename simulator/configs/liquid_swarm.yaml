@@ -1,0 +1,68 @@
+# A heterogeneous swarm of ballast-driven floats in clear water.
+#
+# The defining constraints of this platform:
+#   * blue-green optics are mandatory -- 850 nm cannot cross two metres of water
+#   * z is rate limited by the ballast pump, so depth changes take tens of seconds
+#   * RF is useless at 2.4 GHz under salt water, so the control plane is thin
+#   * photovoltaic income falls off exponentially with depth
+#
+# Run:  iotc sim configs/liquid_swarm.yaml --connect --until 60
+
+name: liquid_swarm
+seed: 1
+
+medium:
+  type: water
+  turbidity: 0.02          # clear ocean
+  cn2: 1.0e-9
+
+channel:
+  type: fso
+  beam: gaussian
+  attenuation: beer_lambert
+  turbulence:
+    type: gamma_gamma
+  pointing: beckmann
+  receiver:
+    type: apd
+    gain: 40
+  modulation: ook
+  coding:
+    type: rs
+    n: 255
+    k: 223
+
+rf: rf_omni
+topology: static
+
+world:
+  dt: 0.05
+  bounds: [[-60, -60, -40], [60, 60, -0.5]]
+  resync_interval: 1.0
+  beacon_accuracy: 1.0e-5
+  payload_bits: 8192
+
+swarm:
+  - class: mote-c            # compute-rich
+    variant: aquatic
+    count: 12
+    layout: {type: lattice, spacing: 7.0, centre: [0, 0, -8]}
+  - class: mote-m            # memory-rich, coarse steering
+    variant: aquatic
+    count: 8
+    layout: {type: ring, radius: 16.0, centre: [0, 0, -8]}
+  - class: mote-s            # fine steering, long hops
+    variant: aquatic
+    count: 6
+    layout: {type: sphere, radius: 11.0, centre: [0, 0, -8]}
+  - class: relay             # aggregators
+    variant: aquatic
+    count: 3
+    layout: {type: ring, radius: 6.0, centre: [0, 0, -4]}
+  - class: anchor            # moored timing reference, at the surface
+    variant: aquatic         # even the anchors need blue-green down here
+    count: 2
+    layout: {type: line, spacing: 30.0, centre: [0, 0, -1]}
+
+run:
+  until: 60.0

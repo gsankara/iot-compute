@@ -1,0 +1,58 @@
+# Remote optical heads on wires, with the compute boxes outside the medium.
+#
+# Only an 8 mm head is immersed, so the density is roughly two orders of
+# magnitude higher than a field of 60 mm floats; xyz comes from a gantry and a
+# winch, so depth is as fast as translation and costs the node nothing.
+#
+# The price is line of sight.  Every head trails a fibre to the surface, and
+# those fibres are opaque -- so the tighter the packing, the more horizontal
+# beams are blocked by somebody else's wire.  That trade is what this config is
+# for.
+#
+# Run:  iotc sim configs/tethered_farm.yaml --connect --until 30
+
+name: tethered_farm
+seed: 2
+
+medium:
+  type: index_fluid          # engineered, clear, dense
+  extinction_per_m: 0.005
+  cn2: 1.0e-12
+
+channel:
+  type: fso
+  turbulence: none           # a quiet tank, unlike open water
+  receiver: {type: apd, gain: 40}
+  modulation: ook
+  coding: {type: rs}
+
+rf: rf_omni
+topology: static
+
+world:
+  dt: 0.05
+  bounds: [[-20, -20, -25], [20, 20, 0]]
+  resync_interval: 0.5       # the boxes are wired, so sync is cheap and good
+  beacon_accuracy: 1.0e-7
+  payload_bits: 8192
+
+swarm:
+  - class: mote-c
+    variant: tethered
+    variant_args:
+      head_radius: 0.008
+      length: 25.0
+      tether_radius: 0.0015
+      max_speed_xy: 0.8
+      max_speed_z: 0.5
+      waveguide_loss_db: 1.5
+    count: 36
+    layout: {type: lattice, spacing: 2.5, centre: [0, 0, -12]}
+  - class: mote-s
+    variant: tethered
+    variant_args: {head_radius: 0.008, length: 25.0}
+    count: 12
+    layout: {type: sphere, radius: 6.0, centre: [0, 0, -12]}
+
+run:
+  until: 30.0
