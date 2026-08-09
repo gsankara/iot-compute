@@ -26,7 +26,8 @@ from __future__ import annotations
 
 __version__ = "0.1.0"
 
-from . import devices, geom, registry, rng, sim, units
+from . import compiler, devices, geom, registry, rng, sim, units
+from .compiler import TaskGraph, build_workload
 from .geom import AngularGrid, vec3
 from .registry import available, create, describe, register
 from .rng import RandomSource
@@ -39,6 +40,9 @@ __all__ = [
     "rng",
     "devices",
     "sim",
+    "compiler",
+    "TaskGraph",
+    "build_workload",
     "AngularGrid",
     "vec3",
     "RandomSource",

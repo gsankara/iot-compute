@@ -18,18 +18,18 @@ realizes.  That is the thesis — **mobility buys dynamic proximity**.
 | Path | Contents |
 |---|---|
 | [`simulator/`](simulator/) | Phase A — the simulator, its testbench and evaluation harness. Complete. |
-| `compiler/` | Phase B — problem graph to per-device bytecode, pass by pass. Not started. |
+| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends) complete. |
 | `testbench/` | Phase C — large-scale emulation and fault campaigns. Not started. |
 
 Start at [`simulator/README.md`](simulator/README.md).
 
 ## Status
 
-**Phase A is complete**: ~6,400 lines of library plus 1,800 lines of tests, 158
-passing.  Sequencing follows the project plan — simulator first, then the
-compiler built pass by pass with each pass shipping its own testbench and
-evaluation, then the large-scale testbench.  See
-[`simulator/docs/ROADMAP.md`](simulator/docs/ROADMAP.md).
+**Phase A is complete** and **Phase B has begun**: 241 tests passing.  Sequencing
+follows the project plan — simulator first, then the compiler built pass by pass
+with each pass shipping its own testbench and evaluation, then the large-scale
+testbench.  B0, the compiler IR and its twelve workload frontends, is done and
+benched.  See [`simulator/docs/ROADMAP.md`](simulator/docs/ROADMAP.md).
 
 ## What the simulator already establishes
 

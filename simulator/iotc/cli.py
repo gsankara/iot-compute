@@ -195,6 +195,43 @@ def _cmd_bench(args) -> int:
 
 
 # --------------------------------------------------------------------------
+def _cmd_graph(args) -> int:
+    """Build a task graph and say what it demands of the hardware."""
+    from .bench import ir_bench
+    from .compiler import build_workload
+
+    params = {}
+    for item in args.set or []:
+        key, _, value = item.partition("=")
+        if not _:
+            print(f"--set needs key=value, got {item!r}", file=sys.stderr)
+            return 2
+        try:
+            params[key] = json.loads(value)
+        except json.JSONDecodeError:
+            params[key] = value
+
+    if args.dump:
+        graph = build_workload(args.workloads[0], **params)
+        graph.to_json(args.dump)
+        print(graph.summary())
+        return 0
+
+    per = {w: params for w in (args.workloads or [])}
+    rows = ir_bench.run(
+        args.workloads or None,
+        tuple(args.classes or ir_bench.DEFAULT_CLASSES),
+        params=per,
+        out=args.out,
+    )
+    for cls in sorted({r["device_class"] for r in rows}):
+        print(ir_bench.report(rows, cls))
+        print()
+    print(ir_bench.verdict(rows))
+    return 0
+
+
+# --------------------------------------------------------------------------
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="iotc", description=__doc__)
     sub = p.add_subparsers(dest="command", required=True)
@@ -248,6 +285,20 @@ def build_parser() -> argparse.ArgumentParser:
                        help="override the number of seeds")
     bench.add_argument("--plot", action="store_true", help="also write figures")
     bench.set_defaults(func=_cmd_bench)
+
+    graph = sub.add_parser(
+        "graph", help="build a workload task graph and characterize it (B0)"
+    )
+    graph.add_argument("workloads", nargs="*",
+                       help="workload names; default is every registered one")
+    graph.add_argument("--set", action="append", metavar="KEY=VALUE",
+                       help="workload parameter override (repeatable)")
+    graph.add_argument("--class", dest="classes", action="append",
+                       help="device class to score against (repeatable)")
+    graph.add_argument("--out", default=None, help="directory for CSV and JSON output")
+    graph.add_argument("--dump", default=None, metavar="PATH",
+                       help="write the first workload's task graph as JSON and stop")
+    graph.set_defaults(func=_cmd_graph)
 
     return p
 

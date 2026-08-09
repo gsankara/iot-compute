@@ -2,12 +2,15 @@
 
 Phase A ships :mod:`iotc.bench.sim_bench`, which sweeps the simulator's design
 space -- medium, platform, device mix, channel model -- and writes tidy CSV.
-The compiler-pass benches and the large-scale fault campaigns land on top of the
-same aggregation and reporting code.
+Phase B adds one bench per compiler pass on top of the same aggregation and
+reporting code, starting with :mod:`iotc.bench.ir_bench` for B0.  The
+large-scale fault campaigns land here too.
 """
 
 from __future__ import annotations
 
+from . import ir_bench
+from .ir_bench import characterize
 from .sim_bench import (
     aggregate,
     expand,
@@ -20,6 +23,8 @@ from .sim_bench import (
 )
 
 __all__ = [
+    "ir_bench",
+    "characterize",
     "run_sweep",
     "run_one",
     "expand",

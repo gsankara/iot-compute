@@ -27,8 +27,10 @@ problem graph ──FastMap──▶ 3D placement ──▶ motion plan ──�
 
 ## Status
 
-**Phase A (simulator) is complete and tested.**  The compiler and the
-large-scale testbench are the next two phases; see `docs/ROADMAP.md`.
+**Phase A (simulator) is complete and tested.**  Phase B has started: **B0**,
+the compiler IR and its twelve workload frontends, is implemented, tested and
+benched (`iotc graph`).  The remaining compiler passes and the large-scale
+testbench follow; see `docs/ROADMAP.md`.
 
 ## Install
 
@@ -63,6 +65,12 @@ Correctness with and without faults:
 
 ```bash
 iotc bench configs/fault_campaign.yaml --out results/faults
+```
+
+Ask what a problem demands of the hardware before compiling it:
+
+```bash
+iotc graph stencil3d maxclique --class mote-c
 ```
 
 In Python:
@@ -110,7 +118,10 @@ iotc/
     links/      the seven-stage link budget, RF, and a memoizing surrogate
     mobility/   kinematics (drone, buoyant, tethered) and topology dynamics
     energy.py clocks.py world.py engine.py faults.py trace.py
-  bench/        design-space sweeps and fault campaigns
+  compiler/
+    ir.py       the TaskGraph every pass consumes                    (B0)
+    frontends/  twelve stock workloads and their graph generators    (B0)
+  bench/        design-space sweeps, fault campaigns, per-pass evaluation
 configs/  examples/  tests/  docs/
 ```
 
@@ -159,6 +170,7 @@ which is gitignored.  The curated versions are committed in `docs/RESULTS.md`.
 python -m pytest -q
 ```
 
-158 tests.  They are written as invariants rather than golden values — monotonic
+241 tests.  They are written as invariants rather than golden values — monotonic
 link budgets, unit-mean fading, energy conservation, quantization bounds, seeded
-determinism — so a new plugin has to satisfy them too.
+determinism, five-point and seven-point stencil neighbourhoods, surface-to-volume
+scaling — so a new plugin or frontend has to satisfy them too.

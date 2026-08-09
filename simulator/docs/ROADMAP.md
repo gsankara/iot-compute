@@ -43,10 +43,30 @@ scale.
 | Ch.4 FMBM block modeling | **Partition** into per-device groups; also the clique-amplified distance |
 | Ch.5 graph convex hull | **Formation envelope** — perimeter and halo devices |
 
-**B0 IR** — `TaskGraph` of tasks (FLOPs, working-set bytes) and edges (payload
-bytes).  Frontends: stencil 2D/3D Jacobi, GEMM/SUMMA, FFT butterfly, all-reduce,
-SpMV/BFS, and the NP-hard family (max clique, MIS, colouring, capacitated
-k-median, max-cut).
+**B0 IR** ✅ **complete** — `TaskGraph` of tasks (FLOPs, working-set bytes) and
+edges (payload bytes), in `iotc/compiler/ir.py`.  Twelve frontends ship, all
+registered under the `workload` plugin kind: stencil 2D/3D Jacobi, GEMM/SUMMA,
+FFT butterfly, all-reduce, SpMV/BFS, and the NP-hard family (max clique, MIS,
+colouring, capacitated k-median, max-cut).
+
+Three modelling decisions the rest of Phase B rests on: the graph describes one
+*superstep* rather than a dependence DAG, because a fabric that re-planned its
+topology per edge would spend all its time pointing; edges are undirected and
+canonical, because a link needs both gimbals aimed and a one-way edge is not
+physically representable; and the numeric fields are arrays, so B3 can stay
+near-linear.
+
+Bench: `iotc graph` (`iotc/bench/ir_bench.py`) scores every workload against
+real device classes and reports which later pass has to act.  Its results:
+
+- **every one of the twelve workloads is aim-dominated on a mote-c** (aim
+  fraction ≥ 0.92) — no choice available to B0 or B1 changes this, only B6 can;
+- **eleven of twelve want more simultaneous neighbours than the part has
+  transceivers**, up to 7.5×, so B5 must time-share beams rather than match;
+- arithmetic intensity spans 0.27 FLOP/B (all-reduce) to 170.7 (SUMMA), a 630×
+  range, so a single scheduling strategy will not serve the whole family;
+- the FFT is the only stock workload that fails to fit a mote-c at default size,
+  which makes it B1's first customer.
 
 **B1 Tile** — split until the working set fits the target class's RAM.
 
