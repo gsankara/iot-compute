@@ -250,6 +250,29 @@ def _cmd_tile(args) -> int:
 
 
 # --------------------------------------------------------------------------
+def _cmd_partition(args) -> int:
+    """Group tasks onto devices, then measure how the partitioners scale."""
+    from .bench import partition_bench
+
+    methods = tuple(args.method or partition_bench.DEFAULT_METHODS)
+    quality = partition_bench.run(
+        args.workloads or None, args.device_class, methods, out=args.out
+    )
+    print(partition_bench.report(quality))
+    print()
+
+    scale = []
+    if not args.no_scaling:
+        scale = partition_bench.scaling(
+            methods, device_class=args.device_class, out=args.out
+        )
+        print(partition_bench.scaling_report(scale))
+        print()
+    print(partition_bench.verdict(quality, scale))
+    return 0
+
+
+# --------------------------------------------------------------------------
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="iotc", description=__doc__)
     sub = p.add_subparsers(dest="command", required=True)
@@ -329,6 +352,18 @@ def build_parser() -> argparse.ArgumentParser:
                       help="tiler plugin to compare (repeatable)")
     tile.add_argument("--out", default=None, help="directory for CSV and JSON output")
     tile.set_defaults(func=_cmd_tile)
+
+    part = sub.add_parser(
+        "partition", help="group tasks onto devices and score the cut (B2)"
+    )
+    part.add_argument("workloads", nargs="*")
+    part.add_argument("--class", dest="device_class", default="mote-c")
+    part.add_argument("--method", action="append",
+                      help="partitioner to compare (repeatable)")
+    part.add_argument("--out", default=None, help="directory for CSV and JSON output")
+    part.add_argument("--no-scaling", action="store_true",
+                      help="skip the runtime ladder")
+    part.set_defaults(func=_cmd_partition)
 
     return p
 

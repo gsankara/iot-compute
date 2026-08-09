@@ -130,4 +130,9 @@ echo "== 10. B1 -- what making it fit costs =="
     | tee "$OUT/console/10_tiling.txt"
 
 echo
+echo "== 11. B2 -- cut quality and the near-linearity study =="
+"${PY[@]}" -m iotc.cli partition --out "$OUT/compiler/b2" \
+    | tee "$OUT/console/11_partition.txt"
+
+echo
 echo "done -- artefacts in $OUT/"

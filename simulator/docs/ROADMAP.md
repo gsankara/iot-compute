@@ -96,8 +96,38 @@ the part.  Its results:
   aim-dominated, and every one has more edges than before.  Making a problem fit
   makes the scheduling problem harder.
 
-**B2 Partition** — `fmbm` by default, with Kernighan–Lin and spectral as
-comparators. Must demonstrate near-linear runtime.
+**B2 Partition** ✅ **complete** — `fmbm` by default, with Kernighan–Lin,
+spectral and a contiguous-block baseline as comparators, in
+`iotc/compiler/partition.py` on `iotc/compiler/fastmap.py`.
+
+Where B1 split tasks to fit, B2 packs them back together: every task boundary
+that survives becomes a beam, and bytes inside a group are a memory copy.  The
+method is embed with graph FastMap → KD-order the embedding → cut into
+capacity-balanced runs → bounded boundary refinement.  Ordering rather than
+clustering is deliberate: capacitated k-means is `O(n·k)` and the device count
+grows with the problem, so it is quadratic in disguise and would sink the
+acceptance criterion.
+
+Bench: `iotc partition` (`iotc/bench/partition_bench.py`), which reports cut
+quality *and* a fitted log-log runtime slope.  Its results:
+
+- **near-linear runtime, measured: `n^0.87`** over a 16× range of task counts,
+  against `n^1.17` for Kernighan–Lin and `n^2.16` for spectral bisection — 6× in
+  wall-clock at 8,000 tasks and widening.  The acceptance criterion is met;
+- **spectral gets the best cuts and cannot be used** — it produces groups that
+  do not fit the device on five of eight workloads, because Fiedler bisection
+  has no notion of capacity;
+- `fmbm` beats the contiguous baseline on **six of eight** workloads.  It loses
+  on BFS, where a power-law degree distribution defeats a geometric ordering,
+  and on SUMMA, whose row-and-column pattern has no low-dimensional embedding.
+
+Two findings worth carrying forward.  Shortest-path distance on a lattice is L1,
+so every edge contributes equally to the first FastMap coordinate and the
+Pythagorean residual zeroes them all at once — a naive implementation returns a
+*one-dimensional* embedding of a 3D mesh.  `fastmap.py` detects the collapse and
+recovers with fresh pivots orthogonalised against the axes already found.  And
+`scipy.sparse.linalg.eigsh` draws its Krylov start vector at random, which made
+spectral partitioning non-deterministic until the start vector was pinned.
 
 **B3 Place** — graph FastMap into ℝ^κ, then an **anisotropic projection** to
 physical 3D.  Note the correction Phase A produced: for a photovoltaic float,

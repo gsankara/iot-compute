@@ -1,0 +1,48 @@
+workload    method          tasks     k     cut   cut MiB balance  fits        ms
+---------------------------------------------------------------------------------
+bfs         block             256     3   0.579      0.06    1.61    ok       0.0
+bfs         fmbm              256     3   0.656      0.07    1.10    ok     354.1
+bfs         spectral          256     3   0.578      0.06    1.69    NO     822.0
+bfs         kernighan_lin     256     3   0.578      0.06    1.61    ok      82.8
+summa       block              64    14   0.786     22.00    1.09    ok       0.0
+summa       fmbm               64    14   0.842     23.56    1.09    ok       8.0
+summa       spectral           64    14   0.714     20.00    1.75    NO      13.6
+summa       kernighan_lin      64    14   0.788     22.06    1.09    ok       1.9
+maxclique   block             128     2   0.502      0.10    1.00    ok       0.0
+maxclique   fmbm              128     2   0.476      0.09    1.09    ok      86.1
+maxclique   spectral          128     2   0.482      0.10    1.00    ok      14.2
+maxclique   kernighan_lin     128     2   0.475      0.09    1.00    ok      23.0
+maxcut      block             128     2   0.503      0.12    1.00    ok       0.1
+maxcut      fmbm              128     2   0.494      0.12    1.09    ok      91.2
+maxcut      spectral          128     2   0.487      0.11    1.00    ok       9.2
+maxcut      kernighan_lin     128     2   0.492      0.12    1.00    ok      20.6
+mis         block             128     2   0.503      0.19    1.00    ok       0.0
+mis         fmbm              128     2   0.494      0.19    1.09    ok      99.0
+mis         spectral          128     2   0.487      0.18    1.00    ok       7.8
+mis         kernighan_lin     128     2   0.492      0.18    1.00    ok      34.1
+spmv        block             256     7   0.859      0.86    1.02    ok       0.1
+spmv        fmbm              256     7   0.856      0.85    1.10    ok     393.3
+spmv        spectral          256     7   0.842      0.84    1.75    NO      45.1
+spmv        kernighan_lin     256     7   0.854      0.85    1.02    ok     122.1
+stencil2d   block             256    38   0.573      0.13    1.04    ok       0.1
+stencil2d   fmbm              256    38   0.481      0.11    1.04    ok      18.8
+stencil2d   spectral          256    38   0.546      0.13    1.19    NO      36.1
+stencil2d   kernighan_lin     256    38   0.569      0.13    1.04    ok       3.1
+stencil3d   block             512    22   0.458      0.60    1.03    ok       0.0
+stencil3d   fmbm              512    22   0.444      0.58    1.07    ok      47.0
+stencil3d   spectral          512    22   0.417      0.55    1.38    NO      26.2
+stencil3d   kernighan_lin     512    22   0.458      0.60    1.03    ok       9.9
+
+method                512      1728      4096      8000  exponent
+-----------------------------------------------------------------
+block                 0.0       0.1       0.1       0.7      0.90
+fmbm                 55.5     150.2     333.8     602.8      0.87
+kernighan_lin        12.1      48.0     212.3     247.0      1.17
+spectral              7.3     217.4     579.5    3490.4      2.16
+
+wall-clock in ms; exponent is the log-log slope against task count
+
+empirical complexity: block n^0.90, fmbm n^0.87, kernighan_lin n^1.17, spectral n^2.16
+fmbm is near-linear at n^0.87; kernighan_lin, spectral grow strictly faster
+cut vs the block baseline: fmbm wins on 6 of 8 (maxclique, maxcut, mis, spmv, stencil2d, stencil3d); loses on bfs, summa
+produced groups that do not fit the device: spectral on 5 workloads

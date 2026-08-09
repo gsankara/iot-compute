@@ -15,28 +15,42 @@ Implemented:
     size, because added traffic depends on the factorization and not on the
     piece count.
 
-Still to come: partition, place (FastMap), motion, beam assignment, schedule,
-energy feasibility, resilience and codegen.  See ``docs/ROADMAP.md``.
+``B2`` -- :mod:`iotc.compiler.partition`, on :mod:`iotc.compiler.fastmap`.  Packs
+    tasks back into per-device groups so that as much traffic as possible
+    becomes a memory copy instead of a beam.  FastMap is the spine and B3 uses
+    the same embedding.
+
+Still to come: place, motion, beam assignment, schedule, energy feasibility,
+resilience and codegen.  See ``docs/ROADMAP.md``.
 """
 
 from __future__ import annotations
 
-from . import frontends, ir, tile
+from . import fastmap, frontends, ir, partition, tile
+from .fastmap import embed_graph, traffic_distance
 from .frontends import Workload
 from .ir import Task, TaskGraph, TaskGraphError
+from .partition import PartitionResult, Partitioner, minimum_devices
 from .tile import TileModel, TileResult, balanced_factors
 
 __all__ = [
     "ir",
     "frontends",
     "tile",
+    "fastmap",
+    "partition",
     "Task",
     "TaskGraph",
     "TaskGraphError",
     "Workload",
     "TileModel",
     "TileResult",
+    "Partitioner",
+    "PartitionResult",
     "balanced_factors",
+    "embed_graph",
+    "traffic_distance",
+    "minimum_devices",
     "build_workload",
 ]
 

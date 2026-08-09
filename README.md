@@ -18,19 +18,19 @@ realizes.  That is the thesis — **mobility buys dynamic proximity**.
 | Path | Contents |
 |---|---|
 | [`simulator/`](simulator/) | Phase A — the simulator, its testbench and evaluation harness. Complete. |
-| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends) and B1 (tiling) complete. |
+| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends), B1 (tiling) and B2 (partitioning) complete. |
 | `testbench/` | Phase C — large-scale emulation and fault campaigns. Not started. |
 
 Start at [`simulator/README.md`](simulator/README.md).
 
 ## Status
 
-**Phase A is complete** and **Phase B is under way**: 291 tests passing.
+**Phase A is complete** and **Phase B is under way**: 333 tests passing.
 Sequencing follows the project plan — simulator first, then the compiler built
 pass by pass with each pass shipping its own testbench and evaluation, then the
-large-scale testbench.  B0 (the compiler IR and its twelve workload frontends)
-and B1 (tiling onto a target part) are done and benched.  See
-[`simulator/docs/ROADMAP.md`](simulator/docs/ROADMAP.md).
+large-scale testbench.  B0 (the compiler IR and its twelve workload frontends),
+B1 (tiling onto a target part) and B2 (partitioning onto devices) are done and
+benched.  See [`simulator/docs/ROADMAP.md`](simulator/docs/ROADMAP.md).
 
 ## What the simulator already establishes
 
@@ -66,6 +66,11 @@ Measured outputs, not design intentions — every one is reproduced in
 - Some workloads **cannot be tiled onto a part at any granularity**: an FFT
   butterfly's exchange alone exceeds the RAM, so the answer is a bigger part
   rather than a finer cut.
+- FastMap partitioning is **near-linear, measured**: `n^0.87` against `n^2.16`
+  for spectral bisection over a 16× range of task counts.
+- **Spectral bisection gets the best cuts and cannot be used** — it ignores
+  capacity, so it produces groups that do not fit the device on five of eight
+  workloads.  An infeasible partition is not a better partition.
 
 ## Quick start
 

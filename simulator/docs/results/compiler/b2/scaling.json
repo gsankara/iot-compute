@@ -1,0 +1,146 @@
+[
+ {
+  "method": "block",
+  "side": 8,
+  "tasks": 512,
+  "edges": 1344,
+  "k": 4,
+  "seconds": 4.710000939667225e-05,
+  "cut_fraction": 0.14285714285714285
+ },
+ {
+  "method": "fmbm",
+  "side": 8,
+  "tasks": 512,
+  "edges": 1344,
+  "k": 4,
+  "seconds": 0.05547969997860491,
+  "cut_fraction": 0.16741071428571427
+ },
+ {
+  "method": "spectral",
+  "side": 8,
+  "tasks": 512,
+  "edges": 1344,
+  "k": 4,
+  "seconds": 0.007341700023971498,
+  "cut_fraction": 0.14285714285714285
+ },
+ {
+  "method": "kernighan_lin",
+  "side": 8,
+  "tasks": 512,
+  "edges": 1344,
+  "k": 4,
+  "seconds": 0.012073999969288707,
+  "cut_fraction": 0.14285714285714285
+ },
+ {
+  "method": "block",
+  "side": 12,
+  "tasks": 1728,
+  "edges": 4752,
+  "k": 12,
+  "seconds": 9.460002183914185e-05,
+  "cut_fraction": 0.3333333333333333
+ },
+ {
+  "method": "fmbm",
+  "side": 12,
+  "tasks": 1728,
+  "edges": 4752,
+  "k": 12,
+  "seconds": 0.15016479999758303,
+  "cut_fraction": 0.1994949494949495
+ },
+ {
+  "method": "spectral",
+  "side": 12,
+  "tasks": 1728,
+  "edges": 4752,
+  "k": 12,
+  "seconds": 0.21737560001201928,
+  "cut_fraction": 0.2359006734006734
+ },
+ {
+  "method": "kernighan_lin",
+  "side": 12,
+  "tasks": 1728,
+  "edges": 4752,
+  "k": 12,
+  "seconds": 0.04803399997763336,
+  "cut_fraction": 0.3333333333333333
+ },
+ {
+  "method": "block",
+  "side": 16,
+  "tasks": 4096,
+  "edges": 11520,
+  "k": 26,
+  "seconds": 0.0001493000891059637,
+  "cut_fraction": 0.3692708333333333
+ },
+ {
+  "method": "fmbm",
+  "side": 16,
+  "tasks": 4096,
+  "edges": 11520,
+  "k": 26,
+  "seconds": 0.33381300000473857,
+  "cut_fraction": 0.29661458333333335
+ },
+ {
+  "method": "spectral",
+  "side": 16,
+  "tasks": 4096,
+  "edges": 11520,
+  "k": 26,
+  "seconds": 0.5795179000124335,
+  "cut_fraction": 0.3472222222222222
+ },
+ {
+  "method": "kernighan_lin",
+  "side": 16,
+  "tasks": 4096,
+  "edges": 11520,
+  "k": 26,
+  "seconds": 0.21234710002318025,
+  "cut_fraction": 0.3692708333333333
+ },
+ {
+  "method": "block",
+  "side": 20,
+  "tasks": 8000,
+  "edges": 22800,
+  "k": 50,
+  "seconds": 0.0007156999781727791,
+  "cut_fraction": 0.3684210526315789
+ },
+ {
+  "method": "fmbm",
+  "side": 20,
+  "tasks": 8000,
+  "edges": 22800,
+  "k": 50,
+  "seconds": 0.602790999924764,
+  "cut_fraction": 0.3920175438596491
+ },
+ {
+  "method": "spectral",
+  "side": 20,
+  "tasks": 8000,
+  "edges": 22800,
+  "k": 50,
+  "seconds": 3.4904069000622258,
+  "cut_fraction": 0.20723684210526316
+ },
+ {
+  "method": "kernighan_lin",
+  "side": 20,
+  "tasks": 8000,
+  "edges": 22800,
+  "k": 50,
+  "seconds": 0.2470278999535367,
+  "cut_fraction": 0.3684210526315789
+ }
+]

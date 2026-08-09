@@ -361,6 +361,69 @@ problem fit makes the scheduling problem harder, not easier.
 
 ---
 
+## 11. B2 — grouping tasks onto devices, and whether it scales
+
+```bash
+python -m iotc.cli partition --class mote-c
+```
+
+Bytes crossing a group boundary become optical traffic; bytes inside a group are
+a memory copy and cost nothing.  Every method is given the same device count.
+
+```
+workload    method          tasks     k     cut   cut MiB balance  fits        ms
+---------------------------------------------------------------------------------
+stencil3d   block             512    22   0.458      0.60    1.03    ok       0.0
+stencil3d   fmbm              512    22   0.444      0.58    1.07    ok      47.0
+stencil3d   spectral          512    22   0.417      0.55    1.38    NO      26.2
+stencil3d   kernighan_lin     512    22   0.458      0.60    1.03    ok       9.9
+stencil2d   block             256    38   0.573      0.13    1.04    ok       0.1
+stencil2d   fmbm              256    38   0.481      0.11    1.04    ok      18.8
+stencil2d   spectral          256    38   0.546      0.13    1.19    NO      36.1
+summa       block              64    14   0.786     22.00    1.09    ok       0.0
+summa       fmbm               64    14   0.842     23.56    1.09    ok       8.0
+```
+
+The acceptance criterion the roadmap sets for this pass is not cut quality but
+**near-linear runtime**, so the ladder is the part that decides it:
+
+```
+method                512      1728      4096      8000  exponent
+-----------------------------------------------------------------
+block                 0.0       0.1       0.1       0.7      0.90
+fmbm                 55.5     150.2     333.8     602.8      0.87
+kernighan_lin        12.1      48.0     212.3     247.0      1.17
+spectral              7.3     217.4     579.5    3490.4      2.16
+```
+
+```
+empirical complexity: block n^0.90, fmbm n^0.87, kernighan_lin n^1.17, spectral n^2.16
+fmbm is near-linear at n^0.87; kernighan_lin, spectral grow strictly faster
+cut vs the block baseline: fmbm wins on 6 of 8 (maxclique, maxcut, mis, spmv,
+stencil2d, stencil3d); loses on bfs, summa
+produced groups that do not fit the device: spectral on 5 workloads
+```
+
+**FastMap partitioning is near-linear, measured.**  `n^0.87` over a 16× range of
+task counts, against `n^2.16` for spectral bisection — a gap that is 6× in
+wall-clock at 8,000 tasks and widens from there.  That is the property the whole
+choice of FastMap rests on, and it is now a measurement rather than a citation.
+
+**Spectral gets the best cuts and cannot be used.**  It wins on cut in most rows
+and produces groups that *do not fit the device* in five of eight workloads,
+because Fiedler bisection optimises the cut with no notion of capacity.  An
+infeasible partition is not a better partition.
+
+**`block` is a stronger baseline than it looks.**  The frontends number their
+tiles in lattice order, so contiguous id ranges are already coherent 3D blocks;
+beating it on a stencil means beating a partition that was handed the geometry
+for free.  `fmbm` beats it on six of eight workloads and loses on two —
+BFS, where a power-law degree distribution defeats a geometric ordering, and
+SUMMA, whose row-and-column communication pattern has no low-dimensional
+embedding to find.  Both losses are reported rather than tuned away.
+
+---
+
 ## Reproducibility
 
 Every run is seeded, and determinism is treated as a correctness property rather
