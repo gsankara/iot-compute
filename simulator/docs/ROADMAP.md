@@ -189,9 +189,34 @@ Still outstanding from the original scope: the harvest duty cycle is not yet
 enforced here.  Motion energy is measured and charged per axis, but checking it
 against what the harvester can supply belongs to B7, which iterates with B6.
 
-**B5 Beam assignment** — degree-constrained b-matching onto transceivers under
-per-class sweep limits; angles snapped to the grid with the residual fed back
-into B3 for one refinement iteration.
+**B5 Beam assignment** ✅ **complete** — degree-constrained b-matching onto
+transceivers under per-class sweep limits, in `iotc/compiler/beam.py`.
+
+A mote has two heads and wants up to thirteen neighbours, so the demand graph
+cannot be a topology — it is realised as a *sequence* of b-matchings, one per
+round.  Three assigners under the `assigner` kind: `heaviest_first` (the pass),
+`lightest_first` (the same matching reversed, isolating the ordering) and
+`arbitrary`.
+
+Bench: `iotc beam` (`iotc/bench/beam_bench.py`).  Its results:
+
+- **B3's energy-optimal placement cannot be aimed.**  The float formation is
+  81 m tall and 0.4 m wide, so nearly every bearing points straight up or down,
+  outside the ±75° elevation limit: **96.5% of links rejected**.  Each pass was
+  locally right and the composition was unusable;
+- **the feedback iteration recovers it** — widening the column to 20 m drops
+  rejection to 3.5% and takes first-round traffic from 5.5% to 48.1%;
+- demand exceeds transceivers by **3.5×** on average; a relay's six heads cut
+  rounds from 4.9 to 2.0 and let one round carry 90% of the traffic, which is
+  the strongest argument yet for heterogeneity;
+- ordering by payload puts **61.7%** of traffic in the opening round against
+  38.9% reversed, at identical round count.
+
+Two corrections to the original framing.  The roadmap asks for the *snap
+residual* to be fed back into B3; the residual is the minor term, and the sweep
+limits are what actually break the placement.  And minimising raw residual makes
+the loss **worse** — loss is quadratic in the residual, so the objective must be
+the loss itself.
 
 **B6 Schedule** — time-slotted circuit switching, since a head serves one
 neighbour at a time and retargeting costs real gimbal time.  Phase A measured

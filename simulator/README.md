@@ -31,8 +31,8 @@ problem graph ──FastMap──▶ 3D placement ──▶ motion plan ──�
 (the compiler IR and its twelve workload frontends, `iotc graph`), **B1**
 (tiling to fit a target part, `iotc tile`), **B2** (grouping tasks onto devices,
 `iotc partition`), **B3** (projecting onto physical coordinates, `iotc place`)
-and **B4** (flying there without dropping links, `iotc motion`) are implemented,
-tested and benched.  The remaining compiler passes and the
+**B4** (flying there without dropping links, `iotc motion`) and **B5** (beam
+rounds, `iotc beam`) are implemented, tested and benched.  The remaining compiler passes and the
 large-scale testbench follow; see `docs/ROADMAP.md`.
 
 ## Install
@@ -100,6 +100,12 @@ Fly it there without dropping the links on the way:
 iotc motion stencil3d
 ```
 
+Assign the beams, and find out what the gimbals can actually point at:
+
+```bash
+iotc beam stencil3d
+```
+
 In Python:
 
 ```python
@@ -153,6 +159,7 @@ iotc/
     partition.py  group tasks onto devices, minimising the cut          (B2)
     place.py    project onto 3D; the cheap axis is not the fast one    (B3)
     motion.py   fly there in waves so links keep one end still         (B4)
+    beam.py     b-matching onto transceivers; what a gimbal can aim at  (B5)
   bench/        design-space sweeps, fault campaigns, per-pass evaluation
 configs/  examples/  tests/  docs/
 ```
@@ -202,7 +209,7 @@ which is gitignored.  The curated versions are committed in `docs/RESULTS.md`.
 python -m pytest -q
 ```
 
-390 tests.  They are written as invariants rather than golden values — monotonic
+415 tests.  They are written as invariants rather than golden values — monotonic
 link budgets, unit-mean fading, energy conservation, quantization bounds, seeded
 determinism, five-point and seven-point stencil neighbourhoods, surface-to-volume
 scaling, FLOP and external-traffic conservation under tiling, embedded distance

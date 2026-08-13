@@ -310,6 +310,23 @@ def _cmd_motion(args) -> int:
 
 
 # --------------------------------------------------------------------------
+def _cmd_beam(args) -> int:
+    """Assign beams and report what the gimbals can actually point at."""
+    from .bench import beam_bench
+
+    rows = beam_bench.run(
+        args.workloads or None,
+        tuple(args.platform or beam_bench.PLATFORMS),
+        tuple(args.assigner or beam_bench.DEFAULT_ASSIGNERS),
+        out=args.out,
+    )
+    print(beam_bench.report(rows))
+    print()
+    print(beam_bench.verdict(rows))
+    return 0
+
+
+# --------------------------------------------------------------------------
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="iotc", description=__doc__)
     sub = p.add_subparsers(dest="command", required=True)
@@ -420,6 +437,15 @@ def build_parser() -> argparse.ArgumentParser:
     mo.add_argument("--planner", action="append", help="planner to compare (repeatable)")
     mo.add_argument("--out", default=None, help="directory for CSV and JSON output")
     mo.set_defaults(func=_cmd_motion)
+
+    bm = sub.add_parser(
+        "beam", help="assign links to transceiver rounds and check aimability (B5)"
+    )
+    bm.add_argument("workloads", nargs="*")
+    bm.add_argument("--platform", action="append", help="float, drone or relay")
+    bm.add_argument("--assigner", action="append", help="assigner to compare")
+    bm.add_argument("--out", default=None, help="directory for CSV and JSON output")
+    bm.set_defaults(func=_cmd_beam)
 
     return p
 

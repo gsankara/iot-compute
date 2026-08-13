@@ -28,17 +28,21 @@ Implemented:
     dropping the links on the way, by moving in colour classes so no protected
     link ever has both endpoints in motion.
 
-Still to come: beam assignment, schedule, energy feasibility, resilience and
-codegen.  See ``docs/ROADMAP.md``.
+``B5`` -- :mod:`iotc.compiler.beam`.  Chooses which links are open at the same
+    time, as a sequence of degree-constrained b-matchings, and feeds the
+    pointing problem back into B3.
+
+Still to come: schedule, energy feasibility, resilience and codegen.  See ``docs/ROADMAP.md``.
 """
 
 from __future__ import annotations
 
-from . import fastmap, frontends, ir, motion, partition, place, tile
+from . import beam, fastmap, frontends, ir, motion, partition, place, tile
 from .fastmap import embed_graph, traffic_distance
 from .frontends import Workload
 from .ir import Task, TaskGraph, TaskGraphError
 from .partition import PartitionResult, Partitioner, minimum_devices
+from .beam import BeamAssigner, BeamAssignment, assign_beams, refine_positions
 from .motion import MotionPlan, Planner, plan_motion
 from .place import MotionBudget, PlaceResult, Placer, derive_budget
 from .tile import TileModel, TileResult, balanced_factors
@@ -51,6 +55,7 @@ __all__ = [
     "partition",
     "place",
     "motion",
+    "beam",
     "Task",
     "TaskGraph",
     "TaskGraphError",
@@ -66,6 +71,10 @@ __all__ = [
     "Planner",
     "MotionPlan",
     "plan_motion",
+    "BeamAssigner",
+    "BeamAssignment",
+    "assign_beams",
+    "refine_positions",
     "balanced_factors",
     "embed_graph",
     "traffic_distance",

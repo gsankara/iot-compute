@@ -141,7 +141,13 @@ echo "== 12. B3 -- placing the swarm, and what the formation costs to fly =="
 
 echo
 echo "== 13. B4 -- flying the swarm without dropping its links =="
-"${PY[@]}" -m iotc.cli motion --out "$OUT/compiler/b4"     | tee "$OUT/console/13_motion.txt"
+"${PY[@]}" -m iotc.cli motion --out "$OUT/compiler/b4" \
+    | tee "$OUT/console/13_motion.txt"
+
+echo
+echo "== 14. B5 -- beam rounds, and what the gimbals can point at =="
+"${PY[@]}" -m iotc.cli beam --out "$OUT/compiler/b5" \
+    | tee "$OUT/console/14_beam.txt"
 
 echo
 echo "done -- artefacts in $OUT/"

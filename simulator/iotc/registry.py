@@ -54,6 +54,7 @@ KINDS = (
     "partitioner",  # task graph -> per-device groups
     "placer",  # task graph -> 3D coordinates
     "planner",  # start formation -> target formation, in flight
+    "assigner",  # which links are open simultaneously
     "scheduler",  # traffic matrix -> time slots
     "workload",  # problem frontend
 )

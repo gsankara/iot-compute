@@ -18,19 +18,20 @@ realizes.  That is the thesis — **mobility buys dynamic proximity**.
 | Path | Contents |
 |---|---|
 | [`simulator/`](simulator/) | Phase A — the simulator, its testbench and evaluation harness. Complete. |
-| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends), B1 (tiling), B2 (partitioning), B3 (placement) and B4 (motion) complete. |
+| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends), B1 (tiling), B2 (partitioning), B3 (placement), B4 (motion) and B5 (beam assignment) complete. |
 | `testbench/` | Phase C — large-scale emulation and fault campaigns. Not started. |
 
 Start at [`simulator/README.md`](simulator/README.md).
 
 ## Status
 
-**Phase A is complete** and **Phase B is under way**: 390 tests passing.
+**Phase A is complete** and **Phase B is under way**: 415 tests passing.
 Sequencing follows the project plan — simulator first, then the compiler built
 pass by pass with each pass shipping its own testbench and evaluation, then the
 large-scale testbench.  B0 (the compiler IR and its twelve workload frontends),
 B1 (tiling onto a target part), B2 (partitioning onto devices), B3 (placing them
-in space) and B4 (flying them there) are done and benched.  See [`simulator/docs/ROADMAP.md`](simulator/docs/ROADMAP.md).
+in space), B4 (flying them there) and B5 (assigning the beams) are done and
+benched.  See [`simulator/docs/ROADMAP.md`](simulator/docs/ROADMAP.md).
 
 ## What the simulator already establishes
 
@@ -80,6 +81,10 @@ Measured outputs, not design intentions — every one is reproduced in
   With no pointing tracker, a link with both ends in motion is gone — so motion
   is planned in colour classes, which keeps every link up for 2.18× the time and
   no extra energy.
+- **The energy-optimal placement cannot be aimed at all.**  Minimising motion
+  energy gives a float a formation 81 m tall and 0.4 m wide, and 96.5% of the
+  bearings in a column fall outside the gimbal's elevation limits.  Feeding that
+  back into placement widens the column and recovers the links.
 
 ## Quick start
 

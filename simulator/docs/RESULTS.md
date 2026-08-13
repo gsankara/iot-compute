@@ -531,6 +531,64 @@ rather than simply taking turns.
 
 ---
 
+## 14. B5 — beam rounds, and what the gimbals can point at
+
+```bash
+python -m iotc.cli beam
+```
+
+```
+workload    platform assigner         B3 fix  tx  over  rounds  1st traffic  rejected  loss dB
+----------------------------------------------------------------------------------------------
+stencil3d   float    heaviest_first       no   2   6.5       1        5.5%     96.5%     0.05
+stencil3d   float    heaviest_first      yes   2   6.5       7       48.1%      3.5%     0.07
+stencil3d   float    lightest_first      yes   2   6.5       7        6.9%      3.5%     0.07
+stencil3d   drone    heaviest_first       no   2   6.5       7       48.7%      4.7%     0.15
+stencil3d   drone    heaviest_first      yes   2   6.5       7       48.7%      2.4%     0.07
+stencil3d   relay    heaviest_first      yes   6   2.2       3       90.1%      0.0%     0.00
+```
+
+```
+demand exceeds transceivers by 3.5x on average -- the graph cannot be a topology,
+only a sequence of them
+drone: B3's placement leaves 2.6% of links unaimable; after the refinement
+iteration, 0.8%
+float: B3's placement leaves 97.8% of links unaimable; after the refinement
+iteration, 9.4%
+relay: B3's placement leaves 0.0% of links unaimable; after the refinement
+iteration, 0.0%
+ordering the b-matching by payload puts 61.7% of the traffic in the opening round
+against 38.9% reversed -- same rounds, different bytes
+rounds against heads: 2 heads 4.9 rounds, 6 heads 2.0 rounds
+assignments exceeding a device's head count: 0 of 54 -- every assignment is realisable
+```
+
+**The energy-optimal placement cannot be aimed.**  This is the sharpest
+cross-pass result in the compiler so far.  B3 minimises motion energy, and on a
+float the cheap axis is depth — so it returns a formation 81 m tall and 0.4 m
+wide.  Nearly every bearing in a column points straight up or down, outside the
+mote's ±75° elevation limit, and **96.5% of the links cannot be aimed at all**.
+Each pass was locally right and the composition was unusable.
+
+**The feedback iteration is a structural correction, not a nudge.**  Returning
+the pointing cost to B3 widens the column from 0.4 m to 20 m and drops rejection
+to 3.5%, taking first-round traffic from 5.5% to 48.1%.  The roadmap framed this
+as feeding back the *snap residual*; the residual turned out to be the minor
+term.  Note also that minimising raw residual makes the loss **worse** — loss is
+quadratic in the residual, so the objective has to be the loss itself.
+
+**Demand exceeds supply by 3.5×, so the topology is a sequence.**  A mote has two
+heads and wants up to thirteen neighbours.  A relay's six heads cut the rounds
+from 4.9 to 2.0 and let one round carry 90% of the traffic — the clearest
+argument yet for heterogeneity in the swarm.
+
+**Ordering the b-matching is the only thing this pass chooses**, and it is worth
+61.7% of traffic in the opening round against 38.9% reversed, at identical round
+count.  Since each round costs every device in it a ~0.5 s retarget, front-loading
+the heavy edges is what B6 will have to exploit.
+
+---
+
 ## Reproducibility
 
 Every run is seeded, and determinism is treated as a correctness property rather
