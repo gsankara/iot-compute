@@ -20,17 +20,22 @@ Implemented:
     becomes a memory copy instead of a beam.  FastMap is the spine and B3 uses
     the same embedding.
 
-Still to come: place, motion, beam assignment, schedule, energy feasibility,
-resilience and codegen.  See ``docs/ROADMAP.md``.
+``B3`` -- :mod:`iotc.compiler.place`.  Projects the embedding onto physical
+    coordinates, scaling each axis by what the *energy* budget allows rather
+    than by how fast the body moves -- the correction Phase A produced.
+
+Still to come: motion, beam assignment, schedule, energy feasibility, resilience
+and codegen.  See ``docs/ROADMAP.md``.
 """
 
 from __future__ import annotations
 
-from . import fastmap, frontends, ir, partition, tile
+from . import fastmap, frontends, ir, partition, place, tile
 from .fastmap import embed_graph, traffic_distance
 from .frontends import Workload
 from .ir import Task, TaskGraph, TaskGraphError
 from .partition import PartitionResult, Partitioner, minimum_devices
+from .place import MotionBudget, PlaceResult, Placer, derive_budget
 from .tile import TileModel, TileResult, balanced_factors
 
 __all__ = [
@@ -39,6 +44,7 @@ __all__ = [
     "tile",
     "fastmap",
     "partition",
+    "place",
     "Task",
     "TaskGraph",
     "TaskGraphError",
@@ -47,6 +53,10 @@ __all__ = [
     "TileResult",
     "Partitioner",
     "PartitionResult",
+    "Placer",
+    "PlaceResult",
+    "MotionBudget",
+    "derive_budget",
     "balanced_factors",
     "embed_graph",
     "traffic_distance",

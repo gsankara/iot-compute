@@ -424,6 +424,64 @@ embedding to find.  Both losses are reported rather than tuned away.
 
 ---
 
+## 12. B3 — placing the swarm, and what the formation costs to fly
+
+```bash
+python -m iotc.cli place
+```
+
+What each platform can actually reach, derived from its `DeviceClass` and its
+medium rather than configured:
+
+```
+platform    xy reach    z reach  anisotropy   optical    xy J/m     z J/m
+------------------------------------------------------------------------
+float           0.70     160.99      231.01     41.62     1.065     0.000
+drone       17874.55   14594.51        0.82     87.89     0.180     0.221
+tether        480.00      30.00        0.06      1.75     0.000     0.000
+```
+
+```
+workload    platform placer                 extent x/y/z (m)   link m  unreach   energy J
+-----------------------------------------------------------------------------------------
+stencil2d   float    anisotropic       0.3     0.3      78.8     8.40    0.0%       3.52
+stencil2d   float    velocity          0.7     0.7       0.7     0.18    0.0%       9.06
+spmv        float    anisotropic       0.2     0.2      39.5    11.83    0.0%       0.43
+spmv        float    velocity          0.7     0.7       0.7     0.47    0.0%       1.64
+```
+
+```
+links beyond optical reach: 0 of 36 placements -- every placement is connected
+drone: cheapest placer is velocity (603.64 J total) -- the velocity reading is not
+penalised on this platform
+float: cheapest placer is anisotropic (5.97 J total), 2.78x cheaper than the
+velocity reading
+tether: motion is free on this platform, energy cannot rank it
+platform anisotropy (z reach / xy reach): drone 0.82, float 231.01, tether 0.06
+```
+
+**A float can go 231× further down than sideways.**  Ballast sets a trim once and
+the body coasts to depth for no further energy, so depth is bounded by *time*;
+thrusters burn charge every second, so lateral travel is bounded by the battery.
+Placing by *cost* rather than by speed spends the free axis and saves the
+rationed one, and the formation is **2.78× cheaper to fly**.  The naive reading —
+"ballast is slow, so keep the swarm flat" — does the exact opposite.
+
+**The axes do not favour the same direction on every platform.**  The float's
+cheap axis is depth (anisotropy 231), the tethered head's is lateral (0.06,
+because the wire limits depth while the gantry does not), and a drone is nearly
+isotropic (0.82) because vertical travel fights gravity.  A placer tuned to one
+platform is wrong on the other two, which is why all three are in the bench —
+and on the drone the naive velocity scaling is *not* penalised.
+
+**Energy is not the binding constraint; light is.**  The float's energy budget
+permits 161 m of depth spread, but 470 nm light crosses only 41.6 m of water.
+Every placement is therefore scaled until its longest link closes, with 5% held
+back as tolerance — Phase A measured that a 0.04 m/s drift destroys an open-loop
+link, so the last few percent of reach is not usable range.
+
+---
+
 ## Reproducibility
 
 Every run is seeded, and determinism is treated as a correctness property rather

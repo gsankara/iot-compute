@@ -273,6 +273,26 @@ def _cmd_partition(args) -> int:
 
 
 # --------------------------------------------------------------------------
+def _cmd_place(args) -> int:
+    """Place devices in space and report what the formation costs to fly."""
+    from .bench import place_bench
+
+    print(place_bench.budget_report())
+    print()
+    rows = place_bench.run(
+        args.workloads or None,
+        tuple(args.platform or place_bench.PLATFORMS),
+        tuple(args.placer or place_bench.DEFAULT_PLACERS),
+        out=args.out,
+    )
+    for platform in sorted({r["platform"] for r in rows}):
+        print(place_bench.report(rows, platform))
+        print()
+    print(place_bench.verdict(rows))
+    return 0
+
+
+# --------------------------------------------------------------------------
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="iotc", description=__doc__)
     sub = p.add_subparsers(dest="command", required=True)
@@ -364,6 +384,16 @@ def build_parser() -> argparse.ArgumentParser:
     part.add_argument("--no-scaling", action="store_true",
                       help="skip the runtime ladder")
     part.set_defaults(func=_cmd_partition)
+
+    pl = sub.add_parser(
+        "place", help="project the embedding onto physical coordinates (B3)"
+    )
+    pl.add_argument("workloads", nargs="*")
+    pl.add_argument("--platform", action="append",
+                    help="float, drone or tether (repeatable)")
+    pl.add_argument("--placer", action="append", help="placer to compare (repeatable)")
+    pl.add_argument("--out", default=None, help="directory for CSV and JSON output")
+    pl.set_defaults(func=_cmd_place)
 
     return p
 

@@ -129,10 +129,36 @@ recovers with fresh pivots orthogonalised against the axes already found.  And
 `scipy.sparse.linalg.eigsh` draws its Krylov start vector at random, which made
 spectral partitioning non-deterministic until the start vector was pinned.
 
-**B3 Place** — graph FastMap into ℝ^κ, then an **anisotropic projection** to
-physical 3D.  Note the correction Phase A produced: for a photovoltaic float,
-z is *slow but free* and xy is *fast but rationed*, so the projection must be
-driven by the energy budget, not by terminal velocity.
+**B3 Place** ✅ **complete** — graph FastMap into ℝ^κ, then an **anisotropic
+projection** to physical 3D, in `iotc/compiler/place.py`.  The correction Phase A
+produced is the whole content of the pass: for a photovoltaic float, z is *slow
+but free* and xy is *fast but rationed*, so each axis is scaled by what the
+**energy budget** allows rather than by terminal velocity.
+
+Three placers under the `placer` kind — `anisotropic` (the pass), `velocity`
+(the pre-correction reading, kept as the comparator) and `isotropic`.  Motion
+budgets are derived from the `DeviceClass` and the medium, and optical reach
+comes from `FSOChannel.max_range`, which was written for exactly this.
+
+Bench: `iotc place` (`iotc/bench/place_bench.py`), across all three platforms.
+Its results:
+
+- **a float reaches 231× further down than sideways**, and placing by cost
+  rather than speed makes the formation **2.78× cheaper to fly**;
+- **the axes do not favour the same direction on every platform** — float 231,
+  tethered head 0.06 (the wire limits depth, the gantry does not), drone 0.82
+  (vertical travel fights gravity).  On the drone the naive velocity scaling is
+  not penalised, and that is reported rather than hidden;
+- **energy is not the binding constraint; light is.**  The float's charge allows
+  161 m of depth spread but 470 nm crosses only 41.6 m of water, so every
+  placement is scaled until its longest link closes, keeping 5% back as
+  tolerance against the drift Phase A measured.
+
+Two bugs worth recording.  Coincident bodies never separate — the push direction
+is undefined at zero distance — so identically-connected tasks would be emitted
+stacked; a deterministic spiral offset breaks the tie before relaxation.  And
+`numpy.linalg.svd` returns `min(n, κ)` components, so a workload coarsened onto
+two devices produced a two-column projection and crashed on the z axis.
 
 **B4 Motion** — collision-free trajectories that preserve critical links in
 flight, and that respect the duty cycle a harvested budget allows.

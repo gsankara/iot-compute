@@ -135,4 +135,9 @@ echo "== 11. B2 -- cut quality and the near-linearity study =="
     | tee "$OUT/console/11_partition.txt"
 
 echo
+echo "== 12. B3 -- placing the swarm, and what the formation costs to fly =="
+"${PY[@]}" -m iotc.cli place --out "$OUT/compiler/b3" \
+    | tee "$OUT/console/12_placement.txt"
+
+echo
 echo "done -- artefacts in $OUT/"

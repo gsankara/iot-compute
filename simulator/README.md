@@ -29,9 +29,10 @@ problem graph ──FastMap──▶ 3D placement ──▶ motion plan ──�
 
 **Phase A (simulator) is complete and tested.**  Phase B is under way: **B0**
 (the compiler IR and its twelve workload frontends, `iotc graph`), **B1**
-(tiling to fit a target part, `iotc tile`) and **B2** (grouping tasks onto
-devices, `iotc partition`) are implemented, tested and benched.  The remaining
-compiler passes and the large-scale testbench follow; see `docs/ROADMAP.md`.
+(tiling to fit a target part, `iotc tile`), **B2** (grouping tasks onto devices,
+`iotc partition`) and **B3** (projecting onto physical coordinates, `iotc place`)
+are implemented, tested and benched.  The remaining compiler passes and the
+large-scale testbench follow; see `docs/ROADMAP.md`.
 
 ## Install
 
@@ -86,6 +87,12 @@ Group the tasks onto devices, and check the partitioner actually scales:
 iotc partition --class mote-c
 ```
 
+Put the swarm in space, and see what the formation costs to fly:
+
+```bash
+iotc place --platform float
+```
+
 In Python:
 
 ```python
@@ -137,6 +144,7 @@ iotc/
     tile.py     split tasks to fit a part; the cut's shape is its cost (B1)
     fastmap.py  graph FastMap: embed into R^kappa, near-linear         (B2/B3)
     partition.py  group tasks onto devices, minimising the cut          (B2)
+    place.py    project onto 3D; the cheap axis is not the fast one    (B3)
   bench/        design-space sweeps, fault campaigns, per-pass evaluation
 configs/  examples/  tests/  docs/
 ```
@@ -186,7 +194,7 @@ which is gitignored.  The curated versions are committed in `docs/RESULTS.md`.
 python -m pytest -q
 ```
 
-333 tests.  They are written as invariants rather than golden values — monotonic
+365 tests.  They are written as invariants rather than golden values — monotonic
 link budgets, unit-mean fading, energy conservation, quantization bounds, seeded
 determinism, five-point and seven-point stencil neighbourhoods, surface-to-volume
 scaling, FLOP and external-traffic conservation under tiling, embedded distance
