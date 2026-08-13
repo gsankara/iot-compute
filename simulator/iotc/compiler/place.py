@@ -55,6 +55,10 @@ class MotionBudget:
     #: Joules to traverse one metre vertically.  Zero for a ballast platform:
     #: the pump cost is paid once to set the trim, not per metre travelled.
     z_cost_per_m: float = 0.0
+    #: Travel speeds [m/s].  B4 needs these to turn a displacement into a
+    #: duration; reach alone cannot say how long a manoeuvre takes.
+    xy_speed: float = 0.0
+    z_speed: float = 0.0
     platform: str = "buoyant"
 
     @property
@@ -106,6 +110,8 @@ def derive_budget(
             z_reach=min(t.max_speed_z * horizon, t.length),
             max_link=_optical_reach(device_class, medium, line_rate),
             separation=2.0 * body.radius + t.radius,
+            xy_speed=t.max_speed_xy,
+            z_speed=t.max_speed_z,
             platform="tethered",
         )
 
@@ -126,6 +132,8 @@ def derive_budget(
             separation=2.0 * body.radius,
             xy_cost_per_m=xy_cost,
             z_cost_per_m=0.0,
+            xy_speed=v_xy,
+            z_speed=v_z,
             platform="buoyant",
         )
 
@@ -140,6 +148,8 @@ def derive_budget(
         separation=2.0 * body.radius,
         xy_cost_per_m=xy_cost,
         z_cost_per_m=z_cost,
+        xy_speed=v_xy,
+        z_speed=v_z,
         platform="aerial",
     )
 

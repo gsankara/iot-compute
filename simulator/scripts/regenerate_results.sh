@@ -140,4 +140,8 @@ echo "== 12. B3 -- placing the swarm, and what the formation costs to fly =="
     | tee "$OUT/console/12_placement.txt"
 
 echo
+echo "== 13. B4 -- flying the swarm without dropping its links =="
+"${PY[@]}" -m iotc.cli motion --out "$OUT/compiler/b4"     | tee "$OUT/console/13_motion.txt"
+
+echo
 echo "done -- artefacts in $OUT/"

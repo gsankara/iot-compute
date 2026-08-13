@@ -293,6 +293,23 @@ def _cmd_place(args) -> int:
 
 
 # --------------------------------------------------------------------------
+def _cmd_motion(args) -> int:
+    """Plan the manoeuvre and report what keeping the links up costs."""
+    from .bench import motion_bench
+
+    rows = motion_bench.run(
+        args.workloads or None,
+        tuple(args.platform or ("float",)),
+        tuple(args.planner or motion_bench.DEFAULT_PLANNERS),
+        out=args.out,
+    )
+    print(motion_bench.report(rows))
+    print()
+    print(motion_bench.verdict(rows))
+    return 0
+
+
+# --------------------------------------------------------------------------
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="iotc", description=__doc__)
     sub = p.add_subparsers(dest="command", required=True)
@@ -394,6 +411,15 @@ def build_parser() -> argparse.ArgumentParser:
     pl.add_argument("--placer", action="append", help="placer to compare (repeatable)")
     pl.add_argument("--out", default=None, help="directory for CSV and JSON output")
     pl.set_defaults(func=_cmd_place)
+
+    mo = sub.add_parser(
+        "motion", help="fly the swarm to its placement without dropping links (B4)"
+    )
+    mo.add_argument("workloads", nargs="*")
+    mo.add_argument("--platform", action="append", help="float or drone (repeatable)")
+    mo.add_argument("--planner", action="append", help="planner to compare (repeatable)")
+    mo.add_argument("--out", default=None, help="directory for CSV and JSON output")
+    mo.set_defaults(func=_cmd_motion)
 
     return p
 

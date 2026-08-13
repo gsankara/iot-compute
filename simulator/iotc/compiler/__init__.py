@@ -24,17 +24,22 @@ Implemented:
     coordinates, scaling each axis by what the *energy* budget allows rather
     than by how fast the body moves -- the correction Phase A produced.
 
-Still to come: motion, beam assignment, schedule, energy feasibility, resilience
-and codegen.  See ``docs/ROADMAP.md``.
+``B4`` -- :mod:`iotc.compiler.motion`.  Flies the swarm to the placement without
+    dropping the links on the way, by moving in colour classes so no protected
+    link ever has both endpoints in motion.
+
+Still to come: beam assignment, schedule, energy feasibility, resilience and
+codegen.  See ``docs/ROADMAP.md``.
 """
 
 from __future__ import annotations
 
-from . import fastmap, frontends, ir, partition, place, tile
+from . import fastmap, frontends, ir, motion, partition, place, tile
 from .fastmap import embed_graph, traffic_distance
 from .frontends import Workload
 from .ir import Task, TaskGraph, TaskGraphError
 from .partition import PartitionResult, Partitioner, minimum_devices
+from .motion import MotionPlan, Planner, plan_motion
 from .place import MotionBudget, PlaceResult, Placer, derive_budget
 from .tile import TileModel, TileResult, balanced_factors
 
@@ -45,6 +50,7 @@ __all__ = [
     "fastmap",
     "partition",
     "place",
+    "motion",
     "Task",
     "TaskGraph",
     "TaskGraphError",
@@ -57,6 +63,9 @@ __all__ = [
     "PlaceResult",
     "MotionBudget",
     "derive_budget",
+    "Planner",
+    "MotionPlan",
+    "plan_motion",
     "balanced_factors",
     "embed_graph",
     "traffic_distance",

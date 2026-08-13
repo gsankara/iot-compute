@@ -1,0 +1,17 @@
+workload    platform planner      devs  prot  waves  makespan s   broken  collide  energy J
+-------------------------------------------------------------------------------------------
+spmv        float    direct          7    10      1        88.8   100.0%        0     17.42
+spmv        float    waves           7    10      4       177.1     0.0%        0     17.42
+spmv        float    sequential      7    10      7       199.6     0.0%        0     17.42
+stencil2d   float    direct         38    31      1       165.6   100.0%        0    104.07
+stencil2d   float    waves          38    31      3       363.3     0.0%        0    104.07
+stencil2d   float    sequential     38    31     38      2643.5     0.0%        0    104.07
+stencil3d   float    direct         22    21      1       160.4   100.0%        0     57.02
+stencil3d   float    waves          22    21      3       379.0     0.0%        0     57.02
+stencil3d   float    sequential     22    21     22      1285.4     0.0%        0     57.02
+
+flying straight drops 100% of protected links; wave-ordered flight drops 0%
+the price is makespan: 2.18x on average (worst 2.36x)
+moving one device at a time is equally safe and 4.5x slower -- wave count follows degree, not device count (3.3 vs 22)
+energy is identical across planners -- waves reorder the motion, they do not lengthen the paths
+collisions along the way: 0 of 9 plans -- every plan is collision-free

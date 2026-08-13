@@ -482,6 +482,55 @@ link, so the last few percent of reach is not usable range.
 
 ---
 
+## 13. B4 — flying the swarm without dropping its links
+
+```bash
+python -m iotc.cli motion
+```
+
+```
+workload    platform planner      devs  prot  waves  makespan s   broken  collide  energy J
+-------------------------------------------------------------------------------------------
+spmv        float    direct          7    10      1        88.8   100.0%        0     17.42
+spmv        float    waves           7    10      4       177.1     0.0%        0     17.42
+spmv        float    sequential      7    10      7       199.6     0.0%        0     17.42
+stencil2d   float    direct         38    31      1       165.6   100.0%        0    104.07
+stencil2d   float    waves          38    31      3       363.3     0.0%        0    104.07
+stencil2d   float    sequential     38    31     38      2643.5     0.0%        0    104.07
+stencil3d   float    direct         22    21      1       160.4   100.0%        0     57.02
+stencil3d   float    waves          22    21      3       379.0     0.0%        0     57.02
+stencil3d   float    sequential     22    21     22      1285.4     0.0%        0     57.02
+```
+
+```
+flying straight drops 100% of protected links; wave-ordered flight drops 0%
+the price is makespan: 2.18x on average (worst 2.36x)
+moving one device at a time is equally safe and 4.5x slower -- wave count follows
+degree, not device count (3.3 vs 22)
+energy is identical across planners -- waves reorder the motion, they do not
+lengthen the paths
+collisions along the way: 0 of 9 plans -- every plan is collision-free
+```
+
+**Interpolating destroys every protected link.**  A link needs both gimbals aimed
+at each other, and Phase A leaves the closed-loop tracker out on purpose —
+open-loop pointing tolerates centimetres.  So a link whose two ends are both in
+motion is *dropped*, not degraded, and flying everyone straight at their targets
+drops 100% of the traffic worth protecting for the entire manoeuvre.
+
+**Colouring the critical links fixes it, and the bill is time.**  Move in colour
+classes and every protected link keeps one endpoint stationary for the moving
+end to re-aim against: zero breakage, for **2.18× the makespan** on average.
+Nothing else changes — energy is identical to the digit across all three
+planners, because waves reorder the motion without lengthening any path.
+
+**The wave count follows degree, not device count.**  Moving one device at a
+time is equally safe and 4.5× slower; greedy colouring needs 3.3 waves on
+average where sequential needs 22.  That gap is why colouring is worth doing
+rather than simply taking turns.
+
+---
+
 ## Reproducibility
 
 Every run is seeded, and determinism is treated as a correctness property rather

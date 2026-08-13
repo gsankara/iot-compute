@@ -53,6 +53,7 @@ KINDS = (
     "tiler",  # how an oversized task is split into pieces
     "partitioner",  # task graph -> per-device groups
     "placer",  # task graph -> 3D coordinates
+    "planner",  # start formation -> target formation, in flight
     "scheduler",  # traffic matrix -> time slots
     "workload",  # problem frontend
 )

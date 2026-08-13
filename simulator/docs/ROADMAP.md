@@ -160,8 +160,34 @@ stacked; a deterministic spiral offset breaks the tie before relaxation.  And
 `numpy.linalg.svd` returns `min(n, κ)` components, so a workload coarsened onto
 two devices produced a two-column projection and crashed on the z axis.
 
-**B4 Motion** — collision-free trajectories that preserve critical links in
-flight, and that respect the duty cycle a harvested budget allows.
+**B4 Motion** ✅ **complete** — collision-free trajectories that preserve
+critical links in flight, in `iotc/compiler/motion.py`.
+
+The pass exists because of a gap Phase A left deliberately: there is no
+closed-loop pointing tracker, and open-loop pointing tolerates centimetres.  A
+link whose *both* endpoints are in motion is therefore dropped, not degraded.
+That turns trajectory planning into graph colouring — colour the critical links
+so no two adjacent devices move in the same wave, and every protected link keeps
+a stationary endpoint for the mover to re-aim against.
+
+Three planners under the `planner` kind: `direct` (interpolate, the comparator),
+`waves` (the pass) and `sequential` (one device at a time, the other extreme).
+Critical links are the smallest set carrying the heaviest half of the traffic,
+since payload is heavily skewed and protecting everything costs waves.
+
+Bench: `iotc motion` (`iotc/bench/motion_bench.py`).  Its results:
+
+- **flying straight drops 100% of protected links** for the whole manoeuvre;
+  wave-ordered flight drops **none**;
+- the price is **2.18× makespan** on average, worst case 2.36×;
+- **energy is identical to the digit across all three planners** — waves reorder
+  the motion, they do not lengthen the paths, so link safety costs only time;
+- **wave count follows degree, not device count**: 3.3 waves on average where
+  moving one at a time needs 22 and runs 4.5× slower.
+
+Still outstanding from the original scope: the harvest duty cycle is not yet
+enforced here.  Motion energy is measured and charged per axis, but checking it
+against what the harvester can supply belongs to B7, which iterates with B6.
 
 **B5 Beam assignment** — degree-constrained b-matching onto transceivers under
 per-class sweep limits; angles snapped to the grid with the residual fed back

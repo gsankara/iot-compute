@@ -18,19 +18,19 @@ realizes.  That is the thesis — **mobility buys dynamic proximity**.
 | Path | Contents |
 |---|---|
 | [`simulator/`](simulator/) | Phase A — the simulator, its testbench and evaluation harness. Complete. |
-| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends), B1 (tiling), B2 (partitioning) and B3 (placement) complete. |
+| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends), B1 (tiling), B2 (partitioning), B3 (placement) and B4 (motion) complete. |
 | `testbench/` | Phase C — large-scale emulation and fault campaigns. Not started. |
 
 Start at [`simulator/README.md`](simulator/README.md).
 
 ## Status
 
-**Phase A is complete** and **Phase B is under way**: 365 tests passing.
+**Phase A is complete** and **Phase B is under way**: 390 tests passing.
 Sequencing follows the project plan — simulator first, then the compiler built
 pass by pass with each pass shipping its own testbench and evaluation, then the
 large-scale testbench.  B0 (the compiler IR and its twelve workload frontends),
-B1 (tiling onto a target part), B2 (partitioning onto devices) and B3 (placing
-them in space) are done and benched.  See [`simulator/docs/ROADMAP.md`](simulator/docs/ROADMAP.md).
+B1 (tiling onto a target part), B2 (partitioning onto devices), B3 (placing them
+in space) and B4 (flying them there) are done and benched.  See [`simulator/docs/ROADMAP.md`](simulator/docs/ROADMAP.md).
 
 ## What the simulator already establishes
 
@@ -76,6 +76,10 @@ Measured outputs, not design intentions — every one is reproduced in
   three platforms do not favour the same axis as each other.
 - **Energy is not the binding constraint on formation size; light is.**  The
   charge allows 161 m of depth spread where 470 nm crosses only 41.6 m.
+- **Flying the swarm straight to its formation drops every protected link.**
+  With no pointing tracker, a link with both ends in motion is gone — so motion
+  is planned in colour classes, which keeps every link up for 2.18× the time and
+  no extra energy.
 
 ## Quick start
 
