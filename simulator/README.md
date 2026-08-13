@@ -30,10 +30,10 @@ problem graph ──FastMap──▶ 3D placement ──▶ motion plan ──�
 **Phase A (simulator) is complete and tested.**  Phase B is under way: **B0**
 (the compiler IR and its twelve workload frontends, `iotc graph`), **B1**
 (tiling to fit a target part, `iotc tile`), **B2** (grouping tasks onto devices,
-`iotc partition`), **B3** (projecting onto physical coordinates, `iotc place`)
+`iotc partition`), **B3** (projecting onto physical coordinates, `iotc place`),
 **B4** (flying there without dropping links, `iotc motion`) and **B5** (beam
-rounds, `iotc beam`) are implemented, tested and benched.  The remaining compiler passes and the
-large-scale testbench follow; see `docs/ROADMAP.md`.
+rounds, `iotc beam`) are implemented, tested and benched.  The remaining compiler
+passes and the large-scale testbench follow; see `docs/ROADMAP.md`.
 
 ## Install
 
