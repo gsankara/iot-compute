@@ -150,4 +150,8 @@ echo "== 14. B5 -- beam rounds, and what the gimbals can point at =="
     | tee "$OUT/console/14_beam.txt"
 
 echo
+echo "== 15. B6 -- slot timing, and what bounds the amortisation =="
+"${PY[@]}" -m iotc.cli schedule --out "$OUT/compiler/b6" | tee "$OUT/console/15_schedule.txt"
+
+echo
 echo "done -- artefacts in $OUT/"

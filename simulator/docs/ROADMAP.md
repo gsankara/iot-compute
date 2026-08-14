@@ -218,10 +218,35 @@ limits are what actually break the placement.  And minimising raw residual makes
 the loss **worse** — loss is quadratic in the residual, so the objective must be
 the loss itself.
 
-**B6 Schedule** — time-slotted circuit switching, since a head serves one
-neighbour at a time and retargeting costs real gimbal time.  Phase A measured
-that overhead at over 99% for small packets, so amortising it is the central
-job here.  Guard bands come from `ClockDomain.required_guard`.
+**B6 Schedule** ✅ **complete** — time-slotted circuit switching over B5's beam
+rounds, in `iotc/compiler/schedule.py`.  Guard bands come from
+`ClockDomain.required_guard`, whose docstring already named the compiler as its
+caller.
+
+The pass has exactly one lever: **stay aimed and send more per aim**.  A slot
+carrying `batch` supersteps pays its retarget once instead of `batch` times.
+Three schedulers under the `scheduler` kind: `single` (retarget every superstep,
+the comparator), `amortised` (batch to a target efficiency, the pass) and
+`max_batch` (fill the buffer).
+
+Bench: `iotc schedule` (`iotc/bench/schedule_bench.py`).  Its results:
+
+- unbatched efficiency is **0.002%–0.09%** on the mote classes, reproducing
+  Phase A's "over 99% overhead" end to end;
+- amortising lifts it by **5×–241×** depending on workload and part;
+- **and it still is not enough.**  Five of six schedules are RAM-starved: the
+  batch the amortisation wants is ~2,800× larger than the buffer allows, and
+  reaching 90% efficiency would need **1,361 MiB of buffer against 4 MiB of
+  RAM**.  The fabric stays aim-dominated because the part is too small, not
+  because the schedule is poor;
+- holding the gimbal fixed and varying only RAM (mote-c → mote-m): stencil3d
+  goes 0.325% → 3.874%, SpMV 0.308% → 3.944%.  Buffer is the axis that moves it.
+
+This is the clearest hardware verdict the compiler has produced: **B6 cannot fix
+aim-domination, and no scheduler can.**  Closing it needs a larger buffer, a
+larger packet, a faster gimbal, or a slower line rate — all decisions outside the
+compiler.  The relay is deliberately excluded from the RAM comparison, since it
+differs in head count and step size as well.
 
 **B7 Energy feasibility** — check against harvest and storage, insert harvest and
 sleep slots, iterate with B6.
