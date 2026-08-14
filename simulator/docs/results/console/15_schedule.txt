@@ -1,0 +1,33 @@
+workload    class      scheduler      batch    wanted  period s  efficiency       kB/s  buffer KiB
+--------------------------------------------------------------------------------------------------
+spmv        mote-c-aq  single             1         1      1.82    0.0618%     384.28        50.1
+spmv        mote-c-aq  amortised          5     18036      1.82    0.3082%    1916.69       250.3
+spmv        mote-c-aq  max_batch          5         1      1.82    0.3082%    1916.69       250.3
+spmv        mote-m-aq  single             1         1      1.21    0.0930%     377.73        50.1
+spmv        mote-m-aq  amortised         47     13790      1.26    3.9440%   15864.35      2023.5
+spmv        mote-m-aq  max_batch         47         1      1.26    3.9440%   15864.35      2023.5
+spmv        relay-aq   single             1         1      0.00   55.4102% 3027807.80        50.1
+spmv        relay-aq   amortised          8         8      0.00   90.8603% 4964925.89       400.5
+spmv        relay-aq   max_batch         10         1      0.00   92.5521% 5057371.13       500.6
+stencil3d   mote-c-aq  single             1         1      4.43    0.0098%     135.38        20.0
+stencil3d   mote-c-aq  amortised        256    687890      4.45    0.3250%    2936.32       256.0
+stencil3d   mote-c-aq  max_batch        256         1      4.45    0.3250%    2936.32       256.0
+stencil3d   mote-m-aq  single             1         1      2.49    0.0161%     227.95        20.0
+stencil3d   mote-m-aq  amortised       2048    242211      2.59    3.8741%   37548.98      2048.0
+stencil3d   mote-m-aq  max_batch       2048         1      2.59    3.8741%   37548.98      2048.0
+stencil3d   relay-aq   single             1         1      4.34    0.0020%     140.72        20.0
+stencil3d   relay-aq   amortised        512   3701840      4.35    0.1147%    4448.19       512.0
+stencil3d   relay-aq   max_batch        512         1      4.35    0.1147%    4448.19       512.0
+
+spmv on mote-c-aq: unbatched 0.0618% -> amortised 0.3082% (5x), batch 5
+spmv on mote-m-aq: unbatched 0.0930% -> amortised 3.9440% (42x), batch 47
+spmv on relay-aq: unbatched 55.4102% -> amortised 90.8603% (2x), batch 8
+stencil3d on mote-c-aq: unbatched 0.0098% -> amortised 0.3250% (33x), batch 256
+stencil3d on mote-m-aq: unbatched 0.0161% -> amortised 3.8741% (241x), batch 2048
+stencil3d on relay-aq: unbatched 0.0020% -> amortised 0.1147% (56x), batch 512
+but 5 of 6 schedules are RAM-starved: the batch needed is 2787x larger than the buffer allows
+reaching the target would need 1361 MiB of buffer against 4.0 MiB of RAM (752x short) -- the fabric stays aim-dominated because the part is too small, not because the schedule is poor
+spmv, holding the gimbal fixed and varying only RAM: 1.0 MiB batch 5 -> 0.308%, 8.0 MiB batch 47 -> 3.944%
+stencil3d, holding the gimbal fixed and varying only RAM: 1.0 MiB batch 256 -> 0.325%, 8.0 MiB batch 2048 -> 3.874%
+the relay is not in that comparison: it has six heads and a finer step, so it differs in more than buffer
+every schedule fits the buffer it was given: True

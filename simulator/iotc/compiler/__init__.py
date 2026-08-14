@@ -32,12 +32,16 @@ Implemented:
     time, as a sequence of degree-constrained b-matchings, and feeds the
     pointing problem back into B3.
 
-Still to come: schedule, energy feasibility, resilience and codegen.  See ``docs/ROADMAP.md``.
+``B6`` -- :mod:`iotc.compiler.schedule`.  Times the beam rounds into slots and
+    amortises the retarget by batching, bounded by RAM and by latency.
+
+Still to come: energy feasibility, resilience and codegen.  See ``docs/ROADMAP.md``.
 """
 
 from __future__ import annotations
 
-from . import beam, fastmap, frontends, ir, motion, partition, place, tile
+from . import (beam, fastmap, frontends, ir, motion, partition, place, schedule,
+               tile)
 from .fastmap import embed_graph, traffic_distance
 from .frontends import Workload
 from .ir import Task, TaskGraph, TaskGraphError
@@ -45,6 +49,7 @@ from .partition import PartitionResult, Partitioner, minimum_devices
 from .beam import BeamAssigner, BeamAssignment, assign_beams, refine_positions
 from .motion import MotionPlan, Planner, plan_motion
 from .place import MotionBudget, PlaceResult, Placer, derive_budget
+from .schedule import Schedule, Scheduler, Slot, build_schedule
 from .tile import TileModel, TileResult, balanced_factors
 
 __all__ = [
@@ -56,6 +61,7 @@ __all__ = [
     "place",
     "motion",
     "beam",
+    "schedule",
     "Task",
     "TaskGraph",
     "TaskGraphError",
@@ -75,6 +81,10 @@ __all__ = [
     "BeamAssignment",
     "assign_beams",
     "refine_positions",
+    "Scheduler",
+    "Schedule",
+    "Slot",
+    "build_schedule",
     "balanced_factors",
     "embed_graph",
     "traffic_distance",

@@ -327,6 +327,23 @@ def _cmd_beam(args) -> int:
 
 
 # --------------------------------------------------------------------------
+def _cmd_schedule(args) -> int:
+    """Build the slot schedule and report what bounds its efficiency."""
+    from .bench import schedule_bench
+
+    rows = schedule_bench.run(
+        args.workloads or None,
+        tuple(args.classes or schedule_bench.CLASSES),
+        tuple(args.scheduler or schedule_bench.DEFAULT_SCHEDULERS),
+        out=args.out,
+    )
+    print(schedule_bench.report(rows))
+    print()
+    print(schedule_bench.verdict(rows))
+    return 0
+
+
+# --------------------------------------------------------------------------
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="iotc", description=__doc__)
     sub = p.add_subparsers(dest="command", required=True)
@@ -446,6 +463,15 @@ def build_parser() -> argparse.ArgumentParser:
     bm.add_argument("--assigner", action="append", help="assigner to compare")
     bm.add_argument("--out", default=None, help="directory for CSV and JSON output")
     bm.set_defaults(func=_cmd_beam)
+
+    sc = sub.add_parser(
+        "schedule", help="time the beam rounds and amortise the retarget (B6)"
+    )
+    sc.add_argument("workloads", nargs="*")
+    sc.add_argument("--class", dest="classes", action="append")
+    sc.add_argument("--scheduler", action="append")
+    sc.add_argument("--out", default=None, help="directory for CSV and JSON output")
+    sc.set_defaults(func=_cmd_schedule)
 
     return p
 
