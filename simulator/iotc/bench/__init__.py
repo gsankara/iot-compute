@@ -10,7 +10,7 @@ large-scale fault campaigns land here too.
 from __future__ import annotations
 
 from . import (beam_bench, energy_bench, ir_bench, motion_bench, partition_bench,
-               place_bench, schedule_bench, tile_bench)
+               place_bench, resilience_bench, schedule_bench, tile_bench)
 from .ir_bench import characterize
 from .partition_bench import fitted_exponent, scaling
 from .tile_bench import evaluate
@@ -34,6 +34,7 @@ __all__ = [
     "beam_bench",
     "schedule_bench",
     "energy_bench",
+    "resilience_bench",
     "characterize",
     "evaluate",
     "scaling",

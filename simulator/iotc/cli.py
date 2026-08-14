@@ -361,6 +361,27 @@ def _cmd_energy(args) -> int:
 
 
 # --------------------------------------------------------------------------
+def _cmd_resilience(args) -> int:
+    """Measure what redundancy buys and what the tracker costs."""
+    from pathlib import Path as _Path
+
+    from .bench import resilience_bench as rb
+    from .bench.sim_bench import write_csv
+
+    rows = rb.run(args.workloads or None,
+                  tuple(args.policy or rb.DEFAULT_POLICIES), out=args.out)
+    tracker = rb.tracker_rows()
+    print(rb.report(rows))
+    print()
+    print(rb.tracker_report(tracker))
+    print()
+    print(rb.verdict(rows, tracker))
+    if args.out:
+        write_csv(tracker, _Path(args.out) / "tracker.csv")
+    return 0
+
+
+# --------------------------------------------------------------------------
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="iotc", description=__doc__)
     sub = p.add_subparsers(dest="command", required=True)
@@ -498,6 +519,14 @@ def build_parser() -> argparse.ArgumentParser:
     en.add_argument("--policy", action="append")
     en.add_argument("--out", default=None, help="directory for CSV and JSON output")
     en.set_defaults(func=_cmd_energy)
+
+    rs = sub.add_parser(
+        "resilience", help="replication, failover and the pointing tracker (B8)"
+    )
+    rs.add_argument("workloads", nargs="*")
+    rs.add_argument("--policy", action="append")
+    rs.add_argument("--out", default=None, help="directory for CSV and JSON output")
+    rs.set_defaults(func=_cmd_resilience)
 
     return p
 

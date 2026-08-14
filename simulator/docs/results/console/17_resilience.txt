@@ -1,0 +1,31 @@
+workload   policy       devs  repl     10%     20%     30%     40%     50%
+--------------------------------------------------------------------------
+spmv       none            7     0   0.714   0.714   0.481   0.287   0.143
+spmv       uniform         7     1   0.765   0.765   0.577   0.375   0.223
+spmv       traffic         7     1   0.781   0.781   0.545   0.377   0.220
+spmv       centrality      7     1   0.763   0.763   0.545   0.356   0.209
+stencil3d  none           22     0   0.819   0.660   0.459   0.342   0.230
+stencil3d  uniform        22     4   0.848   0.720   0.529   0.440   0.318
+stencil3d  traffic        22     4   0.856   0.742   0.581   0.471   0.381
+stencil3d  centrality     22     4   0.852   0.743   0.575   0.464   0.376
+
+drift m/sqrt(s)   tol m  interval s   frame s  re-aims/frame  energy mJ
+-----------------------------------------------------------------------
+          0.000    0.02         inf      4.45            0.0      0.000
+          0.000    0.05         inf      4.45            0.0      0.000
+          0.010    0.02       4.000      4.45            1.1      4.558
+          0.010    0.05      25.000      4.45            0.2      0.729
+          0.040    0.02       0.250      4.45           17.8     72.921
+          0.040    0.05       1.562      4.45            2.8     11.667
+          0.100    0.02       0.040      4.45          111.2    455.753
+          0.100    0.05       0.250      4.45           17.8     72.921
+
+spmv: at 30% device loss, no redundancy keeps 48.1% of traffic; replicating a fifth of the swarm by traffic keeps 54.5%
+spmv: choosing by importance beats choosing at random by -0.031 +/- 0.021 -- NOT significant
+spmv: sampled betweenness over the cheap traffic proxy: -0.000 +/- 0.020 -- NOT significant, so the proxy is enough
+stencil3d: at 30% device loss, no redundancy keeps 45.9% of traffic; replicating a fifth of the swarm by traffic keeps 58.1%
+stencil3d: choosing by importance beats choosing at random by +0.052 +/- 0.013 -- significant
+stencil3d: sampled betweenness over the cheap traffic proxy: -0.005 +/- 0.011 -- NOT significant, so the proxy is enough
+note: B2 leaves device graphs dense -- spmv at mean degree 6.0/6 -- so there are few structural bottlenecks for centrality to find
+pointing tracker: at Phase A's 0.04 m/sqrt(s) drift and 2 cm tolerance a link survives 0.25 s, against a 4.45 s frame -- 18 re-aims per frame just to hold the links open
+that is 5 of 8 drift/tolerance combinations needing a tracker at all; a still medium needs none

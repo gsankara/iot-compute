@@ -158,4 +158,8 @@ echo "== 16. B7 -- powering the schedule, and the duty cycle it forces =="
 "${PY[@]}" -m iotc.cli energy --out "$OUT/compiler/b7" | tee "$OUT/console/16_energy.txt"
 
 echo
+echo "== 17. B8 -- redundancy, failover, and the pointing tracker =="
+"${PY[@]}" -m iotc.cli resilience --out "$OUT/compiler/b8" | tee "$OUT/console/17_resilience.txt"
+
+echo
 echo "done -- artefacts in $OUT/"

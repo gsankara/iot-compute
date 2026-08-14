@@ -282,10 +282,40 @@ that overstated compute by the device count and made it look like the dominant
 term at 93%.  Corrected to the worst single task, compute falls to 34% on a
 mote-c and the real answer — listening — becomes visible.
 
-**B8 Resilience** — replication chosen by centrality, erasure coding, standby
-spares, backup beam targets via LSH, checkpoint intervals.  This is also where
-the **closed-loop pointing tracker** lands, which Phase A deliberately omits and
-whose absence the drift fault exposes.
+**B8 Resilience** ✅ **complete (partly)** — replication chosen by centrality,
+backup beam targets via LSH, and the closed-loop pointing tracker, in
+`iotc/compiler/resilience.py`.  **Erasure coding, standby spares and checkpoint
+intervals are not implemented** and remain open.
+
+Four policies under the `resilience` kind: `none`, `uniform` (the comparator),
+`traffic` (a cheap degree-weighted proxy) and `centrality` (sampled Brandes
+betweenness — near-linear at `O(samples·(n+m))`, since ranking converges long
+before absolute values do).  Failover is random-hyperplane LSH over the FastMap
+embedding B2 and B3 already built, so the index costs nothing extra.
+
+Bench: `iotc resilience` (`iotc/bench/resilience_bench.py`), 60 random failure
+draws per point with standard errors, so a win has to clear the noise:
+
+- **redundancy pays**: replicating a fifth of the swarm lifts 30%-loss survival
+  from 45.9% to 58.1% on the mesh;
+- **but the expensive choice does not.**  Sampled betweenness never beats the
+  cheap traffic proxy — −0.005 ± 0.011 on the mesh, −0.000 ± 0.020 on SpMV,
+  inside the noise both times.  Use the proxy;
+- the reason is a consequence of B2, not of centrality: **B2 leaves device
+  graphs dense.**  SpMV coarsens to a *complete* 7-device graph, where there are
+  no bottlenecks to find and even importance-vs-random fails significance
+  (−0.031 ± 0.021).  Only the mesh rewards choosing at all;
+- **the pointing tracker is not optional and not cheap.**  Drift is a random
+  walk so the safe interval is quadratic in tolerance: at Phase A's 0.04 m/√s
+  and 2 cm tolerance a link survives **0.25 s** against a 4.45 s frame —
+  **17.8 re-aims per frame** at 72.9 mJ, purely to hold links open.  Relaxing to
+  5 cm cuts it to 2.8.
+
+A modelling note worth carrying: the first survival metric counted only direct
+edge survival, which is not what betweenness protects.  A connectivity-aware
+measure was added — but on these instances it never differs from the direct one,
+because B2's dense device graphs do not fragment.  That is reported rather than
+kept as a metric that quietly never fires.
 
 **B9 Codegen** — compact bytecode (`AIM`, `SCAN`, `SEND`, `RECV`, `BCAST`,
 `COMPUTE`, `MOVE`, `BALLAST`, `BARRIER`, `SLEEP`, `HARVEST`, `GUARD`,

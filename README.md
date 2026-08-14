@@ -18,19 +18,19 @@ realizes.  That is the thesis — **mobility buys dynamic proximity**.
 | Path | Contents |
 |---|---|
 | [`simulator/`](simulator/) | Phase A — the simulator, its testbench and evaluation harness. Complete. |
-| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends), B1 (tiling), B2 (partitioning), B3 (placement), B4 (motion), B5 (beam assignment), B6 (scheduling) and B7 (energy feasibility) complete. |
+| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends), B1 (tiling), B2 (partitioning), B3 (placement), B4 (motion), B5 (beam assignment), B6 (scheduling), B7 (energy feasibility) and B8 (resilience, partly) complete. |
 | `testbench/` | Phase C — large-scale emulation and fault campaigns. Not started. |
 
 Start at [`simulator/README.md`](simulator/README.md).
 
 ## Status
 
-**Phase A is complete** and **Phase B is under way**: 451 tests passing.
+**Phase A is complete** and **Phase B is under way**: 486 tests passing.
 Sequencing follows the project plan — simulator first, then the compiler built
 pass by pass with each pass shipping its own testbench and evaluation, then the
 large-scale testbench.  B0 (the compiler IR and its twelve workload frontends),
 B1 (tiling onto a target part), B2 (partitioning onto devices), B3 (placing them
-in space), B4 (flying them there), B5 (assigning the beams), B6 (timing the slots) and B7 (paying for it all) are
+in space), B4 (flying them there), B5 (assigning the beams), B6 (timing the slots), B7 (paying for it all) and B8 (surviving faults) are
 done and benched.  See [`simulator/docs/ROADMAP.md`](simulator/docs/ROADMAP.md).
 
 ## What the simulator already establishes
@@ -92,6 +92,11 @@ Measured outputs, not design intentions — every one is reproduced in
   of the draw; listening and computing are larger.  And B6's batching, which
   buys link efficiency, is exactly what breaks the energy balance — the part it
   favours most drains its store in 6 seconds and needs an 11.5% duty cycle.
+- **Redundancy pays, but choosing what to replicate pays much less.**  Sampled
+  betweenness never beats a cheap traffic-weighted proxy, because B2 leaves
+  device graphs dense enough to have no bottlenecks.
+- **A closed-loop pointing tracker costs 17.8 re-aims per frame** at the drift
+  Phase A measured — the interval is quadratic in tolerance.
 
 ## Quick start
 

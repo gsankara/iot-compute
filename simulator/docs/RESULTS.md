@@ -690,6 +690,76 @@ ones half their throughput for nothing.
 
 ---
 
+## 17. B8 — redundancy, failover, and the pointing tracker
+
+```bash
+python -m iotc.cli resilience
+```
+
+Mean surviving traffic over 60 random failure draws, replicating a fifth of the
+swarm:
+
+```
+workload   policy       devs  repl     10%     20%     30%     40%     50%
+--------------------------------------------------------------------------
+spmv       none            7     0   0.714   0.714   0.481   0.287   0.143
+spmv       uniform         7     1   0.765   0.765   0.577   0.375   0.223
+spmv       traffic         7     1   0.781   0.781   0.545   0.377   0.220
+spmv       centrality      7     1   0.763   0.763   0.545   0.356   0.209
+stencil3d  none           22     0   0.819   0.660   0.459   0.342   0.230
+stencil3d  uniform        22     4   0.848   0.720   0.529   0.440   0.318
+stencil3d  traffic        22     4   0.856   0.742   0.581   0.471   0.381
+stencil3d  centrality     22     4   0.852   0.743   0.575   0.464   0.376
+```
+
+```
+stencil3d: at 30% device loss, no redundancy keeps 45.9% of traffic; replicating a
+fifth of the swarm by traffic keeps 58.1%
+stencil3d: choosing by importance beats choosing at random by +0.052 +/- 0.013 --
+significant
+stencil3d: sampled betweenness over the cheap traffic proxy: -0.005 +/- 0.011 --
+NOT significant, so the proxy is enough
+spmv: choosing by importance beats choosing at random by -0.031 +/- 0.021 --
+NOT significant
+note: B2 leaves device graphs dense -- spmv at mean degree 6.0/6 -- so there are few
+structural bottlenecks for centrality to find
+```
+
+```
+drift m/sqrt(s)   tol m  interval s   frame s  re-aims/frame  energy mJ
+-----------------------------------------------------------------------
+          0.000    0.02         inf      4.45            0.0      0.000
+          0.010    0.02       4.000      4.45            1.1      4.558
+          0.040    0.02       0.250      4.45           17.8     72.921
+          0.040    0.05       1.562      4.45            2.8     11.667
+          0.100    0.02       0.040      4.45          111.2    455.753
+```
+
+**Redundancy pays; choosing what to replicate pays much less than expected.**
+Replicating a fifth of the swarm lifts 30%-loss survival from 45.9% to 58.1% on
+the mesh.  But **sampled betweenness never beats the cheap traffic-weighted
+proxy** — the gap is −0.005 ± 0.011 on the mesh and −0.000 ± 0.020 on SpMV,
+inside the noise both times.  Use the proxy.
+
+The reason is a consequence of an earlier pass rather than a property of
+centrality: **B2 leaves device graphs dense**.  SpMV coarsens to seven devices at
+mean degree 6.0 of a possible 6 — a *complete* graph — and on a complete graph
+there are no structural bottlenecks to find, so even the importance-vs-random
+comparison fails to reach significance there (−0.031 ± 0.021).  Only the mesh,
+which retains real geometry, rewards choosing at all.
+
+**The pointing tracker is not optional and it is not cheap.**  Drift is a random
+walk, so the safe interval is *quadratic* in tolerance: at Phase A's measured
+0.04 m/√s and a 2 cm open-loop tolerance a link survives **0.25 s**, against a
+4.45 s frame — **17.8 re-aims per frame** purely to hold links open, at 72.9 mJ.
+Relaxing tolerance to 5 cm cuts that to 2.8 re-aims; a still medium needs none.
+This is the gap Phase A left deliberately, now priced.
+
+Erasure coding and checkpoint intervals are named in the roadmap and are **not**
+implemented — recorded as remaining work rather than quietly dropped.
+
+---
+
 ## Reproducibility
 
 Every run is seeded, and determinism is treated as a correctness property rather

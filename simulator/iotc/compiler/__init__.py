@@ -38,13 +38,16 @@ Implemented:
 ``B7`` -- :mod:`iotc.compiler.energy`.  Prices the frame against what the class
     harvests and pads it with sleep until the balance closes.
 
-Still to come: resilience and codegen.  See ``docs/ROADMAP.md``.
+``B8`` -- :mod:`iotc.compiler.resilience`.  Replication chosen by centrality,
+    LSH failover targets, and the closed-loop pointing tracker Phase A omits.
+
+Still to come: codegen.  See ``docs/ROADMAP.md``.
 """
 
 from __future__ import annotations
 
 from . import (beam, energy, fastmap, frontends, ir, motion, partition, place,
-               schedule, tile)
+               resilience, schedule, tile)
 from .fastmap import embed_graph, traffic_distance
 from .frontends import Workload
 from .ir import Task, TaskGraph, TaskGraphError
@@ -53,6 +56,8 @@ from .beam import BeamAssigner, BeamAssignment, assign_beams, refine_positions
 from .motion import MotionPlan, Planner, plan_motion
 from .place import MotionBudget, PlaceResult, Placer, derive_budget
 from .energy import EnergyBudget, EnergyPolicy, assess
+from .resilience import (FailoverIndex, ReplicationPolicy, ResilienceResult,
+                         betweenness, plan_resilience, reaim_interval)
 from .schedule import Schedule, Scheduler, Slot, build_schedule
 from .tile import TileModel, TileResult, balanced_factors
 
@@ -67,6 +72,7 @@ __all__ = [
     "beam",
     "schedule",
     "energy",
+    "resilience",
     "Task",
     "TaskGraph",
     "TaskGraphError",
@@ -93,6 +99,12 @@ __all__ = [
     "EnergyPolicy",
     "EnergyBudget",
     "assess",
+    "ReplicationPolicy",
+    "ResilienceResult",
+    "FailoverIndex",
+    "betweenness",
+    "plan_resilience",
+    "reaim_interval",
     "balanced_factors",
     "embed_graph",
     "traffic_distance",
