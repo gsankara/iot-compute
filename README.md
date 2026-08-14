@@ -18,19 +18,19 @@ realizes.  That is the thesis — **mobility buys dynamic proximity**.
 | Path | Contents |
 |---|---|
 | [`simulator/`](simulator/) | Phase A — the simulator, its testbench and evaluation harness. Complete. |
-| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends), B1 (tiling), B2 (partitioning), B3 (placement), B4 (motion), B5 (beam assignment) and B6 (scheduling) complete. |
+| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends), B1 (tiling), B2 (partitioning), B3 (placement), B4 (motion), B5 (beam assignment), B6 (scheduling) and B7 (energy feasibility) complete. |
 | `testbench/` | Phase C — large-scale emulation and fault campaigns. Not started. |
 
 Start at [`simulator/README.md`](simulator/README.md).
 
 ## Status
 
-**Phase A is complete** and **Phase B is under way**: 429 tests passing.
+**Phase A is complete** and **Phase B is under way**: 451 tests passing.
 Sequencing follows the project plan — simulator first, then the compiler built
 pass by pass with each pass shipping its own testbench and evaluation, then the
 large-scale testbench.  B0 (the compiler IR and its twelve workload frontends),
 B1 (tiling onto a target part), B2 (partitioning onto devices), B3 (placing them
-in space), B4 (flying them there), B5 (assigning the beams) and B6 (timing the slots) are
+in space), B4 (flying them there), B5 (assigning the beams), B6 (timing the slots) and B7 (paying for it all) are
 done and benched.  See [`simulator/docs/ROADMAP.md`](simulator/docs/ROADMAP.md).
 
 ## What the simulator already establishes
@@ -88,6 +88,10 @@ Measured outputs, not design intentions — every one is reproduced in
 - **No scheduler can fix aim-domination on this hardware.**  Batching amortises
   the retarget by 5×–241×, but reaching 90% efficiency would need 1,361 MiB of
   buffer against 4 MiB of RAM.  The part is too small, not the schedule.
+- **The fabric is aim-dominated in time but not in energy.**  Retargeting is 18%
+  of the draw; listening and computing are larger.  And B6's batching, which
+  buys link efficiency, is exactly what breaks the energy balance — the part it
+  favours most drains its store in 6 seconds and needs an 11.5% duty cycle.
 
 ## Quick start
 

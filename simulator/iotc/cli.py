@@ -344,6 +344,23 @@ def _cmd_schedule(args) -> int:
 
 
 # --------------------------------------------------------------------------
+def _cmd_energy(args) -> int:
+    """Price the compiled schedule against what the devices can harvest."""
+    from .bench import energy_bench
+
+    rows = energy_bench.run(
+        args.workloads or None,
+        tuple(args.platform or energy_bench.PLATFORMS),
+        tuple(args.policy or energy_bench.DEFAULT_POLICIES),
+        out=args.out,
+    )
+    print(energy_bench.report(rows))
+    print()
+    print(energy_bench.verdict(rows))
+    return 0
+
+
+# --------------------------------------------------------------------------
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="iotc", description=__doc__)
     sub = p.add_subparsers(dest="command", required=True)
@@ -472,6 +489,15 @@ def build_parser() -> argparse.ArgumentParser:
     sc.add_argument("--scheduler", action="append")
     sc.add_argument("--out", default=None, help="directory for CSV and JSON output")
     sc.set_defaults(func=_cmd_schedule)
+
+    en = sub.add_parser(
+        "energy", help="price the schedule against harvest and storage (B7)"
+    )
+    en.add_argument("workloads", nargs="*")
+    en.add_argument("--platform", action="append")
+    en.add_argument("--policy", action="append")
+    en.add_argument("--out", default=None, help="directory for CSV and JSON output")
+    en.set_defaults(func=_cmd_energy)
 
     return p
 

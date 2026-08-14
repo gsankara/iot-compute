@@ -56,6 +56,7 @@ KINDS = (
     "planner",  # start formation -> target formation, in flight
     "assigner",  # which links are open simultaneously
     "scheduler",  # traffic matrix -> time slots
+    "energy_policy",  # what to do when harvest cannot cover the schedule
     "workload",  # problem frontend
 )
 

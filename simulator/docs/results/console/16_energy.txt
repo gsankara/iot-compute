@@ -1,0 +1,26 @@
+workload   platform  policy       batch   draw mJ  harv mW      duty   dominant   share   ok
+--------------------------------------------------------------------------------------------
+spmv       float     ignore           5     64.07    117.2  100.000%         rx   42.6%  yes
+spmv       float     duty_cycle       5     64.07    117.2  100.000%         rx   42.6%  yes
+spmv       float     half_duty        5     64.11    117.2   50.000%         rx   42.6%  yes
+spmv       float-m   ignore          47     49.23    120.0  100.000%         rx   38.3%  yes
+spmv       float-m   duty_cycle      47     49.23    120.0  100.000%         rx   38.3%  yes
+spmv       float-m   half_duty       47     49.26    120.0   50.000%         rx   38.2%  yes
+spmv       drone     ignore           6    106.60   1200.0  100.000%         rx   42.7%  yes
+spmv       drone     duty_cycle       6    106.60   1200.0  100.000%         rx   42.7%  yes
+spmv       drone     half_duty        6    106.66   1200.0   50.000%         rx   42.7%  yes
+stencil3d  float     ignore         256    229.88    120.0  100.000%    compute   34.2%  yes
+stencil3d  float     duty_cycle     256    229.88    120.0  100.000%    compute   34.2%  yes
+stencil3d  float     half_duty      256    229.97    120.0   50.000%    compute   34.2%  yes
+stencil3d  float-m   ignore        2048   2568.27    120.0  100.000%    compute   98.0%   NO
+stencil3d  float-m   duty_cycle    2048   2568.67    120.0   11.540%    compute   98.0%  yes
+stencil3d  float-m   half_duty     2048   2568.33    120.0   50.000%    compute   98.0%   NO
+stencil3d  drone     ignore         256    257.94   1199.9  100.000%         rx   30.5%  yes
+stencil3d  drone     duty_cycle     256    257.94   1199.9  100.000%         rx   30.5%  yes
+stencil3d  drone     half_duty      256    258.04   1199.9   50.000%         rx   30.5%  yes
+
+dominant energy term: compute in 2/6 cases, rx in 4/6 cases
+retargeting is 18.1% of the draw on average -- the fabric is aim-dominated in TIME but not in energy, which is not the same statement
+running B6's frame as written: 1 of 6 configurations drain their store (worst endurance 6 s)
+stencil3d on float-m must drop to a 11.5% duty cycle to be sustainable (batch 2048, compute dominates at 98%)
+a fixed 50% duty rule still leaves 1 configurations draining -- the sleep has to be computed, not chosen

@@ -248,8 +248,39 @@ larger packet, a faster gimbal, or a slower line rate — all decisions outside 
 compiler.  The relay is deliberately excluded from the RAM comparison, since it
 differs in head count and step size as well.
 
-**B7 Energy feasibility** — check against harvest and storage, insert harvest and
-sleep slots, iterate with B6.
+**B7 Energy feasibility** ✅ **complete** — price the frame against harvest and
+storage, pad with sleep until it balances, in `iotc/compiler/energy.py`.
+
+Six draw terms, each read from the `DeviceClass`: retargeting from
+`GimbalSpec.energy_per_step`, transmitting at the laser driver's wall-plug
+efficiency, listening for the *whole slot* (a receiver cannot know when a packet
+starts, so it stays powered through the aim and the guard band), computing,
+idling and leaking.  Against that, the class's `Harvester` at its position in its
+medium.  Three policies under the `energy_policy` kind: `ignore` (the
+comparator — what every pass before B7 implicitly assumed), `duty_cycle` (the
+pass) and `half_duty` (a fixed rule, carried to show a rule of thumb is not
+enough).
+
+Bench: `iotc energy` (`iotc/bench/energy_bench.py`).  Its results:
+
+- **the fabric is aim-dominated in time but not in energy.**  Retargeting is
+  **18.1%** of the draw; listening dominates in four of six configurations and
+  computing in two.  Anyone optimising this platform for energy should start
+  somewhere other than the gimbal;
+- **B6 and B7 pull against each other**, which is why the roadmap pairs them.
+  B6 batches to amortise the retarget, and each batched superstep is another
+  superstep of compute in the same frame.  The memory-rich part B6 favours most
+  (batch 2048) is the only one that cannot power the result: compute reaches 98%
+  of the draw and the store empties in **6 seconds**;
+- padding with sleep fixes it at an **11.5% duty cycle**;
+- a fixed 50% duty rule leaves that configuration still draining while costing
+  the five healthy ones half their throughput — the sleep has to be computed.
+
+One accounting bug worth recording: the first version charged every device with
+the *whole graph's* FLOPs.  The coarsened graph holds one task per device, so
+that overstated compute by the device count and made it look like the dominant
+term at 93%.  Corrected to the worst single task, compute falls to 34% on a
+mote-c and the real answer — listening — becomes visible.
 
 **B8 Resilience** — replication chosen by centrality, erasure coding, standby
 spares, backup beam targets via LSH, checkpoint intervals.  This is also where

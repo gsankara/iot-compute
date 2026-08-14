@@ -35,13 +35,16 @@ Implemented:
 ``B6`` -- :mod:`iotc.compiler.schedule`.  Times the beam rounds into slots and
     amortises the retarget by batching, bounded by RAM and by latency.
 
-Still to come: energy feasibility, resilience and codegen.  See ``docs/ROADMAP.md``.
+``B7`` -- :mod:`iotc.compiler.energy`.  Prices the frame against what the class
+    harvests and pads it with sleep until the balance closes.
+
+Still to come: resilience and codegen.  See ``docs/ROADMAP.md``.
 """
 
 from __future__ import annotations
 
-from . import (beam, fastmap, frontends, ir, motion, partition, place, schedule,
-               tile)
+from . import (beam, energy, fastmap, frontends, ir, motion, partition, place,
+               schedule, tile)
 from .fastmap import embed_graph, traffic_distance
 from .frontends import Workload
 from .ir import Task, TaskGraph, TaskGraphError
@@ -49,6 +52,7 @@ from .partition import PartitionResult, Partitioner, minimum_devices
 from .beam import BeamAssigner, BeamAssignment, assign_beams, refine_positions
 from .motion import MotionPlan, Planner, plan_motion
 from .place import MotionBudget, PlaceResult, Placer, derive_budget
+from .energy import EnergyBudget, EnergyPolicy, assess
 from .schedule import Schedule, Scheduler, Slot, build_schedule
 from .tile import TileModel, TileResult, balanced_factors
 
@@ -62,6 +66,7 @@ __all__ = [
     "motion",
     "beam",
     "schedule",
+    "energy",
     "Task",
     "TaskGraph",
     "TaskGraphError",
@@ -85,6 +90,9 @@ __all__ = [
     "Schedule",
     "Slot",
     "build_schedule",
+    "EnergyPolicy",
+    "EnergyBudget",
+    "assess",
     "balanced_factors",
     "embed_graph",
     "traffic_distance",

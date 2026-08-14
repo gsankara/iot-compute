@@ -589,6 +589,107 @@ the heavy edges is what B6 will have to exploit.
 
 ---
 
+## 15. B6 — slot timing, and what bounds the amortisation
+
+```bash
+python -m iotc.cli schedule
+```
+
+```
+workload    class      scheduler      batch    wanted  period s  efficiency       kB/s  buffer KiB
+--------------------------------------------------------------------------------------------------
+stencil3d   mote-c-aq  single             1         1      4.43    0.0098%     135.38        20.0
+stencil3d   mote-c-aq  amortised        256    687890      4.45    0.3250%    2936.32       256.0
+stencil3d   mote-m-aq  single             1         1      2.49    0.0161%     227.95        20.0
+stencil3d   mote-m-aq  amortised       2048    242211      2.59    3.8741%   37548.98      2048.0
+stencil3d   relay-aq   single             1         1      4.34    0.0020%     140.72        20.0
+stencil3d   relay-aq   amortised        512   3701840      4.35    0.1147%    4448.19       512.0
+```
+
+```
+stencil3d on mote-c-aq: unbatched 0.0098% -> amortised 0.3250% (33x), batch 256
+stencil3d on mote-m-aq: unbatched 0.0161% -> amortised 3.8741% (241x), batch 2048
+stencil3d on relay-aq: unbatched 0.0020% -> amortised 0.1147% (56x), batch 512
+but 5 of 6 schedules are RAM-starved: the batch needed is 2787x larger than the
+buffer allows
+reaching the target would need 1361 MiB of buffer against 4.0 MiB of RAM (752x short)
+-- the fabric stays aim-dominated because the part is too small, not because the
+schedule is poor
+stencil3d, holding the gimbal fixed and varying only RAM: 1.0 MiB batch 256 -> 0.325%,
+8.0 MiB batch 2048 -> 3.874%
+the relay is not in that comparison: it has six heads and a finer step, so it differs
+in more than buffer
+```
+
+**Unbatched, the schedule runs at 0.002%–0.09% efficiency** — Phase A's "over 99%
+overhead", reproduced through the whole compiler rather than asserted.
+
+**Amortising the aim lifts it 33×–241×**, and still is not enough.  The batch
+that would reach 90% efficiency is ~2,800× larger than the buffer permits;
+reaching it needs **1,361 MiB against 4 MiB of RAM**.  No scheduler closes that
+gap.  The fabric stays aim-dominated because the part is too small, and fixing it
+means a bigger buffer, a bigger packet, a faster gimbal or a slower line rate —
+all decisions outside the compiler.
+
+The RAM comparison holds the gimbal fixed and varies only the buffer, so it says
+what it appears to say.  The relay is excluded deliberately: it has six heads and
+a finer step as well as different memory, so including it would make the trend
+look non-monotonic and prove nothing.
+
+---
+
+## 16. B7 — powering the schedule, and the duty cycle it forces
+
+```bash
+python -m iotc.cli energy
+```
+
+```
+workload   platform  policy       batch   draw mJ  harv mW      duty   dominant   share   ok
+--------------------------------------------------------------------------------------------
+spmv       float     ignore           5     64.07    117.2  100.000%         rx   42.6%  yes
+spmv       drone     ignore           6    106.60   1200.0  100.000%         rx   42.7%  yes
+stencil3d  float     ignore         256    229.88    120.0  100.000%    compute   34.2%  yes
+stencil3d  float-m   ignore        2048   2568.27    120.0  100.000%    compute   98.0%   NO
+stencil3d  float-m   duty_cycle    2048   2568.67    120.0   11.540%    compute   98.0%  yes
+stencil3d  float-m   half_duty     2048   2568.33    120.0   50.000%    compute   98.0%   NO
+stencil3d  drone     ignore         256    257.94   1199.9  100.000%         rx   30.5%  yes
+```
+
+```
+dominant energy term: compute in 2/6 cases, rx in 4/6 cases
+retargeting is 18.1% of the draw on average -- the fabric is aim-dominated in TIME
+but not in energy, which is not the same statement
+running B6's frame as written: 1 of 6 configurations drain their store
+(worst endurance 6 s)
+stencil3d on float-m must drop to a 11.5% duty cycle to be sustainable
+(batch 2048, compute dominates at 98%)
+a fixed 50% duty rule still leaves 1 configurations draining -- the sleep has to be
+computed, not chosen
+```
+
+**The fabric is aim-dominated in time but not in energy.**  Every pass so far has
+been about retargeting, because it consumes over 99% of the *clock*.  It is
+**18.1% of the joules**.  What actually drains the store is listening — a
+receiver cannot know when a packet will start, so it stays powered through the
+aim and the guard band as well as the wire — and, at large batch, computing.
+Anyone optimising this platform for energy should start somewhere other than the
+gimbal.
+
+**B6 and B7 pull against each other, which is why the roadmap pairs them.**
+B6 batches to amortise the retarget, and every batched superstep is another
+superstep of compute inside the same frame.  The memory-rich part is the one B6
+favours — it grants the largest batch, 2048 — and it is the only configuration
+here that cannot power the result: compute reaches 98% of the draw and the store
+empties in **6 seconds**.  Padding with sleep fixes it, at an **11.5% duty
+cycle**.  The best schedule for the link is not the cheapest to run.
+
+**A fixed duty-cycle rule is not a substitute for computing one.**  Halving the
+duty leaves that configuration still draining, while costing the five healthy
+ones half their throughput for nothing.
+
+---
+
 ## Reproducibility
 
 Every run is seeded, and determinism is treated as a correctness property rather

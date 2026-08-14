@@ -154,4 +154,8 @@ echo "== 15. B6 -- slot timing, and what bounds the amortisation =="
 "${PY[@]}" -m iotc.cli schedule --out "$OUT/compiler/b6" | tee "$OUT/console/15_schedule.txt"
 
 echo
+echo "== 16. B7 -- powering the schedule, and the duty cycle it forces =="
+"${PY[@]}" -m iotc.cli energy --out "$OUT/compiler/b7" | tee "$OUT/console/16_energy.txt"
+
+echo
 echo "done -- artefacts in $OUT/"
