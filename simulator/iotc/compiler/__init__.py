@@ -44,13 +44,16 @@ Implemented:
 ``B9`` -- :mod:`iotc.compiler.codegen`.  Emits per-device bytecode and a global
     manifest; :mod:`iotc.sim.node` is the VM that executes it.
 
-Still to come: B10, the max-clique flagship.  See ``docs/ROADMAP.md``.
+``B10`` -- :mod:`iotc.compiler.clique`.  Maximum clique end to end: physical
+    proximity as the adjacency test, against four conventional baselines.
+
+Phase B is complete.  See ``docs/ROADMAP.md``.
 """
 
 from __future__ import annotations
 
-from . import (beam, codegen, energy, fastmap, frontends, ir, motion, partition,
-               place, resilience, schedule, tile)
+from . import (beam, clique, codegen, energy, fastmap, frontends, ir, motion,
+               partition, place, resilience, schedule, tile)
 from .fastmap import embed_graph, traffic_distance
 from .frontends import Workload
 from .ir import Task, TaskGraph, TaskGraphError
@@ -61,6 +64,7 @@ from .place import MotionBudget, PlaceResult, Placer, derive_budget
 from .energy import EnergyBudget, EnergyPolicy, assess
 from .resilience import (FailoverIndex, ReplicationPolicy, ResilienceResult,
                          betweenness, plan_resilience, reaim_interval)
+from .clique import CliqueResult, CliqueSolver, solve_clique
 from .codegen import DeviceProgram, Instruction, Manifest, Op, emit
 from .schedule import Schedule, Scheduler, Slot, build_schedule
 from .tile import TileModel, TileResult, balanced_factors
@@ -78,6 +82,7 @@ __all__ = [
     "energy",
     "resilience",
     "codegen",
+    "clique",
     "Task",
     "TaskGraph",
     "TaskGraphError",
@@ -115,6 +120,9 @@ __all__ = [
     "DeviceProgram",
     "Manifest",
     "emit",
+    "CliqueSolver",
+    "CliqueResult",
+    "solve_clique",
     "balanced_factors",
     "embed_graph",
     "traffic_distance",

@@ -399,6 +399,22 @@ def _cmd_codegen(args) -> int:
 
 
 # --------------------------------------------------------------------------
+def _cmd_clique(args) -> int:
+    """Run the flagship: find cliques by flying the candidates together."""
+    from .bench import clique_bench
+
+    rows = clique_bench.run(
+        tuple(args.size or clique_bench.SIZES),
+        tuple(args.solver or clique_bench.DEFAULT_SOLVERS),
+        out=args.out,
+    )
+    print(clique_bench.report(rows))
+    print()
+    print(clique_bench.verdict(rows))
+    return 0
+
+
+# --------------------------------------------------------------------------
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="iotc", description=__doc__)
     sub = p.add_subparsers(dest="command", required=True)
@@ -553,6 +569,14 @@ def build_parser() -> argparse.ArgumentParser:
     cg.add_argument("--encoding", action="append")
     cg.add_argument("--out", default=None, help="directory for CSV and JSON output")
     cg.set_defaults(func=_cmd_codegen)
+
+    cq = sub.add_parser(
+        "clique", help="maximum clique: proximity as the adjacency test (B10)"
+    )
+    cq.add_argument("--size", type=int, action="append")
+    cq.add_argument("--solver", action="append")
+    cq.add_argument("--out", default=None, help="directory for CSV and JSON output")
+    cq.set_defaults(func=_cmd_clique)
 
     return p
 

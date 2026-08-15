@@ -166,4 +166,8 @@ echo "== 18. B9 -- the emitted bytecode, its size and its round trip =="
 "${PY[@]}" -m iotc.cli codegen --out "$OUT/compiler/b9" | tee "$OUT/console/18_codegen.txt"
 
 echo
+echo "== 19. B10 -- maximum clique, proximity as the adjacency test =="
+"${PY[@]}" -m iotc.cli clique --out "$OUT/compiler/b10" | tee "$OUT/console/19_clique.txt"
+
+echo
 echo "done -- artefacts in $OUT/"

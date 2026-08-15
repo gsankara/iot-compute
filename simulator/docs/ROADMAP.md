@@ -354,24 +354,40 @@ downward-only layering `docs/ARCHITECTURE.md` requires (`compiler` sits *above*
 `sim`) and deadlocked the import graph; the enum is now fetched at execution
 time.
 
-**B10 Maximum clique, end to end** — the flagship demonstration that physical
-proximity *is* the adjacency test:
+**B10 Maximum clique, end to end** ✅ **complete** — the flagship, in
+`iotc/compiler/clique.py`.  The pipeline is as specified: FastMap-embed under the
+common-neighbour attraction weight `W[i,j] = |N(i) ∩ N(j)| + A[i,j]`, LSH buckets
+nominate dense balls, the devices holding a candidate converge, and one broadcast
+round verifies it.  Five solvers under the `clique_solver` kind — `physical` plus
+Bron–Kerbosch, colour-bound branch and bound, simulated annealing and greedy
+degeneracy order.
 
-1. FastMap-embed under the **common-neighbour attraction weight**
-   `W[i,j] = |N(i) ∩ N(j)| + A[i,j]`, replacing spectral initialization —
-   near-linear instead of eigendecomposition;
-2. **LSH** buckets nominate dense balls as candidate cliques;
-3. the devices holding those vertices **physically converge**, forming an
-   all-to-all optical mesh, so O(k²) mutual-adjacency verification becomes **one
-   physical broadcast round**;
-4. non-members are repelled and their affinity decayed — a **force-directed
-   attraction/repulsion** law, now flown.  `GravityTopology.repel()` already
-   implements this.
+Bench: `iotc clique` (`iotc/bench/clique_bench.py`), on a planted clique so
+recovery has a ground truth that is not itself exponential to establish.
 
-Evaluated against **Bron–Kerbosch**, **colour-bound branch and bound**,
-**simulated annealing** and a **greedy degeneracy-order** baseline, on solution
-quality, wall-clock, *and* the new physical axes (rounds, motion energy,
-photons).
+**The claim, narrowly.**  Verifying a k-clique costs `k(k−1)/2` pairwise tests
+conventionally — 120 for k=16, 2,016 for k=64 — and **one broadcast round** once
+the members are in mutual line of sight, whatever k is.
+
+Its results:
+
+- among the four solvers that find the planted clique, the physical scheme's
+  **adjacency tests grow slowest over a 10× range of n: 2.1×**, against 4.8×
+  (greedy), 7.9× (colour bound) and 9.1× (Bron–Kerbosch);
+- **broadcast rounds are constant at 36** regardless of problem size;
+- **and it is the slowest in wall-clock** — 624 ms against greedy's 3.2 ms at
+  n=4000.  The FastMap embedding and LSH probing are overhead a greedy pass
+  never pays.  The argument is that hardware cost is rounds of aiming (~0.5 s
+  each), not CPU microseconds; on a laptop the physical scheme loses, and the
+  bench reports that rather than burying it;
+- physically priced: 340.9 J to converge the members, 1.82e10 photons for the
+  round;
+- every answer is checked independently against the adjacency sets — 15 of 15
+  are genuine cliques.
+
+Simulated annealing collapses on the larger instances (size 2 of a planted 16 at
+n=4000) and is excluded from the cost comparison: its low test count is the cost
+of not answering, and ranking it as cheap would invert the reading.
 
 ---
 

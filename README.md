@@ -18,20 +18,21 @@ realizes.  That is the thesis — **mobility buys dynamic proximity**.
 | Path | Contents |
 |---|---|
 | [`simulator/`](simulator/) | Phase A — the simulator, its testbench and evaluation harness. Complete. |
-| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends), B1 (tiling), B2 (partitioning), B3 (placement), B4 (motion), B5 (beam assignment), B6 (scheduling), B7 (energy feasibility), B8 (resilience, partly) and B9 (codegen) complete. |
+| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends), B1 (tiling), B2 (partitioning), B3 (placement), B4 (motion), B5 (beam assignment), B6 (scheduling), B7 (energy feasibility), B8 (resilience, partly), B9 (codegen) and B10 (the max-clique flagship) complete — Phase B done. |
 | `testbench/` | Phase C — large-scale emulation and fault campaigns. Not started. |
 
 Start at [`simulator/README.md`](simulator/README.md).
 
 ## Status
 
-**Phase A is complete** and **Phase B is under way**: 515 tests passing.
+**Phases A and B are complete**: 544 tests passing.
 Sequencing follows the project plan — simulator first, then the compiler built
 pass by pass with each pass shipping its own testbench and evaluation, then the
 large-scale testbench.  B0 (the compiler IR and its twelve workload frontends),
 B1 (tiling onto a target part), B2 (partitioning onto devices), B3 (placing them
-in space), B4 (flying them there), B5 (assigning the beams), B6 (timing the slots), B7 (paying for it all), B8 (surviving faults) and B9 (emitting the bytecode) are
-done and benched.  See [`simulator/docs/ROADMAP.md`](simulator/docs/ROADMAP.md).
+in space), B4 (flying them there), B5 (assigning the beams), B6 (timing the slots), B7 (paying for it all), B8 (surviving faults), B9 (emitting the bytecode) and B10 (the max-clique
+flagship) are done and benched.  **Phase C, the large-scale testbench, is what
+remains.**  See [`simulator/docs/ROADMAP.md`](simulator/docs/ROADMAP.md).
 
 ## What the simulator already establishes
 
@@ -56,7 +57,7 @@ Measured outputs, not design intentions — every one is reproduced in
 - Without a closed-loop pointing tracker, a 0.04 m/√s current destroys every
   link.  Open-loop pointing has a tolerance of centimetres.
 
-## What the compiler establishes so far
+## What the compiler establishes
 
 - Every one of the twelve stock workloads is **aim-dominated** on the small part
   — the least affected still spends 92% of its link time slewing.  No tiling
@@ -101,6 +102,11 @@ Measured outputs, not design intentions — every one is reproduced in
   instructions and executes 1.5 million; unrolling them overflows a mote's flash
   from 10,000 frames on, while the looped image is 2.3 KiB regardless of run
   length.  A VM executes the bytecode and reproduces B6's plan exactly.
+- **Verifying a k-clique costs k(k−1)/2 pairwise tests conventionally and one
+  broadcast round physically** — the collapse the whole architecture argues for.
+  Measured: the physical scheme's adjacency tests grow 2.1× over a 10× range of
+  n against 4.8×–9.1× for the baselines, at a constant 36 broadcast rounds — but
+  it is the slowest in wall-clock, which is reported rather than buried.
 
 ## Quick start
 

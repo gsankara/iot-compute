@@ -807,6 +807,71 @@ each slot boundary fixed it, and the check is now a test.
 
 ---
 
+## 19. B10 — maximum clique: proximity as the adjacency test
+
+```bash
+python -m iotc.cli clique
+```
+
+A clique of 16 planted in an Erdős–Rényi graph of mean degree 10, so recovery
+has a ground truth that is not itself exponential to establish.
+
+```
+     n solver              size  planted        ms      tests  rounds  energy J   ok
+------------------------------------------------------------------------------------
+   400 greedy_degeneracy     16   16/16        0.6       2973       0    340.93   ok
+  4000 greedy_degeneracy     16   16/16        3.2      14164       0    340.93   ok
+  4000 colour_bound          16   16/16      196.2       4125       0    340.93   ok
+  4000 bron_kerbosch         16   16/16       49.9      24219       0    340.93   ok
+  4000 annealing              2    0/16       56.6      38903       0     42.62   ok
+  4000 physical              16   16/16      623.6       6653      36    340.93   ok
+```
+
+```
+adjacency tests over a 10x range of n, among solvers that found the clique:
+physical 2.1x, greedy_degeneracy 4.8x, colour_bound 7.9x, bron_kerbosch 9.1x
+-- the embedding is what keeps the physical scheme's growth flat
+excluded from that comparison because they did not find the clique: annealing
+-- their low test counts are the cost of not answering
+broadcast rounds are constant at 36 regardless of n -- the physical cost does not
+grow with the problem
+and it is the slowest in wall-clock: 624 ms against 3.2 ms for greedy_degeneracy at
+n=4000 -- the embedding and LSH are overhead a greedy extension never pays
+the claim the pass actually makes is about verification: confirming a 16-clique costs
+120 pairwise tests conventionally and 1 broadcast round physically, whatever k is
+paid for physically: 340.9 J to converge the members and 1.82e+10 photons for the round
+independently checked: 15 of 15 answers are genuine cliques
+```
+
+**The claim, stated narrowly.**  Verifying a candidate clique of size k costs
+`k(k−1)/2` pairwise adjacency tests conventionally — 120 for k=16, 2,016 for
+k=64 — and **one broadcast round** once the members are in mutual line of sight,
+whatever k is.  That is the collapse the architecture argues for, and it is
+arithmetic rather than a measurement.
+
+**What the measurement adds, and what it costs.**  Among the four solvers that
+actually find the planted clique, the physical scheme's adjacency tests grow
+slowest over a 10× range of n — **2.1× against 4.8×, 7.9× and 9.1×** — because
+the common-neighbour weight puts dense regions of the graph in dense regions of
+the embedding, so LSH nominates good balls.  Its broadcast rounds are **constant
+at 36** regardless of problem size.
+
+**And it is the slowest in wall-clock**, 624 ms against greedy extension's 3.2 ms
+at n=4000.  That is a real limitation, not a rounding error: the FastMap
+embedding and the LSH probing are overhead a greedy pass never pays.  The
+argument is that on hardware the cost is *rounds of aiming* — ~0.5 s of gimbal
+time each — not CPU microseconds, so a scheme with a constant round count wins
+where it matters.  On a laptop it does not, and the bench says so.
+
+Simulated annealing collapses on the larger instances (size 2 of a planted 16 at
+n=4000) and is excluded from the cost comparison: its low test count is the cost
+of not answering, and ranking it as cheap would invert the reading.
+
+Every answer is checked independently against the adjacency sets — 15 of 15 are
+genuine cliques.
+
+---
+
 ## Reproducibility
 
 Every run is seeded, and determinism is treated as a correctness property rather
