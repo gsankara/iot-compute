@@ -393,6 +393,15 @@ of not answering, and ranking it as cheap would invert the reading.
 
 ## Phase C — Large-scale emulation and evaluation
 
+**Sequencing decision (2026-08-14): correctness first, speed later.**  Phase C is
+built as an unoptimized reference; time optimization comes afterwards and is
+expected to be **hardware** — GPU or FPGA — rather than CPU tuning.  So a slow
+pipeline here is not a defect to be fixed in passing.  Asymptotic complexity is
+still in scope where the roadmap makes it an acceptance criterion (B2's
+near-linear partitioning is a requirement, not an optimisation); constant factors
+are not.
+
+
 - 1k–10k devices via the surrogate, with periodic exact spot-checks.
 - Golden host reference per workload; every run classified pass / degraded /
   wrong / hung.
