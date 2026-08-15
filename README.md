@@ -18,19 +18,19 @@ realizes.  That is the thesis — **mobility buys dynamic proximity**.
 | Path | Contents |
 |---|---|
 | [`simulator/`](simulator/) | Phase A — the simulator, its testbench and evaluation harness. Complete. |
-| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends), B1 (tiling), B2 (partitioning), B3 (placement), B4 (motion), B5 (beam assignment), B6 (scheduling), B7 (energy feasibility) and B8 (resilience, partly) complete. |
+| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends), B1 (tiling), B2 (partitioning), B3 (placement), B4 (motion), B5 (beam assignment), B6 (scheduling), B7 (energy feasibility), B8 (resilience, partly) and B9 (codegen) complete. |
 | `testbench/` | Phase C — large-scale emulation and fault campaigns. Not started. |
 
 Start at [`simulator/README.md`](simulator/README.md).
 
 ## Status
 
-**Phase A is complete** and **Phase B is under way**: 486 tests passing.
+**Phase A is complete** and **Phase B is under way**: 515 tests passing.
 Sequencing follows the project plan — simulator first, then the compiler built
 pass by pass with each pass shipping its own testbench and evaluation, then the
 large-scale testbench.  B0 (the compiler IR and its twelve workload frontends),
 B1 (tiling onto a target part), B2 (partitioning onto devices), B3 (placing them
-in space), B4 (flying them there), B5 (assigning the beams), B6 (timing the slots), B7 (paying for it all) and B8 (surviving faults) are
+in space), B4 (flying them there), B5 (assigning the beams), B6 (timing the slots), B7 (paying for it all), B8 (surviving faults) and B9 (emitting the bytecode) are
 done and benched.  See [`simulator/docs/ROADMAP.md`](simulator/docs/ROADMAP.md).
 
 ## What the simulator already establishes
@@ -97,6 +97,10 @@ Measured outputs, not design intentions — every one is reproduced in
   device graphs dense enough to have no bottlenecks.
 - **A closed-loop pointing tracker costs 17.8 re-aims per frame** at the drift
   Phase A measured — the interval is quadratic in tolerance.
+- **The emitted program is a loop, not a stream.**  A device stores 17
+  instructions and executes 1.5 million; unrolling them overflows a mote's flash
+  from 10,000 frames on, while the looped image is 2.3 KiB regardless of run
+  length.  A VM executes the bytecode and reproduces B6's plan exactly.
 
 ## Quick start
 

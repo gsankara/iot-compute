@@ -760,6 +760,53 @@ implemented — recorded as remaining work rather than quietly dropped.
 
 ---
 
+## 18. B9 — the emitted bytecode, its size and its round trip
+
+```bash
+python -m iotc.cli codegen
+```
+
+```
+workload   class      encoding    repeat  stored   executed  total KiB  worst KiB flash  plan
+---------------------------------------------------------------------------------------------
+stencil3d  mote-c-aq  flat          1000      17      15002     8569.9      622.1    ok    ok
+stencil3d  mote-c-aq  packed        1000      17      15002     3469.0      255.9    ok    ok
+stencil3d  mote-c-aq  looped        1000      17      15002        3.8        0.3    ok    ok
+stencil3d  mote-c-aq  flat        100000      17    1500002   856934.2    62207.1  OVER    ok
+stencil3d  mote-c-aq  packed      100000      17    1500002   346875.3    25586.0  OVER    ok
+stencil3d  mote-c-aq  looped      100000      17    1500002        3.9        0.3    ok    ok
+```
+
+```
+at 100000 frames: flat 516700 KiB, packed 208643 KiB, looped 2.3 KiB -- varints
+save 2.5x, looping saves a further 89021x
+images that do not fit flash: flat at 10000 frames, flat at 100000 frames, packed at
+10000 frames, packed at 100000 frames -- unrolling overflows a mote from 10000 frames on
+the looped image is independent of run length (1.01x across a 1000x range of frame
+counts) -- the others are linear in it
+VM round trip: 24 of 24 images deliver exactly the bytes B6 planned, with every SEND
+matched by a RECV
+```
+
+**The program is a loop, not a stream, and that is the whole pass.**  B6's
+schedule is one frame repeated, so a device stores **17 instructions** and
+executes **1,500,002** of them.  Emitting what it *does* rather than what it *is*
+costs 516,700 KiB against 2.3 KiB — and **unrolling overflows a mote's 2 MiB
+flash from 10,000 frames on**, while the looped image is flat in run length
+(1.01× across a 1000× range).  Varints alone save 2.5×; looping saves a further
+89,021×.  This is the same shape of question B1 asked of RAM, which is why the
+encoding is a compiler decision and not a serialization detail.
+
+**The VM is the correctness gate, and it earned its place immediately.**  All 24
+images deliver exactly the bytes B6 planned, with every SEND matched by a RECV —
+a link needs both gimbals, so a one-way edge is not physically representable.
+On its first run the VM rejected the emitter with *"device 0 aimed at 3 peers
+with 2 transceivers"*: heads were being released only at the frame edge, when
+B5's rounds exist precisely so devices retarget between them.  A `BARRIER` at
+each slot boundary fixed it, and the check is now a test.
+
+---
+
 ## Reproducibility
 
 Every run is seeded, and determinism is treated as a correctness property rather

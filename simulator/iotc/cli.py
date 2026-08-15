@@ -382,6 +382,23 @@ def _cmd_resilience(args) -> int:
 
 
 # --------------------------------------------------------------------------
+def _cmd_codegen(args) -> int:
+    """Emit the bytecode, size it against flash, and check it on the VM."""
+    from .bench import codegen_bench
+
+    rows = codegen_bench.run(
+        args.workloads or None,
+        tuple(args.classes or ("mote-c",)),
+        tuple(args.encoding or codegen_bench.DEFAULT_ENCODINGS),
+        out=args.out,
+    )
+    print(codegen_bench.report(rows))
+    print()
+    print(codegen_bench.verdict(rows))
+    return 0
+
+
+# --------------------------------------------------------------------------
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="iotc", description=__doc__)
     sub = p.add_subparsers(dest="command", required=True)
@@ -527,6 +544,15 @@ def build_parser() -> argparse.ArgumentParser:
     rs.add_argument("--policy", action="append")
     rs.add_argument("--out", default=None, help="directory for CSV and JSON output")
     rs.set_defaults(func=_cmd_resilience)
+
+    cg = sub.add_parser(
+        "codegen", help="emit per-device bytecode and run it on the VM (B9)"
+    )
+    cg.add_argument("workloads", nargs="*")
+    cg.add_argument("--class", dest="classes", action="append")
+    cg.add_argument("--encoding", action="append")
+    cg.add_argument("--out", default=None, help="directory for CSV and JSON output")
+    cg.set_defaults(func=_cmd_codegen)
 
     return p
 

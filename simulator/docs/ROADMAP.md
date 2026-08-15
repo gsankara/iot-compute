@@ -317,10 +317,42 @@ measure was added — but on these instances it never differs from the direct on
 because B2's dense device graphs do not fragment.  That is reported rather than
 kept as a metric that quietly never fires.
 
-**B9 Codegen** — compact bytecode (`AIM`, `SCAN`, `SEND`, `RECV`, `BCAST`,
+**B9 Codegen** ✅ **complete** — per-device bytecode and a global manifest, in
+`iotc/compiler/codegen.py`, executed by `iotc/sim/node.py` — the VM the roadmap
+asks this file to become.
+
+The fourteen opcodes are as specified (`AIM`, `SCAN`, `SEND`, `RECV`, `BCAST`,
 `COMPUTE`, `MOVE`, `BALLAST`, `BARRIER`, `SLEEP`, `HARVEST`, `GUARD`,
-`REPLICATE`, `CHECK`) plus a per-device `DeviceProgram` and a global `Manifest`.
-`iotc/sim/node.py` becomes the VM that executes it.
+`REPLICATE`, `CHECK`), with **no loop opcode**: repetition is a property of the
+`DeviceProgram`, so the interpreter stays a flat dispatch with no control stack.
+Operands are integers — angles in gimbal *ticks*, since B5 already snapped them
+and the float was a fiction — so they varint-encode.  A program is a prologue
+(fly to station) plus a frame that repeats.
+
+Three encoders under the `encoder` kind: `flat` (fixed 13-byte records,
+unrolled), `packed` (varints, unrolled) and `looped` (varints, frame stored
+once).
+
+Bench: `iotc codegen` (`iotc/bench/codegen_bench.py`).  Its results:
+
+- **the program is a loop, not a stream.**  A device stores **17 instructions**
+  and executes **1,500,002**.  At 100,000 frames: flat 516,700 KiB, packed
+  208,643 KiB, **looped 2.3 KiB** — varints save 2.5×, looping a further
+  **89,021×**;
+- **unrolling overflows a mote's 2 MiB flash from 10,000 frames on**, while the
+  looped image is flat in run length (1.01× across a 1000× range).  Same shape
+  of question B1 asked of RAM, which is why the encoding is a compiler decision;
+- **the VM round trip passes on all 24 images**: each delivers exactly the bytes
+  B6 planned, with every SEND matched by a RECV.
+
+Two things the VM caught that review had not.  On its first run it rejected the
+emitter — *"device 0 aimed at 3 peers with 2 transceivers"* — because heads were
+released only at the frame edge, when B5's rounds exist precisely so devices
+retarget between them; a `BARRIER` per slot boundary fixed it.  And `node.py`
+initially imported the instruction set at module scope, which inverts the
+downward-only layering `docs/ARCHITECTURE.md` requires (`compiler` sits *above*
+`sim`) and deadlocked the import graph; the enum is now fetched at execution
+time.
 
 **B10 Maximum clique, end to end** — the flagship demonstration that physical
 proximity *is* the adjacency test:

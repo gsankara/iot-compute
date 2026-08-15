@@ -1,0 +1,31 @@
+workload   class      encoding    repeat  stored   executed  total KiB  worst KiB flash  plan
+---------------------------------------------------------------------------------------------
+spmv       mote-c-aq  flat           100      23       2102      176.7       30.5    ok    ok
+spmv       mote-c-aq  packed         100      23       2102       70.5       12.4    ok    ok
+spmv       mote-c-aq  looped         100      23       2102        0.8        0.1    ok    ok
+spmv       mote-c-aq  flat          1000      23      21002     1764.8      304.7    ok    ok
+spmv       mote-c-aq  packed        1000      23      21002      704.2      124.0    ok    ok
+spmv       mote-c-aq  looped        1000      23      21002        0.8        0.1    ok    ok
+spmv       mote-c-aq  flat         10000      23     210002    17646.7     3046.9  OVER    ok
+spmv       mote-c-aq  packed       10000      23     210002     7041.1     1240.2    ok    ok
+spmv       mote-c-aq  looped       10000      23     210002        0.8        0.1    ok    ok
+spmv       mote-c-aq  flat        100000      23    2100002   176465.0    30468.8  OVER    ok
+spmv       mote-c-aq  packed      100000      23    2100002    70410.2    12402.4  OVER    ok
+spmv       mote-c-aq  looped      100000      23    2100002        0.8        0.1    ok    ok
+stencil3d  mote-c-aq  flat           100      17       1502      857.5       62.2    ok    ok
+stencil3d  mote-c-aq  packed         100      17       1502      347.2       25.6    ok    ok
+stencil3d  mote-c-aq  looped         100      17       1502        3.8        0.3    ok    ok
+stencil3d  mote-c-aq  flat          1000      17      15002     8569.9      622.1    ok    ok
+stencil3d  mote-c-aq  packed        1000      17      15002     3469.0      255.9    ok    ok
+stencil3d  mote-c-aq  looped        1000      17      15002        3.8        0.3    ok    ok
+stencil3d  mote-c-aq  flat         10000      17     150002    85694.0     6220.7  OVER    ok
+stencil3d  mote-c-aq  packed       10000      17     150002    34687.8     2558.6  OVER    ok
+stencil3d  mote-c-aq  looped       10000      17     150002        3.9        0.3    ok    ok
+stencil3d  mote-c-aq  flat        100000      17    1500002   856934.2    62207.1  OVER    ok
+stencil3d  mote-c-aq  packed      100000      17    1500002   346875.3    25586.0  OVER    ok
+stencil3d  mote-c-aq  looped      100000      17    1500002        3.9        0.3    ok    ok
+
+at 100000 frames: flat 516700 KiB, packed 208643 KiB, looped 2.3 KiB -- varints save 2.5x, looping saves a further 89021x
+images that do not fit flash: flat at 10000 frames, flat at 100000 frames, packed at 10000 frames, packed at 100000 frames -- unrolling overflows a mote from 10000 frames on
+the looped image is independent of run length (1.01x across a 1000x range of frame counts) -- the others are linear in it
+VM round trip: 24 of 24 images deliver exactly the bytes B6 planned, with every SEND matched by a RECV

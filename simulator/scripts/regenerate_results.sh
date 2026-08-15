@@ -162,4 +162,8 @@ echo "== 17. B8 -- redundancy, failover, and the pointing tracker =="
 "${PY[@]}" -m iotc.cli resilience --out "$OUT/compiler/b8" | tee "$OUT/console/17_resilience.txt"
 
 echo
+echo "== 18. B9 -- the emitted bytecode, its size and its round trip =="
+"${PY[@]}" -m iotc.cli codegen --out "$OUT/compiler/b9" | tee "$OUT/console/18_codegen.txt"
+
+echo
 echo "done -- artefacts in $OUT/"

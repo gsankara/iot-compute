@@ -33,8 +33,8 @@ problem graph ──FastMap──▶ 3D placement ──▶ motion plan ──�
 `iotc partition`), **B3** (projecting onto physical coordinates, `iotc place`),
 **B4** (flying there without dropping links, `iotc motion`), **B5** (beam rounds,
 `iotc beam`), **B6** (slot scheduling, `iotc schedule`), **B7** (energy
-feasibility, `iotc energy`) and **B8** (resilience, `iotc resilience`) are
-implemented, tested and benched.  The remaining compiler
+feasibility, `iotc energy`), **B8** (resilience, `iotc resilience`) and **B9**
+(bytecode and its VM, `iotc codegen`) are implemented, tested and benched.  The remaining compiler
 passes and the large-scale testbench follow; see `docs/ROADMAP.md`.
 
 ## Install
@@ -153,6 +153,7 @@ iotc/
     links/      the seven-stage link budget, RF, and a memoizing surrogate
     mobility/   kinematics (drone, buoyant, tethered) and topology dynamics
     energy.py clocks.py world.py engine.py faults.py trace.py
+    node.py     the VM that executes the emitted bytecode          (B9)
   compiler/
     ir.py       the TaskGraph every pass consumes                    (B0)
     frontends/  twelve stock workloads and their graph generators    (B0)
@@ -165,6 +166,7 @@ iotc/
     schedule.py slot timing; amortise the aim until RAM stops you      (B6)
     energy.py   price the frame against harvest; sleep to balance   (B7)
     resilience.py  replication, LSH failover, pointing tracker      (B8)
+    codegen.py  per-device bytecode; the program is a loop        (B9)
   bench/        design-space sweeps, fault campaigns, per-pass evaluation
 configs/  examples/  tests/  docs/
 ```
@@ -214,7 +216,7 @@ which is gitignored.  The curated versions are committed in `docs/RESULTS.md`.
 python -m pytest -q
 ```
 
-486 tests.  They are written as invariants rather than golden values — monotonic
+515 tests.  They are written as invariants rather than golden values — monotonic
 link budgets, unit-mean fading, energy conservation, quantization bounds, seeded
 determinism, five-point and seven-point stencil neighbourhoods, surface-to-volume
 scaling, FLOP and external-traffic conservation under tiling, embedded distance

@@ -58,6 +58,7 @@ KINDS = (
     "scheduler",  # traffic matrix -> time slots
     "energy_policy",  # what to do when harvest cannot cover the schedule
     "resilience",  # which tasks get a standby copy
+    "encoder",  # bytecode image format
     "workload",  # problem frontend
 )
 

@@ -41,13 +41,16 @@ Implemented:
 ``B8`` -- :mod:`iotc.compiler.resilience`.  Replication chosen by centrality,
     LSH failover targets, and the closed-loop pointing tracker Phase A omits.
 
-Still to come: codegen.  See ``docs/ROADMAP.md``.
+``B9`` -- :mod:`iotc.compiler.codegen`.  Emits per-device bytecode and a global
+    manifest; :mod:`iotc.sim.node` is the VM that executes it.
+
+Still to come: B10, the max-clique flagship.  See ``docs/ROADMAP.md``.
 """
 
 from __future__ import annotations
 
-from . import (beam, energy, fastmap, frontends, ir, motion, partition, place,
-               resilience, schedule, tile)
+from . import (beam, codegen, energy, fastmap, frontends, ir, motion, partition,
+               place, resilience, schedule, tile)
 from .fastmap import embed_graph, traffic_distance
 from .frontends import Workload
 from .ir import Task, TaskGraph, TaskGraphError
@@ -58,6 +61,7 @@ from .place import MotionBudget, PlaceResult, Placer, derive_budget
 from .energy import EnergyBudget, EnergyPolicy, assess
 from .resilience import (FailoverIndex, ReplicationPolicy, ResilienceResult,
                          betweenness, plan_resilience, reaim_interval)
+from .codegen import DeviceProgram, Instruction, Manifest, Op, emit
 from .schedule import Schedule, Scheduler, Slot, build_schedule
 from .tile import TileModel, TileResult, balanced_factors
 
@@ -73,6 +77,7 @@ __all__ = [
     "schedule",
     "energy",
     "resilience",
+    "codegen",
     "Task",
     "TaskGraph",
     "TaskGraphError",
@@ -105,6 +110,11 @@ __all__ = [
     "betweenness",
     "plan_resilience",
     "reaim_interval",
+    "Op",
+    "Instruction",
+    "DeviceProgram",
+    "Manifest",
+    "emit",
     "balanced_factors",
     "embed_graph",
     "traffic_distance",
