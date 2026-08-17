@@ -391,7 +391,7 @@ of not answering, and ranking it as cheap would invert the reading.
 
 ---
 
-## Phase C — Large-scale emulation and evaluation
+## Phase C — Large-scale emulation and evaluation ✅ **first cut complete**
 
 **Sequencing decision (2026-08-14): correctness first, speed later.**  Phase C is
 built as an unoptimized reference; time optimization comes afterwards and is
@@ -401,15 +401,48 @@ still in scope where the roadmap makes it an acceptance criterion (B2's
 near-linear partitioning is a requirement, not an optimisation); constant factors
 are not.
 
+Implemented in `iotc/testbench/`, driven by `iotc testbench`.  A *run* is the
+whole pipeline end to end — workload → tile → partition → place → beams →
+schedule → energy → bytecode → VM — classified into the four states this section
+asks for: **pass**, **degraded**, **wrong**, **hung**.  Degraded is its own state
+on purpose: a swarm that loses a tenth of its traffic *and knows it* is a usable
+machine, and one that silently drops the same tenth is not.
 
-- 1k–10k devices via the surrogate, with periodic exact spot-checks.
-- Golden host reference per workload; every run classified pass / degraded /
-  wrong / hung.
-- Monte-Carlo fault campaigns, run identically with faults disabled and enabled.
-- Invariants checked every run: no double delivery, no task executed twice,
-  schedule feasibility, energy never negative, aim angles on the quantization
-  grid and inside sweep limits.
-- Tidy CSV plus figures in `docs/figures/`.
+The five invariants are checked on **every** run, not sampled: no double
+delivery, no task executed twice, schedule feasibility, energy never negative,
+and aim angles on the grid and inside sweep limits.  Each returns what broke
+rather than a boolean, because a campaign that reports "37 runs failed" and
+cannot say how is not evidence of anything.
+
+Results:
+
+- **1,270 devices** from a 2,048-task tiled stencil, compiled and executed with
+  every invariant holding — the roadmap's 1k–10k band is reached at the low end;
+- **no run was ever classified `wrong`**: across the campaign the compiler never
+  emitted a plan that violated its own rules;
+- **the pointing tracker B8 built is what survives faults.**  Under scatter,
+  delivery is 84.0% without it and 99.6% with it; under drift, 92.5% against
+  99.6%.  Under a node crash it recovers only 83.6% → 89.5%, because **a tracker
+  cannot fix distance** — those links are out of optical reach however well they
+  are aimed;
+- **short links are the fragile ones under drift**, which inverts the obvious
+  reading.  The beam footprint is the divergence half-angle *at range*, so it
+  grows with link length while the drift does not: 1.6 cm of tolerance on a 3 m
+  link against 20 cm on a 39 m one.  Measured, the links drift breaks average
+  15.4 m and the survivors 30.5 m.
+
+Two things this exposed in earlier passes.  B5's refinement scored a *local*
+move with a *global* cost, making it `O(n·m)` — 329 s at 159 devices, which put
+these device counts out of reach entirely; scoring only the moved device's
+incident edges made it 4.5 s and left B5's published results byte-identical.
+And drift quoted in m/√s is meaningless without an exposure, since the
+displacement grows as `rate·√t`; the injector now takes the frame period.
+
+Still open: erasure coding, standby spares and checkpoint intervals from B8;
+the golden reference is taken from the compiled plan rather than from an
+independent implementation, so it checks that the *execution* matches the
+*plan*, not that the plan solves the problem — only the clique workload has a
+ground truth strong enough for that.
 
 ---
 

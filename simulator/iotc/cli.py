@@ -415,6 +415,28 @@ def _cmd_clique(args) -> int:
 
 
 # --------------------------------------------------------------------------
+def _cmd_testbench(args) -> int:
+    """Compile and run at scale, check the invariants, campaign the faults."""
+    from .testbench import campaign as tb
+
+    faults = tuple(args.fault or ("none", "position_drift", "scatter", "node_crash"))
+
+    if not args.no_scale:
+        scale = tb.scale_demonstration(args.workloads or None)
+        print("scale demonstration -- one clean run per workload")
+        print(tb.scale_report(scale))
+        print()
+
+    results = tb.campaign(args.workloads or None, seeds=args.seeds,
+                          faults=faults, out=args.out)
+    print("fault campaign -- every fault, with and without a pointing tracker")
+    print(tb.report(results))
+    print()
+    print(tb.verdict(results))
+    return 0
+
+
+# --------------------------------------------------------------------------
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="iotc", description=__doc__)
     sub = p.add_subparsers(dest="command", required=True)
@@ -577,6 +599,18 @@ def build_parser() -> argparse.ArgumentParser:
     cq.add_argument("--solver", action="append")
     cq.add_argument("--out", default=None, help="directory for CSV and JSON output")
     cq.set_defaults(func=_cmd_clique)
+
+    tb = sub.add_parser(
+        "testbench", help="large-scale runs, invariants and fault campaigns (Phase C)"
+    )
+    tb.add_argument("workloads", nargs="*")
+    tb.add_argument("--seeds", type=int, default=5)
+    tb.add_argument("--fault", action="append",
+                    help="none, position_drift, scatter or node_crash (repeatable)")
+    tb.add_argument("--out", default=None, help="directory for CSV and JSON output")
+    tb.add_argument("--no-scale", action="store_true",
+                    help="skip the large-scale demonstration run")
+    tb.set_defaults(func=_cmd_testbench)
 
     return p
 

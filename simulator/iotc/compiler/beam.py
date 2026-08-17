@@ -304,25 +304,48 @@ def refine_positions(
         extent = float(np.ptp(positions, axis=0).max())
         step = max(extent * 0.05, 1e-3)
 
-    def cost(p: np.ndarray) -> float:
-        ok, residual = aimability(graph, p, device_class)
-        loss = pointing_loss_db(residual, divergence)
-        return float(np.where(ok, loss, reject_penalty_db).sum())
+    # Moving one device changes only the bearings of *its own* edges, so the
+    # cost of a trial move is a local quantity.  Scoring it globally makes the
+    # descent O(n * m) -- at a few hundred devices that is minutes per pass and
+    # it puts Phase C's device counts out of reach entirely.  Incident edge
+    # lists make each trial O(degree).
+    incident: list[list[int]] = [[] for _ in range(positions.shape[0])]
+    for idx in range(e.shape[0]):
+        incident[int(e[idx, 0])].append(idx)
+        incident[int(e[idx, 1])].append(idx)
+
+    def edge_cost(p: np.ndarray, idx: int) -> float:
+        a, b = int(e[idx, 0]), int(e[idx, 1])
+        delta = p[b] - p[a]
+        az, el = spherical_from_vec(delta.reshape(1, 3))
+        az, el = float(az[0]), float(el[0])
+        if not (grid.in_range(az, el) and grid.in_range(az - math.pi, -el)):
+            return reject_penalty_db
+        return float(pointing_loss_db(np.array([grid.snap(az, el)[2]]), divergence)[0])
 
     best = positions.astype(float).copy()
-    best_score = cost(best)
+    edge_scores = np.array([edge_cost(best, idx) for idx in range(e.shape[0])])
 
     for _ in range(rounds):
         improved = False
         for i in range(best.shape[0]):
+            mine = incident[i]
+            if not mine:
+                continue
+            local_before = sum(edge_scores[idx] for idx in mine)
             for axis in range(3):
                 for sign in (+1.0, -1.0):
-                    trial = best.copy()
-                    trial[i, axis] += sign * step
-                    score = cost(trial)
-                    if score < best_score - 1e-12:
-                        best, best_score = trial, score
+                    original = best[i, axis]
+                    best[i, axis] = original + sign * step
+                    trial = {idx: edge_cost(best, idx) for idx in mine}
+                    local_after = sum(trial.values())
+                    if local_after < local_before - 1e-12:
+                        for idx, value in trial.items():
+                            edge_scores[idx] = value
+                        local_before = local_after
                         improved = True
+                    else:
+                        best[i, axis] = original
         if not improved:
             step *= 0.5
             if step < 1e-4:

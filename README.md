@@ -19,20 +19,20 @@ realizes.  That is the thesis — **mobility buys dynamic proximity**.
 |---|---|
 | [`simulator/`](simulator/) | Phase A — the simulator, its testbench and evaluation harness. Complete. |
 | [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends), B1 (tiling), B2 (partitioning), B3 (placement), B4 (motion), B5 (beam assignment), B6 (scheduling), B7 (energy feasibility), B8 (resilience, partly), B9 (codegen) and B10 (the max-clique flagship) complete — Phase B done. |
-| `testbench/` | Phase C — large-scale emulation and fault campaigns. Not started. |
+| [`simulator/iotc/testbench/`](simulator/iotc/testbench/) | Phase C — large-scale emulation and fault campaigns. First cut complete. |
 
 Start at [`simulator/README.md`](simulator/README.md).
 
 ## Status
 
-**Phases A and B are complete**: 544 tests passing.
+**Phases A and B are complete, and Phase C has its first cut**: 563 tests passing.
 Sequencing follows the project plan — simulator first, then the compiler built
 pass by pass with each pass shipping its own testbench and evaluation, then the
 large-scale testbench.  B0 (the compiler IR and its twelve workload frontends),
 B1 (tiling onto a target part), B2 (partitioning onto devices), B3 (placing them
 in space), B4 (flying them there), B5 (assigning the beams), B6 (timing the slots), B7 (paying for it all), B8 (surviving faults), B9 (emitting the bytecode) and B10 (the max-clique
-flagship) are done and benched.  **Phase C, the large-scale testbench, is what
-remains.**  See [`simulator/docs/ROADMAP.md`](simulator/docs/ROADMAP.md).
+flagship) are done and benched, and Phase C now compiles and executes complete
+runs at 1,270 devices with every invariant checked.  See [`simulator/docs/ROADMAP.md`](simulator/docs/ROADMAP.md).
 
 ## What the simulator already establishes
 
@@ -107,6 +107,17 @@ Measured outputs, not design intentions — every one is reproduced in
   Measured: the physical scheme's adjacency tests grow 2.1× over a 10× range of
   n against 4.8×–9.1× for the baselines, at a constant 36 broadcast rounds — but
   it is the slowest in wall-clock, which is reported rather than buried.
+
+## What the testbench establishes
+
+- **1,270 devices compiled and executed with every invariant holding**, and
+  across the whole fault campaign no run was ever classified *wrong*.
+- **The pointing tracker is what survives faults, and only the ones it can
+  reach**: drift 90.8% → 99.8% delivery, scatter 82.5% → 99.8%, but a node crash
+  only 82.2% → 86.5% — those links are beyond optical reach.
+- **Short links are the fragile ones under drift.**  The beam footprint grows
+  with range while the drift does not, so a 3 m link has 1.6 cm of tolerance
+  against 20 cm on a 39 m one.
 
 ## Quick start
 

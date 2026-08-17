@@ -1,0 +1,32 @@
+scale demonstration -- one clean run per workload
+workload       tasks  devices    links   verdict  delivered   seconds
+---------------------------------------------------------------------
+spmv            1024       25      300  degraded     100.0%      10.6
+stencil2d        576      150      555  degraded      97.2%       4.9
+stencil3d       2048     1270     6628  degraded      96.5%      66.2
+
+fault campaign -- every fault, with and without a pointing tracker
+workload    fault            trk  runs  devices  delivered  drift-lost  reach-lost  verdicts
+--------------------------------------------------------------------------------------------
+spmv        node_crash        no     3        7      79.1%         3.7         3.7  degraded=3
+spmv        node_crash       yes     3        7      79.1%         0.0         3.7  degraded=3
+spmv        none              no     3        7     100.0%         0.0         0.0  degraded=3
+spmv        position_drift    no     3        7      86.6%         2.3         0.0  degraded=3
+spmv        position_drift   yes     3        7     100.0%         0.0         0.0  degraded=3
+spmv        scatter           no     3        7      79.1%         3.7         0.0  degraded=3
+spmv        scatter          yes     3        7     100.0%         0.0         0.0  degraded=3
+stencil3d   node_crash        no     3       22      85.2%         9.7         5.7  degraded=3
+stencil3d   node_crash       yes     3       22      93.9%         0.0         5.7  degraded=3
+stencil3d   none              no     3       22      99.6%         0.0         1.0  degraded=3
+stencil3d   position_drift    no     3       22      95.1%         3.3         1.0  degraded=3
+stencil3d   position_drift   yes     3       22      99.6%         0.0         1.0  degraded=3
+stencil3d   scatter           no     3       22      85.8%         9.7         1.0  degraded=3
+stencil3d   scatter          yes     3       22      99.6%         0.0         1.0  degraded=3
+
+42 runs: pass 0, degraded 42, wrong 0, hung 0
+invariant violations: none -- no run was classified wrong
+largest run *in this campaign*: 22 devices, 512 tasks before coarsening -- the scale demonstration above runs far larger, one seed each
+node_crash: delivery 82.2% without a pointing tracker, 86.5% with one -- B8's tracker is what recovers it
+position_drift: delivery 90.8% without a pointing tracker, 99.8% with one -- B8's tracker is what recovers it
+scatter: delivery 82.5% without a pointing tracker, 99.8% with one -- B8's tracker is what recovers it
+a tracker cannot fix distance: 18 runs still lose links that are out of optical reach however well they are aimed

@@ -170,4 +170,8 @@ echo "== 19. B10 -- maximum clique, proximity as the adjacency test =="
 "${PY[@]}" -m iotc.cli clique --out "$OUT/compiler/b10" | tee "$OUT/console/19_clique.txt"
 
 echo
+echo "== 20. Phase C -- large-scale runs, invariants and fault campaigns =="
+"${PY[@]}" -m iotc.cli testbench --out "$OUT/testbench" | tee "$OUT/console/20_testbench.txt"
+
+echo
 echo "done -- artefacts in $OUT/"

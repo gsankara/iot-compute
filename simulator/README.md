@@ -35,8 +35,9 @@ problem graph ──FastMap──▶ 3D placement ──▶ motion plan ──�
 `iotc beam`), **B6** (slot scheduling, `iotc schedule`), **B7** (energy
 feasibility, `iotc energy`), **B8** (resilience, `iotc resilience`), **B9**
 (bytecode and its VM, `iotc codegen`) and **B10** (the max-clique flagship,
-`iotc clique`) are implemented, tested and benched.  **Phase B is complete**; the
-large-scale testbench of Phase C follows.  See `docs/ROADMAP.md`.
+`iotc clique`) are implemented, tested and benched.  **Phase C** — the large-scale
+testbench, `iotc testbench` — has its first cut: runs classified pass/degraded/
+wrong/hung with five invariants checked on every one.  See `docs/ROADMAP.md`.
 
 ## Install
 
@@ -169,6 +170,7 @@ iotc/
     resilience.py  replication, LSH failover, pointing tracker      (B8)
     codegen.py  per-device bytecode; the program is a loop        (B9)
     clique.py   the flagship: proximity as the adjacency test    (B10)
+  testbench/    end-to-end runs, invariants, fault campaigns   (Phase C)
   bench/        design-space sweeps, fault campaigns, per-pass evaluation
 configs/  examples/  tests/  docs/
 ```
@@ -218,7 +220,7 @@ which is gitignored.  The curated versions are committed in `docs/RESULTS.md`.
 python -m pytest -q
 ```
 
-544 tests.  They are written as invariants rather than golden values — monotonic
+563 tests.  They are written as invariants rather than golden values — monotonic
 link budgets, unit-mean fading, energy conservation, quantization bounds, seeded
 determinism, five-point and seven-point stencil neighbourhoods, surface-to-volume
 scaling, FLOP and external-traffic conservation under tiling, embedded distance
