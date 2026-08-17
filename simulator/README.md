@@ -27,7 +27,7 @@ problem graph ──FastMap──▶ 3D placement ──▶ motion plan ──�
 
 ## Status
 
-**Phase A (simulator) is complete and tested.**  Phase B is under way: **B0**
+**Phases A and B are complete.**  The compiler runs end to end: **B0**
 (the compiler IR and its twelve workload frontends, `iotc graph`), **B1**
 (tiling to fit a target part, `iotc tile`), **B2** (grouping tasks onto devices,
 `iotc partition`), **B3** (projecting onto physical coordinates, `iotc place`),
