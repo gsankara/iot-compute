@@ -415,6 +415,20 @@ def _cmd_clique(args) -> int:
 
 
 # --------------------------------------------------------------------------
+def _cmd_broadcast(args) -> int:
+    """Price the omnidirectional plane against the optical one (B11)."""
+    from .bench import broadcast_bench
+
+    return broadcast_bench.main(
+        [*(args.workloads or [])]
+        + [a for pl in (args.platform or []) for a in ("--platform", pl)]
+        + [a for m in (args.model or []) for a in ("--model", m)]
+        + (["--out", args.out] if args.out else [])
+        + (["--no-scaling"] if args.no_scaling else [])
+    )
+
+
+# --------------------------------------------------------------------------
 def _cmd_testbench(args) -> int:
     """Compile and run at scale, check the invariants, campaign the faults."""
     from .testbench import campaign as tb
@@ -599,6 +613,18 @@ def build_parser() -> argparse.ArgumentParser:
     cq.add_argument("--solver", action="append")
     cq.add_argument("--out", default=None, help="directory for CSV and JSON output")
     cq.set_defaults(func=_cmd_clique)
+
+    bc = sub.add_parser(
+        "broadcast",
+        help="the omnidirectional plane: contention instead of aiming (B11)",
+    )
+    bc.add_argument("workloads", nargs="*")
+    bc.add_argument("--platform", action="append")
+    bc.add_argument("--model", action="append")
+    bc.add_argument("--no-scaling", action="store_true",
+                    help="skip the device-count sweep")
+    bc.add_argument("--out", default=None, help="directory for CSV and JSON output")
+    bc.set_defaults(func=_cmd_broadcast)
 
     tb = sub.add_parser(
         "testbench", help="large-scale runs, invariants and fault campaigns (Phase C)"

@@ -964,6 +964,120 @@ is usable; one that silently drops the same traffic is not.
 
 ---
 
+---
+
+## 21. B11 — the omnidirectional plane, where contention replaces aiming
+
+```bash
+python -m iotc.cli broadcast
+```
+
+The radio does not point, so B4's wave colouring, B5's b-matching and B6's
+central problem all dissolve at once.  What replaces them is **contention**,
+under the same surface-to-volume law B1 found for traffic and the harvest budget
+finds for power.
+
+What a carrier buys, measured rather than asserted:
+
+```
+   carrier         rate        reach  in water
+--------------------------------------------------
+   2.4 GHz    1000.0 kb/s     0.046 m
+     1 MHz     100.0 kb/s     2.664 m
+   100 kHz      10.0 kb/s     8.427 m
+    30 kHz       1.0 kb/s    15.384 m
+    10 kHz       1.0 kb/s    26.647 m
+
+   carrier         rate        reach  in air
+--------------------------------------------------
+   2.4 GHz    1000.0 kb/s   395.509 m
+     1 MHz     100.0 kb/s 10000.000 m
+```
+
+```
+workload   platform model        carrier  reach m  slots  reuse   per-node   uncov   bcast ms    opt ms  speedup
+----------------------------------------------------------------------------------------------------------------
+stencil2d  drone    min_reach    2.4 GHz   125.12     37  1.03x  2.703e+04   0.0%     909.31   2874.40    3.16x
+stencil3d  drone    min_reach    2.4 GHz   125.12     22  1.00x  4.545e+04   0.0%    3604.48   5248.87    1.46x
+spmv       drone    min_reach    2.4 GHz   125.12      7  1.00x  1.429e+05   0.0%    2870.56   3035.17    1.06x
+allreduce  drone    min_reach    2.4 GHz   125.12      5  1.00x      2e+05   0.0%   10485.76   1629.46    0.16x
+stencil3d  float    min_reach     10 kHz    26.65     20  1.10x         50   9.4% 3276800.00   4446.37      n/a
+allreduce  float    nominal       30 kHz    15.38      3  1.67x       3333  80.0%  629145.60      2.23      n/a
+```
+
+Reuse against device count, on the placements B3 actually produces:
+
+```
+ devices  extent m  reach m  domains  domain n  slots   reuse   per-node
+------------------------------------------------------------------------
+      11     73.43   125.12     0.29      10.0     11   1.00x  9.091e+04
+     118    146.50   125.12     0.59     116.5    118   1.00x       8475
+     590    190.27   125.12     0.76     577.0    581   1.02x       1721
+    1153    199.58   125.12     0.80    1094.2   1034   1.12x      967.1
+```
+
+```
+drone: choosing the power buys no reuse (1.01x) -- reach has to cover the
+longest task edge, and the reach that does already spans 3.16x the whole array,
+so there is only ever one collision domain to divide
+float: NO setting carries the placement, so reuse cannot be ranked -- the
+best-looking one (nominal, 1.90x) gets there by leaving 23% of the edges
+unreachable, which is reuse bought by not delivering
+12 of 24 settings cannot carry the placement (float); worst leaves 80.0% of
+edges beyond a 15.38 m reach
+over the 12 comparable rows, median speedup against the optical plane is 1.26x
+if payloads are shared and 0.29x if private
+and the optical plane it is measured against runs at 0.3% link efficiency,
+B6's amortised best
+reuse against scale: 1.00x at 11 devices -> 1.12x at 1153
+```
+
+**No subsea radio can carry an optically placed float swarm.**  This is the
+sharpest result of the pass, and it is a composition failure rather than a
+tuning problem.  B3 scales a placement until its longest link *closes
+optically* — 41.6 m of blue-green water — while the entire carrier ladder tops
+out at 26.6 m, and that only at 10 kHz and 1 kb/s.  Twelve of twenty-four
+settings cannot carry their placement at all, the worst leaving **80% of edges
+out of reach**.  The radio stays what Phase A said it was: a control plane, not
+a data plane, in water.
+
+**Broadcast is a wash, not a win — and which way it falls depends on a fact the
+IR does not record.**  Over the comparable rows the median speedup is **1.26×
+if payloads are shared and 0.29× if private**.  Both bounds are reported
+because `TaskGraph` carries bytes per edge and no multicast flag: an all-reduce
+really does send the same bytes to everyone, a stencil's six halo faces are six
+different blocks.  Counting a stencil as shared would be inventing a factor of
+three.  The best case measured is **stencil2d on a drone at 3.16×**; the worst
+is **all-reduce at 0.16×**, because a 32-way tree coarsens onto five devices and
+a megabit radio simply cannot move what a gigabit beam can, aiming included.
+
+**Cutting the power buys no reuse, and the reason is structural.**  Reach must
+cover the longest task edge, and the reach that does already spans **3.16× the
+whole array** — so there is one collision domain and nothing to divide, whatever
+the transmitter does.  `min_reach` cuts the drone's power tenfold (1 mW →
+0.1 mW) and gets the same 22 slots.  The schedule degenerates to round-robin
+TDMA: one node per slot, reuse 1.00×.
+
+**And scale does not rescue it, because B3 densifies instead of expanding.**
+Over a 105× range of device count the extent grows only **2.72×**, since
+placements are scaled to close the longest *optical* link rather than to keep
+edges short.  Domains across the array go 0.29 → 0.80 — never even reaching one.
+Reuse creeps 1.00× → 1.12×.  **Spatial reuse would need a placement objective
+that minimises the longest edge, which is not what B3 optimises**, so the
+broadcast variant cannot simply reuse the optical pipeline's placement: it needs
+its own B3.
+
+Two traps this pass walked into, both the same shape and both worth recording.
+Ranking settings by per-node rate picks the radio **too weak to reach anybody**:
+no links means no conflicts, one slot, and the full line rate advertised against
+zero delivered bytes.  And dividing by a zero optical frame reports broadcast as
+infinitely worse, when a zero frame means B5 rejected *every* link and the
+optical plane is the one carrying nothing.  Both are the B10 bug again — a
+component scored well for failing to answer — so coverage is now the primary
+ranking key and uncomparable rows are reported as `n/a` instead of as numbers.
+
+---
+
 ## Reproducibility
 
 Every run is seeded, and determinism is treated as a correctness property rather

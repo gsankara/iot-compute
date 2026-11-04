@@ -18,14 +18,14 @@ realizes.  That is the thesis — **mobility buys dynamic proximity**.
 | Path | Contents |
 |---|---|
 | [`simulator/`](simulator/) | Phase A — the simulator, its testbench and evaluation harness. Complete. |
-| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends), B1 (tiling), B2 (partitioning), B3 (placement), B4 (motion), B5 (beam assignment), B6 (scheduling), B7 (energy feasibility), B8 (resilience, partly), B9 (codegen) and B10 (the max-clique flagship) complete — Phase B done. |
+| [`simulator/iotc/compiler/`](simulator/iotc/compiler/) | Phase B — problem graph to per-device bytecode, pass by pass. B0 (IR and frontends), B1 (tiling), B2 (partitioning), B3 (placement), B4 (motion), B5 (beam assignment), B6 (scheduling), B7 (energy feasibility), B8 (resilience, partly), B9 (codegen) and B10 (the max-clique flagship) complete — Phase B done. B11 (broadcast) opens the omnidirectional variant. |
 | [`simulator/iotc/testbench/`](simulator/iotc/testbench/) | Phase C — large-scale emulation and fault campaigns. First cut complete. |
 
 Start at [`simulator/README.md`](simulator/README.md).
 
 ## Status
 
-**Phases A and B are complete, and Phase C has its first cut**: 563 tests passing.
+**Phases A and B are complete, and Phase C has its first cut**: 593 tests passing.
 Sequencing follows the project plan — simulator first, then the compiler built
 pass by pass with each pass shipping its own testbench and evaluation, then the
 large-scale testbench.  B0 (the compiler IR and its twelve workload frontends),
@@ -102,6 +102,19 @@ Measured outputs, not design intentions — every one is reproduced in
   instructions and executes 1.5 million; unrolling them overflows a mote's flash
   from 10,000 frames on, while the looped image is 2.3 KiB regardless of run
   length.  A VM executes the bytecode and reproduces B6's plan exactly.
+- **A radio removes the aiming and inherits the contention.**  With nothing to
+  point, B4, B5 and B6's central problem all dissolve — but capacity on a shared
+  medium is areal while node count is volumetric, so the same surface-to-volume
+  law returns.  Measured: broadcast is **1.26× faster if payloads are shared and
+  0.29× if private**, and the IR does not record which.
+- **No subsea radio can carry an optically placed float swarm.**  B3 spreads the
+  swarm until its longest link closes at 41.6 m of blue-green water; the whole
+  carrier ladder tops out at 26.6 m, and 12 of 24 settings cannot carry their
+  placement at all.
+- **Cutting the transmit power buys no spatial reuse**, because reach must still
+  cover the longest task edge — and that reach already spans 3.16× the array, so
+  there is one collision domain and nothing to divide.  Nor does scale help: 105×
+  the devices widens the array only 2.72×, since B3 densifies rather than expands.
 - **Verifying a k-clique costs k(k−1)/2 pairwise tests conventionally and one
   broadcast round physically** — the collapse the whole architecture argues for.
   Measured: the physical scheme's adjacency tests grow 2.1× over a 10× range of

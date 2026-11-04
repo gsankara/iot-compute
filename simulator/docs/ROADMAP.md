@@ -396,6 +396,60 @@ of not answering, and ranking it as cheap would invert the reading.
 
 ---
 
+### B11 — Broadcast: the omnidirectional plane ✅ **first cut complete**
+
+`iotc/compiler/broadcast.py`, benched by `iotc broadcast`.  A variant rather than
+a successor: the radio does not point, so B4's wave colouring, B5's b-matching
+and B6's whole amortisation problem dissolve at once — and **contention** takes
+their place, under the same surface-to-volume law.  Capacity is areal (one
+conversation per domain) while node count is volumetric, so the pass's job is
+the inverse of what a radio is for: **reach is the thing to throw away.**
+
+Three choosers under the new `broadcaster` kind — `nominal` (the stock radio,
+carried to measure what not bothering costs), `min_reach` (least power that
+still covers every task edge) and `swept` (the whole carrier × power grid).
+Slots come from greedy colouring of the conflict graph, so the capacity claim is
+an upper bound on the chromatic number and never promises more reuse than it can
+realise.
+
+Measured:
+
+- **no subsea radio can carry an optically placed float swarm** — B3 scales a
+  placement until its longest link closes *optically* at 41.6 m, while the whole
+  carrier ladder tops out at 26.6 m (and only at 10 kHz / 1 kb/s).  12 of 24
+  settings cannot carry their placement; the worst leaves **80% of edges out of
+  reach**.  The radio stays a control plane in water, exactly as Phase A said;
+- **broadcast is a wash, and which way it falls is a fact the IR does not
+  record**: median **1.26× if payloads are shared, 0.29× if private**.  Both
+  bounds are reported because `TaskGraph` carries bytes per edge and no
+  multicast flag — an all-reduce really does send everyone the same bytes, a
+  stencil's six halo faces are six different blocks.  Best measured case is
+  stencil2d on a drone at **3.16×**; worst is all-reduce at **0.16×**;
+- **cutting the power buys no reuse, structurally**: reach must cover the
+  longest task edge, and the reach that does already spans **3.16× the whole
+  array**, so there is one collision domain and nothing to divide.  `min_reach`
+  cuts the drone's power tenfold for the same 22 slots — round-robin TDMA;
+- **and scale does not rescue it, because B3 densifies instead of expanding**:
+  105× the devices grows the extent only **2.72×**, so domains across the array
+  go 0.29 → 0.80 and never reach one.  **Spatial reuse needs a placement
+  objective that minimises the longest edge, which is not what B3 optimises** —
+  so the broadcast variant needs its own B3 rather than the optical one's.
+
+Two traps, both the same shape as B10's and both now pinned by tests.  Ranking by
+per-node rate picks the radio *too weak to reach anybody* — no links, no
+conflicts, one slot, full line rate advertised against zero delivered bytes.  And
+dividing by a zero optical frame reports broadcast as infinitely worse, when a
+zero frame means B5 rejected every link and it is the *optical* plane carrying
+nothing.  Coverage is now the primary ranking key, and uncomparable rows print
+`n/a` rather than a number.
+
+Still open on this pass: `conflict_matrix` is a dense boolean matmul, O(n³) in
+time and O(n²) in memory — 1.4 s at 1,153 devices and 89 s at 2,732, so the
+sweep stops near twelve hundred.  Sparse set intersection is the first
+optimization it should get, deferred with the rest.
+
+---
+
 ## Phase C — Large-scale emulation and evaluation ✅ **first cut complete**
 
 **Sequencing decision (2026-08-14): correctness first, speed later.**  Phase C is
@@ -456,3 +510,11 @@ ground truth strong enough for that.
 Listed in `docs/PHYSICS.md` §7.  The two that most affect Phase B are the absence
 of a **closed-loop pointing tracker** (B8) and the **aim-dominated overhead** of
 small packets (B6).
+
+B11 adds two of its own.  The IR has **no multicast flag**, so broadcast's
+advantage can only be bracketed rather than measured — closing that gap means
+extending `TaskGraph`, which would move B0's and B1's published numbers and so is
+not a small change.  And **B3 has no broadcast-aware objective**: it scales
+placements to close the longest optical link, which densifies the array instead
+of widening it, so spatial reuse never appears.  A broadcast deployment needs a
+placer that minimises the longest edge.

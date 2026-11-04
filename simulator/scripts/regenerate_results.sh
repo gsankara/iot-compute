@@ -174,4 +174,8 @@ echo "== 20. Phase C -- large-scale runs, invariants and fault campaigns =="
 "${PY[@]}" -m iotc.cli testbench --out "$OUT/testbench" | tee "$OUT/console/20_testbench.txt"
 
 echo
+echo "== 21. B11 -- the omnidirectional plane: contention instead of aiming =="
+"${PY[@]}" -m iotc.cli broadcast --out "$OUT/compiler/b11" | tee "$OUT/console/21_broadcast.txt"
+
+echo
 echo "done -- artefacts in $OUT/"

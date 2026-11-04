@@ -1,0 +1,59 @@
+   carrier         rate        reach  in water
+--------------------------------------------------
+   2.4 GHz    1000.0 kb/s     0.046 m
+     1 MHz     100.0 kb/s     2.664 m
+   100 kHz      10.0 kb/s     8.427 m
+    30 kHz       1.0 kb/s    15.384 m
+    10 kHz       1.0 kb/s    26.647 m
+
+   carrier         rate        reach  in air
+--------------------------------------------------
+   2.4 GHz    1000.0 kb/s   395.509 m
+     1 MHz     100.0 kb/s 10000.000 m
+   100 kHz      10.0 kb/s 10000.000 m
+    30 kHz       1.0 kb/s 10000.000 m
+    10 kHz       1.0 kb/s 10000.000 m
+
+workload   platform model        carrier  reach m  slots  reuse   per-node   uncov   bcast ms    opt ms  speedup
+----------------------------------------------------------------------------------------------------------------
+allreduce  drone    min_reach    2.4 GHz   125.12      5  1.00x      2e+05   0.0%   10485.76   1629.46    0.16x
+allreduce  drone    nominal      2.4 GHz   395.51      5  1.00x      2e+05   0.0%   10485.76   1629.46    0.16x
+allreduce  drone    swept        2.4 GHz   395.51      5  1.00x      2e+05   0.0%   10485.76   1629.46    0.16x
+allreduce  float    min_reach     10 kHz    26.65      4  1.25x        250  60.0% 8388608.00      2.23      n/a
+allreduce  float    nominal       30 kHz    15.38      3  1.67x       3333  80.0%  629145.60      2.23      n/a
+allreduce  float    swept         10 kHz    26.65      4  1.25x        250  60.0% 8388608.00      2.23      n/a
+spmv       drone    min_reach    2.4 GHz   125.12      7  1.00x  1.429e+05   0.0%    2870.56   3035.17    1.06x
+spmv       drone    nominal      2.4 GHz   395.51      7  1.00x  1.429e+05   0.0%    2870.56   3035.17    1.06x
+spmv       drone    swept        2.4 GHz   395.51      7  1.00x  1.429e+05   0.0%    2870.56   3035.17    1.06x
+spmv       float    min_reach     10 kHz    26.65      7  1.00x      142.9   4.8% 2870560.00   1821.51      n/a
+spmv       float    nominal       30 kHz    15.38      7  1.00x       1429  47.6%  287056.00   1821.51      n/a
+spmv       float    swept         10 kHz    26.65      7  1.00x      142.9   4.8% 2870560.00   1821.51      n/a
+stencil2d  drone    min_reach    2.4 GHz   125.12     37  1.03x  2.703e+04   0.0%     909.31   2874.40    3.16x
+stencil2d  drone    nominal      2.4 GHz   395.51     38  1.00x  2.632e+04   0.0%     933.89   2874.40    3.08x
+stencil2d  drone    swept        2.4 GHz   125.12     37  1.03x  2.703e+04   0.0%     909.31   2874.40    3.16x
+stencil2d  float    min_reach     10 kHz    26.65     26  1.46x      38.46   4.0%  638976.00   2789.40      n/a
+stencil2d  float    nominal       30 kHz    15.38     20  1.90x        500  22.8%   49152.00   2789.40      n/a
+stencil2d  float    swept         10 kHz    26.65     26  1.46x      38.46   4.0%  638976.00   2789.40      n/a
+stencil3d  drone    min_reach    2.4 GHz   125.12     22  1.00x  4.545e+04   0.0%    3604.48   5248.87    1.46x
+stencil3d  drone    nominal      2.4 GHz   395.51     22  1.00x  4.545e+04   0.0%    3604.48   5248.87    1.46x
+stencil3d  drone    swept        2.4 GHz   395.51     22  1.00x  4.545e+04   0.0%    3604.48   5248.87    1.46x
+stencil3d  float    min_reach     10 kHz    26.65     20  1.10x         50   9.4% 3276800.00   4446.37      n/a
+stencil3d  float    nominal       30 kHz    15.38     17  1.29x      588.2  40.0%  278528.00   4446.37      n/a
+stencil3d  float    swept         10 kHz    26.65     20  1.10x         50   9.4% 3276800.00   4446.37      n/a
+
+ devices  extent m  reach m  domains  domain n  slots   reuse   per-node
+------------------------------------------------------------------------
+      11     73.43   125.12     0.29      10.0     11   1.00x  9.091e+04
+      44    110.94   125.12     0.44      43.0     44   1.00x  2.273e+04
+     118    146.50   125.12     0.59     116.5    118   1.00x       8475
+     250    102.75   125.12     0.41     249.0    250   1.00x       4000
+     590    190.27   125.12     0.76     577.0    581   1.02x       1721
+    1153    199.58   125.12     0.80    1094.2   1034   1.12x      967.1
+
+drone: choosing the power buys no reuse (1.01x) -- reach has to cover the longest task edge, and the reach that does already spans 3.16x the whole array, so there is only ever one collision domain to divide
+float: NO setting carries the placement, so reuse cannot be ranked -- the best-looking one (nominal, 1.90x) gets there by leaving 23% of the edges unreachable, which is reuse bought by not delivering
+12 of 24 settings cannot carry the placement (float); worst leaves 80.0% of edges beyond a 15.38 m reach -- B3 spreads the swarm to close a 41.6 m *optical* link, which no subsea radio reaches
+over the 12 comparable rows, median speedup against the optical plane is 1.26x if payloads are shared and 0.29x if private -- both bounds, because the IR does not say which applies
+and the optical plane it is measured against runs at 0.3% link efficiency, B6's amortised best
+reuse against scale: 1.00x at 11 devices -> 1.12x at 1153, as the array grows from 0.29 to 0.80 domains across
+and it barely moves, because B3 does not expand with device count: 105x the devices grows the extent only 2.72x, since placements are scaled to close the longest *optical* link. Adding devices densifies the array instead of widening it, so the domain count never rises. Broadcast reuse would need a placement objective that minimises the longest edge, which is not what B3 optimises.

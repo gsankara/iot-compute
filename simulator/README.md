@@ -35,9 +35,11 @@ problem graph ──FastMap──▶ 3D placement ──▶ motion plan ──�
 `iotc beam`), **B6** (slot scheduling, `iotc schedule`), **B7** (energy
 feasibility, `iotc energy`), **B8** (resilience, `iotc resilience`), **B9**
 (bytecode and its VM, `iotc codegen`) and **B10** (the max-clique flagship,
-`iotc clique`) are implemented, tested and benched.  **Phase C** — the large-scale
-testbench, `iotc testbench` — has its first cut: runs classified pass/degraded/
-wrong/hung with five invariants checked on every one.  See `docs/ROADMAP.md`.
+`iotc clique`) are implemented, tested and benched.  **B11** (`iotc broadcast`)
+opens the *omnidirectional* variant, where nothing points and contention replaces
+aiming.  **Phase C** — the large-scale testbench, `iotc testbench` — has its first
+cut: runs classified pass/degraded/wrong/hung with five invariants checked on
+every one.  See `docs/ROADMAP.md`.
 
 ## Install
 
@@ -110,6 +112,12 @@ Assign the beams, and find out what the gimbals can actually point at:
 iotc beam stencil3d
 ```
 
+Or drop the beams entirely and ask what a radio that never points would cost:
+
+```bash
+iotc broadcast --no-scaling stencil3d
+```
+
 In Python:
 
 ```python
@@ -143,6 +151,7 @@ is pinned by a test.
 | A tethered head is ~50× smaller than a float, moves 4× faster in z at zero node energy — and its own wire forest blocks the beams, cutting delivered traffic by ~3×. | `configs/platform_study.yaml` |
 | With 8 kbit packets at 1 Gb/s, transmission takes microseconds and aiming takes ~0.5 s. The fabric is aim-dominated; the scheduler must amortise retargeting. | `iotc sim --traffic` |
 | Without a re-aiming loop, a 0.04 m/√s current destroys every link. Open-loop pointing has a tolerance of centimetres. | `configs/fault_campaign.yaml` |
+| A radio avoids aiming but not contention: in water the carrier ladder tops out at 26.6 m, below the 41.6 m links B3 plans, so no subsea radio can be the data plane. | `iotc broadcast` |
 
 ## Layout
 
@@ -170,6 +179,7 @@ iotc/
     resilience.py  replication, LSH failover, pointing tracker      (B8)
     codegen.py  per-device bytecode; the program is a loop        (B9)
     clique.py   the flagship: proximity as the adjacency test    (B10)
+    broadcast.py  the radio plane: contention, not aiming          (B11)
   testbench/    end-to-end runs, invariants, fault campaigns   (Phase C)
   bench/        design-space sweeps, fault campaigns, per-pass evaluation
 configs/  examples/  tests/  docs/
@@ -220,7 +230,7 @@ which is gitignored.  The curated versions are committed in `docs/RESULTS.md`.
 python -m pytest -q
 ```
 
-563 tests.  They are written as invariants rather than golden values — monotonic
+593 tests.  They are written as invariants rather than golden values — monotonic
 link budgets, unit-mean fading, energy conservation, quantization bounds, seeded
 determinism, five-point and seven-point stencil neighbourhoods, surface-to-volume
 scaling, FLOP and external-traffic conservation under tiling, embedded distance

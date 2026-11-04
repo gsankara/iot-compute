@@ -47,13 +47,17 @@ Implemented:
 ``B10`` -- :mod:`iotc.compiler.clique`.  Maximum clique end to end: physical
     proximity as the adjacency test, against four conventional baselines.
 
-Phase B is complete.  See ``docs/ROADMAP.md``.
+``B11`` -- :mod:`iotc.compiler.broadcast`.  The omnidirectional plane, where
+    nothing points and contention replaces aiming.  Chooses carrier and transmit
+    power to buy spatial reuse, and colours the conflict graph into slots.
+
+Phase B is complete; B11 opens the broadcast variant.  See ``docs/ROADMAP.md``.
 """
 
 from __future__ import annotations
 
-from . import (beam, clique, codegen, energy, fastmap, frontends, ir, motion,
-               partition, place, resilience, schedule, tile)
+from . import (beam, broadcast, clique, codegen, energy, fastmap, frontends,
+               ir, motion, partition, place, resilience, schedule, tile)
 from .fastmap import embed_graph, traffic_distance
 from .frontends import Workload
 from .ir import Task, TaskGraph, TaskGraphError
@@ -64,6 +68,9 @@ from .place import MotionBudget, PlaceResult, Placer, derive_budget
 from .energy import EnergyBudget, EnergyPolicy, assess
 from .resilience import (FailoverIndex, ReplicationPolicy, ResilienceResult,
                          betweenness, plan_resilience, reaim_interval)
+from .broadcast import (BroadcastPlan, Broadcaster, RadioBudget,
+                        colour_greedy, conflict_matrix, derive_radio_budget,
+                        hearing_matrix, plan_broadcast)
 from .clique import CliqueResult, CliqueSolver, solve_clique
 from .codegen import DeviceProgram, Instruction, Manifest, Op, emit
 from .schedule import Schedule, Scheduler, Slot, build_schedule
@@ -83,6 +90,7 @@ __all__ = [
     "resilience",
     "codegen",
     "clique",
+    "broadcast",
     "Task",
     "TaskGraph",
     "TaskGraphError",
@@ -123,6 +131,14 @@ __all__ = [
     "CliqueSolver",
     "CliqueResult",
     "solve_clique",
+    "Broadcaster",
+    "BroadcastPlan",
+    "RadioBudget",
+    "derive_radio_budget",
+    "hearing_matrix",
+    "conflict_matrix",
+    "colour_greedy",
+    "plan_broadcast",
     "balanced_factors",
     "embed_graph",
     "traffic_distance",
