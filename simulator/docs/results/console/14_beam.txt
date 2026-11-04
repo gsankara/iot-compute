@@ -18,6 +18,12 @@ spmv        relay    lightest_first       no   6   1.0       1      100.0%      
 spmv        relay    lightest_first      yes   6   1.0       1      100.0%      0.0%     0.00
 spmv        relay    arbitrary            no   6   1.0       1      100.0%      0.0%     0.01
 spmv        relay    arbitrary           yes   6   1.0       1      100.0%      0.0%     0.00
+spmv        tether   heaviest_first       no   2   3.0       4       33.5%      0.0%     0.15
+spmv        tether   heaviest_first      yes   2   3.0       4       33.5%      0.0%     0.08
+spmv        tether   lightest_first       no   2   3.0       4       27.6%      0.0%     0.15
+spmv        tether   lightest_first      yes   2   3.0       4       27.6%      0.0%     0.08
+spmv        tether   arbitrary            no   2   3.0       4       27.9%      0.0%     0.15
+spmv        tether   arbitrary           yes   2   3.0       4       27.9%      0.0%     0.08
 stencil2d   float    heaviest_first       no   2   4.0       1        3.5%     97.0%     0.18
 stencil2d   float    heaviest_first      yes   2   4.0       4       53.7%      1.0%     0.06
 stencil2d   float    lightest_first       no   2   4.0       1        3.5%     97.0%     0.18
@@ -36,6 +42,12 @@ stencil2d   relay    lightest_first       no   6   1.3       2       86.1%      
 stencil2d   relay    lightest_first      yes   6   1.3       2       86.1%      0.0%     0.00
 stencil2d   relay    arbitrary            no   6   1.3       2       95.2%      0.0%     0.01
 stencil2d   relay    arbitrary           yes   6   1.3       2       95.2%      0.0%     0.00
+stencil2d   tether   heaviest_first       no   2   4.0       4       53.7%      0.0%     0.17
+stencil2d   tether   heaviest_first      yes   2   4.0       4       53.7%      0.0%     0.07
+stencil2d   tether   lightest_first       no   2   4.0       4       21.2%      0.0%     0.17
+stencil2d   tether   lightest_first      yes   2   4.0       4       21.2%      0.0%     0.07
+stencil2d   tether   arbitrary            no   2   4.0       4       43.7%      0.0%     0.17
+stencil2d   tether   arbitrary           yes   2   4.0       4       43.7%      0.0%     0.07
 stencil3d   float    heaviest_first       no   2   6.5       1        5.5%     96.5%     0.05
 stencil3d   float    heaviest_first      yes   2   6.5       7       48.1%      3.5%     0.07
 stencil3d   float    lightest_first       no   2   6.5       1        5.5%     96.5%     0.05
@@ -54,11 +66,18 @@ stencil3d   relay    lightest_first       no   6   2.2       3       50.6%      
 stencil3d   relay    lightest_first      yes   6   2.2       3       50.6%      0.0%     0.00
 stencil3d   relay    arbitrary            no   6   2.2       3       81.4%      0.0%     0.01
 stencil3d   relay    arbitrary           yes   6   2.2       3       81.4%      0.0%     0.00
+stencil3d   tether   heaviest_first       no   2   6.5       7       48.7%      0.0%     0.14
+stencil3d   tether   heaviest_first      yes   2   6.5       7       48.7%      0.0%     0.07
+stencil3d   tether   lightest_first       no   2   6.5       7        7.2%      0.0%     0.14
+stencil3d   tether   lightest_first      yes   2   6.5       7        7.2%      0.0%     0.07
+stencil3d   tether   arbitrary            no   2   6.5       7       41.5%      0.0%     0.14
+stencil3d   tether   arbitrary           yes   2   6.5       7       41.5%      0.0%     0.07
 
-demand exceeds transceivers by 3.5x on average -- the graph cannot be a topology, only a sequence of them
+demand exceeds transceivers by 3.8x on average -- the graph cannot be a topology, only a sequence of them
 drone: B3's placement leaves 2.6% of links unaimable; after the refinement iteration, 0.8%
 float: B3's placement leaves 97.8% of links unaimable; after the refinement iteration, 9.4%
 relay: B3's placement leaves 0.0% of links unaimable; after the refinement iteration, 0.0%
-ordering the b-matching by payload puts 61.7% of the traffic in the opening round against 38.9% reversed -- same rounds, different bytes
+tether: B3's placement leaves 0.0% of links unaimable; after the refinement iteration, 0.0%
+ordering the b-matching by payload puts 57.6% of the traffic in the opening round against 33.9% reversed -- same rounds, different bytes
 rounds against heads: 2 heads 4.9 rounds, 6 heads 2.0 rounds
-assignments exceeding a device's head count: 0 of 54 -- every assignment is realisable
+assignments exceeding a device's head count: 0 of 72 -- every assignment is realisable

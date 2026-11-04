@@ -206,11 +206,16 @@ Bench: `iotc beam` (`iotc/bench/beam_bench.py`).  Its results:
   locally right and the composition was unusable;
 - **the feedback iteration recovers it** — widening the column to 20 m drops
   rejection to 3.5% and takes first-round traffic from 5.5% to 48.1%;
-- demand exceeds transceivers by **3.5×** on average; a relay's six heads cut
+- **but 96.5% is a property of columns, not of gimbals** — the tethered head's
+  slab placement (74.1 × 74.1 × 4.6 m, anisotropy 0.06) is **0.0% unaimable with
+  no feedback iteration at all**, since a slab's bearings are near-horizontal.
+  B5 does not charge for occlusion, though, so this says the slab is *pointable*,
+  not that the beams arrive — and horizontal beams are the ones the wires block;
+- demand exceeds transceivers by **3.8×** on average; a relay's six heads cut
   rounds from 4.9 to 2.0 and let one round carry 90% of the traffic, which is
   the strongest argument yet for heterogeneity;
-- ordering by payload puts **61.7%** of traffic in the opening round against
-  38.9% reversed, at identical round count.
+- ordering by payload puts **57.6%** of traffic in the opening round against
+  33.9% reversed, at identical round count.
 
 Two corrections to the original framing.  The roadmap asks for the *snap
 residual* to be fed back into B3; the residual is the minor term, and the sweep

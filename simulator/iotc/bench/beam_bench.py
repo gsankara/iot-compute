@@ -35,7 +35,7 @@ from ..compiler import build_workload
 from ..compiler.beam import assign_beams, refine_positions
 from ..compiler.partition import partition
 from ..compiler.place import place
-from ..devices import MOTE_C, RELAY, aerial, aquatic
+from ..devices import MOTE_C, RELAY, aerial, aquatic, tethered
 from ..registry import create
 from .sim_bench import write_csv
 
@@ -45,6 +45,11 @@ PLATFORMS = {
     "float": (lambda: aquatic(MOTE_C), "water"),
     "drone": (lambda: aerial(MOTE_C), "air"),
     "relay": (lambda: aquatic(RELAY), "water"),
+    # B3 gives this platform a *slab* (anisotropy 0.06) where the float gets a
+    # column (231), and a column is what B5 found 96.5% unaimable.  ``aquatic``
+    # wraps first: the modifier order decides whether the head is on blue-green
+    # or still on 850 nm, and the wrong order silently reports a 1.75 m reach.
+    "tether": (lambda: tethered(aquatic(MOTE_C)), "water"),
 }
 
 QUALITY_PARAMS = {
