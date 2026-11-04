@@ -57,10 +57,21 @@ def test_a_drone_pays_for_both_axes():
 
 
 def test_a_tethered_head_moves_for_free_and_is_bounded_by_its_wire():
-    b = derive_budget(tethered(MOTE_C), WATER)
+    head = tethered(aquatic(MOTE_C))
+    b = derive_budget(head, WATER)
     assert b.platform == "tethered"
     assert b.xy_cost_per_m == 0.0 and b.z_cost_per_m == 0.0
-    assert b.z_reach <= tethered(MOTE_C).tether.length + 1e-9
+    assert b.z_reach <= head.tether.length + 1e-9
+
+
+def test_a_tethered_head_sees_as_far_as_a_float():
+    # The head carries the float's optics, so once it is converted for the
+    # medium its reach is the float's.  A bare ``MOTE_C`` on 850 nm reports
+    # ~1.75 m, which is the wavelength's limit masquerading as the platform's.
+    head = derive_budget(tethered(aquatic(MOTE_C)), WATER)
+    floater = derive_budget(aquatic(MOTE_C), WATER)
+    assert head.max_link == pytest.approx(floater.max_link, rel=1e-9)
+    assert derive_budget(tethered(MOTE_C), WATER).max_link < 0.1 * floater.max_link
 
 
 def test_terminal_velocity_grows_with_force_and_falls_with_density():

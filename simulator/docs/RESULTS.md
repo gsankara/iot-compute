@@ -438,7 +438,7 @@ platform    xy reach    z reach  anisotropy   optical    xy J/m     z J/m
 ------------------------------------------------------------------------
 float           0.70     160.99      231.01     41.62     1.065     0.000
 drone       17874.55   14594.51        0.82     87.89     0.180     0.221
-tether        480.00      30.00        0.06      1.75     0.000     0.000
+tether        480.00      30.00        0.06     41.62     0.000     0.000
 ```
 
 ```
@@ -448,6 +448,8 @@ stencil2d   float    anisotropic       0.3     0.3      78.8     8.40    0.0%   
 stencil2d   float    velocity          0.7     0.7       0.7     0.18    0.0%       9.06
 spmv        float    anisotropic       0.2     0.2      39.5    11.83    0.0%       0.43
 spmv        float    velocity          0.7     0.7       0.7     0.47    0.0%       1.64
+stencil3d   tether   anisotropic      74.1    74.1       4.6    16.77    0.0%       0.00
+stencil3d   tether   isotropic        30.0    30.0      30.0     8.93    0.0%       0.00
 ```
 
 ```
@@ -470,7 +472,12 @@ rationed one, and the formation is **2.78× cheaper to fly**.  The naive reading
 **The axes do not favour the same direction on every platform.**  The float's
 cheap axis is depth (anisotropy 231), the tethered head's is lateral (0.06,
 because the wire limits depth while the gantry does not), and a drone is nearly
-isotropic (0.82) because vertical travel fights gravity.  A placer tuned to one
+isotropic (0.82) because vertical travel fights gravity.  Note that the tethered
+head's 30 m of depth is its *wire*, not its light — it carries the float's optics,
+so once it is converted for the medium it sees the same 41.6 m.  (An earlier
+revision of this bench built the head from an unconverted `MOTE_C` and reported
+1.75 m of reach, which is 850 nm drowning in water rather than anything about
+tethers; the float and drone numbers were unaffected.)  A placer tuned to one
 platform is wrong on the other two, which is why all three are in the bench —
 and on the drone the naive velocity scaling is *not* penalised.
 

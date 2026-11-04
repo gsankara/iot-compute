@@ -45,7 +45,11 @@ DEFAULT_PLACERS = ("anisotropic", "velocity", "isotropic")
 PLATFORMS = {
     "float": (lambda: aquatic(MOTE_C), "water"),
     "drone": (lambda: aerial(MOTE_C), "air"),
-    "tether": (lambda: tethered(MOTE_C), "water"),
+    # ``aquatic`` first: the conversion that moves the carrier to blue-green is
+    # what lets *any* device see past 2 m of water.  Wrapping a bare ``MOTE_C``
+    # leaves the head on 850 nm and reports a 1.75 m reach that is a property of
+    # the wavelength, not of the tether.
+    "tether": (lambda: tethered(aquatic(MOTE_C)), "water"),
 }
 
 QUALITY_PARAMS = {
