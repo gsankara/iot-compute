@@ -1,0 +1,296 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 1180" role="img">
+<style>
+  svg{--bg:#ccd5d8;--surface:#e1e8ea;--surface-2:#bcc7cb;--line:#8ea0a6;--line-soft:#aab8bd;
+      --fg:#101a1f;--fg-dim:#374950;--fg-faint:#5a6e76;--optical:#8c4409;--radio:#0a5c71;
+      --warn:#8a1032;--ok:#115e34;
+      --font-sans:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+      --font-mono:"IBM Plex Mono",ui-monospace,monospace;
+      --font-display:Archivo,"Helvetica Neue",Arial,sans-serif;
+      background:var(--bg)}
+</style><title>Compile problems onto mobile nodes</title><desc>Four compute problems are compiled onto 22 nodes in 3D space with mobile beams, then deployed in air, suspended and fluid environments.</desc>
+<defs><marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1 L9 5 L1 9 Z" fill="var(--fg)"/></marker><linearGradient id="fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--surface-2)"/><stop offset="1" style="stop-color:var(--bg)"/></linearGradient></defs>
+<rect x="0" y="0" width="1180" height="1180" fill="var(--bg)"/>
+<rect x="135" y="30" width="130" height="110" rx="16" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"/>
+<g transform="translate(135,30)">
+<line x1="101.0" y1="55.0" x2="83.0" y2="86.2" stroke="var(--line)" stroke-width="1" fill="none"/>
+<line x1="101.0" y1="55.0" x2="47.0" y2="86.2" stroke="var(--line)" stroke-width="1" fill="none"/>
+<line x1="101.0" y1="55.0" x2="29.0" y2="55.0" stroke="var(--line)" stroke-width="1" fill="none"/>
+<line x1="101.0" y1="55.0" x2="47.0" y2="23.8" stroke="var(--line)" stroke-width="1" fill="none"/>
+<line x1="101.0" y1="55.0" x2="83.0" y2="23.8" stroke="var(--line)" stroke-width="1" fill="none"/>
+<line x1="83.0" y1="86.2" x2="47.0" y2="86.2" stroke="var(--line)" stroke-width="1" fill="none"/>
+<line x1="83.0" y1="86.2" x2="29.0" y2="55.0" stroke="var(--line)" stroke-width="1" fill="none"/>
+<line x1="83.0" y1="86.2" x2="47.0" y2="23.8" stroke="var(--line)" stroke-width="1" fill="none"/>
+<line x1="83.0" y1="86.2" x2="83.0" y2="23.8" stroke="var(--line)" stroke-width="1" fill="none"/>
+<line x1="47.0" y1="86.2" x2="29.0" y2="55.0" stroke="var(--line)" stroke-width="1" fill="none"/>
+<line x1="47.0" y1="86.2" x2="47.0" y2="23.8" stroke="var(--line)" stroke-width="1" fill="none"/>
+<line x1="47.0" y1="86.2" x2="83.0" y2="23.8" stroke="var(--line)" stroke-width="1" fill="none"/>
+<line x1="29.0" y1="55.0" x2="47.0" y2="23.8" stroke="var(--line)" stroke-width="1" fill="none"/>
+<line x1="29.0" y1="55.0" x2="83.0" y2="23.8" stroke="var(--line)" stroke-width="1" fill="none"/>
+<line x1="47.0" y1="23.8" x2="83.0" y2="23.8" stroke="var(--line)" stroke-width="1" fill="none"/>
+<circle cx="101.0" cy="55.0" r="7" fill="var(--optical)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="83.0" cy="86.2" r="7" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="47.0" cy="86.2" r="7" fill="var(--optical)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="29.0" cy="55.0" r="7" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="47.0" cy="23.8" r="7" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="83.0" cy="23.8" r="7" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+</g>
+<text x="200" y="168" text-anchor="middle" font-family="var(--font-sans)" font-size="13" fill="var(--fg-dim)" letter-spacing="0.1em">clique</text>
+<rect x="402" y="30" width="130" height="110" rx="16" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"/>
+<g transform="translate(402,30)">
+<rect x="24" y="14" width="16" height="16" rx="2" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1"/>
+<rect x="44" y="14" width="16" height="16" rx="2" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1"/>
+<rect x="64" y="14" width="16" height="16" rx="2" fill="var(--optical)" fill-opacity="0.28" stroke="var(--optical)" stroke-width="1.5"/>
+<rect x="84" y="14" width="16" height="16" rx="2" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1"/>
+<rect x="24" y="34" width="16" height="16" rx="2" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1"/>
+<rect x="44" y="34" width="16" height="16" rx="2" fill="var(--optical)" fill-opacity="0.28" stroke="var(--optical)" stroke-width="1.5"/>
+<rect x="64" y="34" width="16" height="16" rx="2" fill="var(--optical)" stroke="var(--optical)" stroke-width="1"/>
+<rect x="84" y="34" width="16" height="16" rx="2" fill="var(--optical)" fill-opacity="0.28" stroke="var(--optical)" stroke-width="1.5"/>
+<rect x="24" y="54" width="16" height="16" rx="2" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1"/>
+<rect x="44" y="54" width="16" height="16" rx="2" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1"/>
+<rect x="64" y="54" width="16" height="16" rx="2" fill="var(--optical)" fill-opacity="0.28" stroke="var(--optical)" stroke-width="1.5"/>
+<rect x="84" y="54" width="16" height="16" rx="2" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1"/>
+<rect x="24" y="74" width="16" height="16" rx="2" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1"/>
+<rect x="44" y="74" width="16" height="16" rx="2" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1"/>
+<rect x="64" y="74" width="16" height="16" rx="2" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1"/>
+<rect x="84" y="74" width="16" height="16" rx="2" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1"/>
+<polygon points="59,38 59,46 64,42" fill="var(--optical)"/>
+<polygon points="85,38 85,46 80,42" fill="var(--optical)"/>
+<polygon points="68,29 76,29 72,34" fill="var(--optical)"/>
+<polygon points="68,55 76,55 72,50" fill="var(--optical)"/>
+</g>
+<text x="467" y="168" text-anchor="middle" font-family="var(--font-sans)" font-size="13" fill="var(--fg-dim)" letter-spacing="0.1em">stencil</text>
+<rect x="668" y="30" width="130" height="110" rx="16" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"/>
+<g transform="translate(668,30)">
+<line x1="12" y1="96" x2="118" y2="96" stroke="var(--line)" stroke-width="1.5" fill="none"/>
+<g transform="translate(33,76) scale(0.76)"><rect x="-1.5" y="-7" width="3" height="7" fill="var(--fg-faint)"/><polygon points="-11,-7 11,-7 0,-21" fill="var(--warn)" fill-opacity="0.30" stroke="var(--warn)" stroke-width="1.5"/><polygon points="-8,-18 8,-18 0,-30" fill="var(--warn)" fill-opacity="0.30" stroke="var(--warn)" stroke-width="1.5"/></g>
+<g transform="translate(56,76) scale(0.76)"><rect x="-1.5" y="-7" width="3" height="7" fill="var(--fg-faint)"/><polygon points="-11,-7 11,-7 0,-21" fill="var(--warn)" fill-opacity="0.30" stroke="var(--warn)" stroke-width="1.5"/><polygon points="-8,-18 8,-18 0,-30" fill="var(--warn)" fill-opacity="0.30" stroke="var(--warn)" stroke-width="1.5"/></g>
+<g transform="translate(79,76) scale(0.76)"><rect x="-1.5" y="-7" width="3" height="7" fill="var(--fg-faint)"/><polygon points="-11,-7 11,-7 0,-21" fill="var(--ok)" fill-opacity="0.30" stroke="var(--ok)" stroke-width="1.5"/><polygon points="-8,-18 8,-18 0,-30" fill="var(--ok)" fill-opacity="0.30" stroke="var(--ok)" stroke-width="1.5"/></g>
+<g transform="translate(102,76) scale(0.76)"><rect x="-1.5" y="-7" width="3" height="7" fill="var(--fg-faint)"/><polygon points="-11,-7 11,-7 0,-21" fill="var(--ok)" fill-opacity="0.30" stroke="var(--ok)" stroke-width="1.5"/><polygon points="-8,-18 8,-18 0,-30" fill="var(--ok)" fill-opacity="0.30" stroke="var(--ok)" stroke-width="1.5"/></g>
+<g transform="translate(22,96) scale(1.0)"><rect x="-1.5" y="-7" width="3" height="7" fill="var(--fg-faint)"/><polygon points="-11,-7 11,-7 0,-21" fill="var(--warn)" fill-opacity="0.30" stroke="var(--warn)" stroke-width="1.5"/><polygon points="-8,-18 8,-18 0,-30" fill="var(--warn)" fill-opacity="0.30" stroke="var(--warn)" stroke-width="1.5"/></g>
+<g transform="translate(45,96) scale(1.0)"><rect x="-1.5" y="-7" width="3" height="7" fill="var(--fg-faint)"/><polygon points="-11,-7 11,-7 0,-21" fill="var(--warn)" fill-opacity="0.30" stroke="var(--warn)" stroke-width="1.5"/><polygon points="-8,-18 8,-18 0,-30" fill="var(--warn)" fill-opacity="0.30" stroke="var(--warn)" stroke-width="1.5"/></g>
+<g transform="translate(68,96) scale(1.0)"><rect x="-1.5" y="-7" width="3" height="7" fill="var(--fg-faint)"/><polygon points="-11,-7 11,-7 0,-21" fill="var(--warn)" fill-opacity="0.30" stroke="var(--warn)" stroke-width="1.5"/><polygon points="-8,-18 8,-18 0,-30" fill="var(--warn)" fill-opacity="0.30" stroke="var(--warn)" stroke-width="1.5"/></g>
+<g transform="translate(91,96) scale(1.0)"><rect x="-1.5" y="-7" width="3" height="7" fill="var(--fg-faint)"/><polygon points="-11,-7 11,-7 0,-21" fill="var(--ok)" fill-opacity="0.30" stroke="var(--ok)" stroke-width="1.5"/><polygon points="-8,-18 8,-18 0,-30" fill="var(--ok)" fill-opacity="0.30" stroke="var(--ok)" stroke-width="1.5"/></g>
+<g transform="translate(112,96) scale(1.0)"><rect x="-1.5" y="-7" width="3" height="7" fill="var(--fg-faint)"/><polygon points="-11,-7 11,-7 0,-21" fill="var(--ok)" fill-opacity="0.30" stroke="var(--ok)" stroke-width="1.5"/><polygon points="-8,-18 8,-18 0,-30" fill="var(--ok)" fill-opacity="0.30" stroke="var(--ok)" stroke-width="1.5"/></g>
+<g transform="translate(22,66) scale(1.0)"><path d="M0,0 C-6,-6 -5,-12 0,-19 C5,-12 6,-6 0,0 Z" fill="var(--warn)" fill-opacity="0.75" stroke="var(--warn)" stroke-width="1"/><path d="M0,-2 C-3,-6 -2,-10 0,-13 C2,-10 3,-6 0,-2 Z" fill="var(--optical)" stroke="none"/></g>
+<g transform="translate(45,66) scale(1.15)"><path d="M0,0 C-6,-6 -5,-12 0,-19 C5,-12 6,-6 0,0 Z" fill="var(--warn)" fill-opacity="0.75" stroke="var(--warn)" stroke-width="1"/><path d="M0,-2 C-3,-6 -2,-10 0,-13 C2,-10 3,-6 0,-2 Z" fill="var(--optical)" stroke="none"/></g>
+<g transform="translate(33,50) scale(0.8)"><path d="M0,0 C-6,-6 -5,-12 0,-19 C5,-12 6,-6 0,0 Z" fill="var(--warn)" fill-opacity="0.75" stroke="var(--warn)" stroke-width="1"/><path d="M0,-2 C-3,-6 -2,-10 0,-13 C2,-10 3,-6 0,-2 Z" fill="var(--optical)" stroke="none"/></g>
+<g transform="translate(68,70) scale(0.75)"><path d="M0,0 C-6,-6 -5,-12 0,-19 C5,-12 6,-6 0,0 Z" fill="var(--warn)" fill-opacity="0.75" stroke="var(--warn)" stroke-width="1"/><path d="M0,-2 C-3,-6 -2,-10 0,-13 C2,-10 3,-6 0,-2 Z" fill="var(--optical)" stroke="none"/></g>
+</g>
+<text x="733" y="168" text-anchor="middle" font-family="var(--font-sans)" font-size="13" fill="var(--fg-dim)" letter-spacing="0.1em">wildfire</text>
+<rect x="935" y="30" width="130" height="110" rx="16" fill="var(--surface)" stroke="var(--line)" stroke-width="1.5"/>
+<g transform="translate(935,30)">
+<line x1="35" y1="16" x2="95" y2="16" stroke="var(--line)" stroke-width="1.5" fill="none"/>
+<line x1="35" y1="16" x2="95" y2="41" stroke="var(--line)" stroke-width="1.5" fill="none"/>
+<line x1="35" y1="41" x2="95" y2="41" stroke="var(--line)" stroke-width="1.5" fill="none"/>
+<line x1="35" y1="41" x2="95" y2="16" stroke="var(--line)" stroke-width="1.5" fill="none"/>
+<line x1="35" y1="66" x2="95" y2="66" stroke="var(--line)" stroke-width="1.5" fill="none"/>
+<line x1="35" y1="66" x2="95" y2="91" stroke="var(--line)" stroke-width="1.5" fill="none"/>
+<line x1="35" y1="91" x2="95" y2="91" stroke="var(--line)" stroke-width="1.5" fill="none"/>
+<line x1="35" y1="91" x2="95" y2="66" stroke="var(--line)" stroke-width="1.5" fill="none"/>
+<circle cx="35" cy="16" r="5" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="35" cy="41" r="5" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="35" cy="66" r="5" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="35" cy="91" r="5" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="95" cy="16" r="5" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="95" cy="41" r="5" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="95" cy="66" r="5" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="95" cy="91" r="5" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+</g>
+<text x="1000" y="168" text-anchor="middle" font-family="var(--font-sans)" font-size="13" fill="var(--fg-dim)" letter-spacing="0.1em">transform</text>
+<path d="M556 212 L590 246 L624 212 M590 190 L590 244" fill="none" stroke="var(--fg-dim)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="640" y="225" text-anchor="start" font-family="var(--font-sans)" font-size="14" fill="var(--fg-dim)" letter-spacing="0.1em">compile</text>
+<path d="M556 872 L590 906 L624 872 M590 850 L590 904" fill="none" stroke="var(--fg-dim)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="640" y="885" text-anchor="start" font-family="var(--font-sans)" font-size="14" fill="var(--fg-dim)" letter-spacing="0.1em">deploy</text>
+<line x1="450.0" y1="565.0" x2="450.0" y2="305.0" stroke="var(--line)" stroke-width="1.2" fill="none"/>
+<line x1="450.0" y1="565.0" x2="224.8" y2="695.0" stroke="var(--line)" stroke-width="1.2" fill="none"/>
+<line x1="450.0" y1="565.0" x2="675.2" y2="695.0" stroke="var(--line)" stroke-width="1.2" fill="none"/>
+<line x1="450.0" y1="305.0" x2="224.8" y2="435.0" stroke="var(--line)" stroke-width="1.2" fill="none"/>
+<line x1="450.0" y1="305.0" x2="675.2" y2="435.0" stroke="var(--line)" stroke-width="1.2" fill="none"/>
+<line x1="224.8" y1="695.0" x2="224.8" y2="435.0" stroke="var(--line)" stroke-width="1.2" fill="none"/>
+<line x1="224.8" y1="695.0" x2="450.0" y2="825.0" stroke="var(--line)" stroke-width="1.2" fill="none"/>
+<line x1="224.8" y1="435.0" x2="450.0" y2="565.0" stroke="var(--line)" stroke-width="1.2" fill="none"/>
+<line x1="675.2" y1="695.0" x2="675.2" y2="435.0" stroke="var(--line)" stroke-width="1.2" fill="none"/>
+<line x1="675.2" y1="695.0" x2="450.0" y2="825.0" stroke="var(--line)" stroke-width="1.2" fill="none"/>
+<line x1="675.2" y1="435.0" x2="450.0" y2="565.0" stroke="var(--line)" stroke-width="1.2" fill="none"/>
+<line x1="450.0" y1="825.0" x2="450.0" y2="565.0" stroke="var(--line)" stroke-width="1.2" fill="none"/>
+<line x1="385.4" y1="513.1" x2="381.9" y2="505.3" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="385.4" y1="513.1" x2="421.7" y2="525.5" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="385.4" y1="513.1" x2="464.7" y2="659.7" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="385.4" y1="513.1" x2="480.0" y2="543.4" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="381.9" y1="505.3" x2="421.7" y2="525.5" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="381.9" y1="505.3" x2="416.4" y2="528.2" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="381.9" y1="505.3" x2="430.3" y2="550.5" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="381.9" y1="505.3" x2="480.0" y2="543.4" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="381.9" y1="505.3" x2="373.3" y2="557.6" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="381.9" y1="505.3" x2="360.8" y2="585.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="421.7" y1="525.5" x2="416.4" y2="528.2" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="421.7" y1="525.5" x2="430.3" y2="550.5" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="421.7" y1="525.5" x2="464.7" y2="659.7" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="421.7" y1="525.5" x2="480.0" y2="543.4" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="421.7" y1="525.5" x2="494.1" y2="504.7" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="421.7" y1="525.5" x2="471.4" y2="593.4" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="416.4" y1="528.2" x2="430.3" y2="550.5" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="416.4" y1="528.2" x2="373.3" y2="557.6" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="416.4" y1="528.2" x2="360.8" y2="585.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="416.4" y1="528.2" x2="422.1" y2="568.7" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="416.4" y1="528.2" x2="471.4" y2="593.4" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="430.3" y1="550.5" x2="464.7" y2="659.7" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="430.3" y1="550.5" x2="494.1" y2="504.7" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="430.3" y1="550.5" x2="373.3" y2="557.6" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="430.3" y1="550.5" x2="360.8" y2="585.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="430.3" y1="550.5" x2="422.1" y2="568.7" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="430.3" y1="550.5" x2="471.4" y2="593.4" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="430.3" y1="550.5" x2="489.4" y2="584.5" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="430.3" y1="550.5" x2="463.4" y2="613.3" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="464.7" y1="659.7" x2="480.0" y2="543.4" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="464.7" y1="659.7" x2="494.1" y2="504.7" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="464.7" y1="659.7" x2="504.4" y2="509.1" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="464.7" y1="659.7" x2="422.1" y2="568.7" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="464.7" y1="659.7" x2="471.4" y2="593.4" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="464.7" y1="659.7" x2="489.4" y2="584.5" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="480.0" y1="543.4" x2="507.6" y2="550.0" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="480.0" y1="543.4" x2="494.1" y2="504.7" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="480.0" y1="543.4" x2="504.4" y2="509.1" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="507.6" y1="550.0" x2="494.1" y2="504.7" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="507.6" y1="550.0" x2="504.4" y2="509.1" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="507.6" y1="550.0" x2="512.9" y2="521.4" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="494.1" y1="504.7" x2="504.4" y2="509.1" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="494.1" y1="504.7" x2="512.9" y2="521.4" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="494.1" y1="504.7" x2="471.4" y2="593.4" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="494.1" y1="504.7" x2="489.4" y2="584.5" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="494.1" y1="504.7" x2="529.4" y2="542.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="504.4" y1="509.1" x2="512.9" y2="521.4" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="504.4" y1="509.1" x2="489.4" y2="584.5" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="504.4" y1="509.1" x2="529.4" y2="542.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="512.9" y1="521.4" x2="529.4" y2="542.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="512.9" y1="521.4" x2="463.4" y2="613.3" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="512.9" y1="521.4" x2="530.2" y2="641.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="373.3" y1="557.6" x2="360.8" y2="585.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="373.3" y1="557.6" x2="422.1" y2="568.7" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="373.3" y1="557.6" x2="347.4" y2="616.3" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="360.8" y1="585.9" x2="422.1" y2="568.7" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="360.8" y1="585.9" x2="347.4" y2="616.3" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="360.8" y1="585.9" x2="416.3" y2="611.8" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="360.8" y1="585.9" x2="471.4" y2="593.4" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="360.8" y1="585.9" x2="463.4" y2="613.3" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="422.1" y1="568.7" x2="347.4" y2="616.3" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="422.1" y1="568.7" x2="416.3" y2="611.8" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="422.1" y1="568.7" x2="471.4" y2="593.4" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="422.1" y1="568.7" x2="489.4" y2="584.5" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="422.1" y1="568.7" x2="463.4" y2="613.3" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="422.1" y1="568.7" x2="530.2" y2="641.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="347.4" y1="616.3" x2="416.3" y2="611.8" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="416.3" y1="611.8" x2="471.4" y2="593.4" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="416.3" y1="611.8" x2="463.4" y2="613.3" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="416.3" y1="611.8" x2="530.2" y2="641.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="416.3" y1="611.8" x2="496.8" y2="602.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="471.4" y1="593.4" x2="489.4" y2="584.5" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="471.4" y1="593.4" x2="529.4" y2="542.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="471.4" y1="593.4" x2="463.4" y2="613.3" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="471.4" y1="593.4" x2="530.2" y2="641.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="471.4" y1="593.4" x2="496.8" y2="602.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="489.4" y1="584.5" x2="529.4" y2="542.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="489.4" y1="584.5" x2="463.4" y2="613.3" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="489.4" y1="584.5" x2="530.2" y2="641.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="529.4" y1="542.9" x2="463.4" y2="613.3" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="529.4" y1="542.9" x2="530.2" y2="641.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="529.4" y1="542.9" x2="496.8" y2="602.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="463.4" y1="613.3" x2="530.2" y2="641.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="463.4" y1="613.3" x2="496.8" y2="602.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<line x1="530.2" y1="641.9" x2="496.8" y2="602.9" stroke="var(--line-soft)" stroke-width="1" fill="none"/>
+<circle cx="385.4" cy="513.1" r="7.7" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.84"/>
+<circle cx="381.9" cy="505.3" r="7.9" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.89"/>
+<circle cx="421.7" cy="525.5" r="7.8" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.86"/>
+<circle cx="416.4" cy="528.2" r="7.9" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.88"/>
+<circle cx="430.3" cy="550.5" r="7.7" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.83"/>
+<circle cx="464.7" cy="659.7" r="6.0" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.50"/>
+<circle cx="480.0" cy="543.4" r="7.3" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.75"/>
+<circle cx="507.6" cy="550.0" r="7.4" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.78"/>
+<circle cx="494.1" cy="504.7" r="8.3" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.95"/>
+<circle cx="504.4" cy="509.1" r="8.4" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.99"/>
+<circle cx="512.9" cy="521.4" r="8.3" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.97"/>
+<circle cx="373.3" cy="557.6" r="7.8" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.86"/>
+<circle cx="360.8" cy="585.9" r="7.8" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.87"/>
+<circle cx="422.1" cy="568.7" r="7.8" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.87"/>
+<circle cx="347.4" cy="616.3" r="8.0" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.90"/>
+<circle cx="416.3" cy="611.8" r="7.7" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.84"/>
+<circle cx="471.4" cy="593.4" r="7.4" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.78"/>
+<circle cx="489.4" cy="584.5" r="7.7" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.83"/>
+<circle cx="529.4" cy="542.9" r="8.1" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.93"/>
+<circle cx="463.4" cy="613.3" r="7.5" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.80"/>
+<circle cx="530.2" cy="641.9" r="7.1" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.72"/>
+<circle cx="496.8" cy="602.9" r="7.5" fill="var(--surface)" stroke="var(--optical)" stroke-width="2" stroke-opacity="0.80"/>
+<circle cx="489.4" cy="584.5" r="14" fill="none" stroke="var(--warn)" stroke-width="2"/>
+<line x1="502.5" y1="579.4" x2="879.7" y2="434.3" stroke="var(--warn)" stroke-width="1.2" fill="none"/>
+<line x1="502.9" y1="588.3" x2="891.5" y2="699.6" stroke="var(--warn)" stroke-width="1.2" fill="none"/>
+<circle cx="930" cy="565" r="140" fill="var(--surface)" stroke="var(--line)" stroke-width="2"/>
+<g transform="translate(930,565)">
+<polygon points="0,0 74.9,-83.2 98.9,-52.6" fill="var(--optical)" fill-opacity="0.25" stroke="none"/>
+<line x1="-82" y1="0" x2="82" y2="0" stroke="var(--fg)" stroke-width="2" fill="none" marker-start="url(#arr)" marker-end="url(#arr)"/>
+<line x1="0" y1="-76" x2="0" y2="76" stroke="var(--fg)" stroke-width="2" fill="none" marker-start="url(#arr)" marker-end="url(#arr)"/>
+<path d="M8.7 -49.2 A50 50 0 0 1 49.8 -4.4" fill="none" stroke="var(--optical)" stroke-width="2" stroke-dasharray="4 4"/>
+<circle cx="0" cy="0" r="13" fill="var(--optical)" stroke="var(--optical)" stroke-width="2"/>
+</g>
+<text x="868" y="663" text-anchor="middle" font-family="var(--font-sans)" font-size="13" fill="var(--fg-dim)">move</text>
+<text x="996" y="663" text-anchor="middle" font-family="var(--font-sans)" font-size="13" fill="var(--fg-dim)">beam</text>
+<g transform="translate(24,940)">
+<rect x="0" y="0" width="360" height="186" rx="14" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1.5"/>
+<line x1="46" y1="120" x2="74" y2="120" stroke="var(--fg)" stroke-width="2" stroke-linecap="round" fill="none"/>
+<ellipse cx="46" cy="115" rx="7" ry="2.5" fill="var(--surface)" stroke="var(--fg-dim)" stroke-width="1.2"/>
+<ellipse cx="74" cy="115" rx="7" ry="2.5" fill="var(--surface)" stroke="var(--fg-dim)" stroke-width="1.2"/>
+<circle cx="60" cy="121" r="4" fill="var(--optical)" stroke="var(--optical)" stroke-width="1"/>
+<line x1="126" y1="60" x2="154" y2="60" stroke="var(--fg)" stroke-width="2" stroke-linecap="round" fill="none"/>
+<ellipse cx="126" cy="55" rx="7" ry="2.5" fill="var(--surface)" stroke="var(--fg-dim)" stroke-width="1.2"/>
+<ellipse cx="154" cy="55" rx="7" ry="2.5" fill="var(--surface)" stroke="var(--fg-dim)" stroke-width="1.2"/>
+<circle cx="140" cy="61" r="4" fill="var(--optical)" stroke="var(--optical)" stroke-width="1"/>
+<line x1="216" y1="110" x2="244" y2="110" stroke="var(--fg)" stroke-width="2" stroke-linecap="round" fill="none"/>
+<ellipse cx="216" cy="105" rx="7" ry="2.5" fill="var(--surface)" stroke="var(--fg-dim)" stroke-width="1.2"/>
+<ellipse cx="244" cy="105" rx="7" ry="2.5" fill="var(--surface)" stroke="var(--fg-dim)" stroke-width="1.2"/>
+<circle cx="230" cy="111" r="4" fill="var(--optical)" stroke="var(--optical)" stroke-width="1"/>
+<line x1="286" y1="50" x2="314" y2="50" stroke="var(--fg)" stroke-width="2" stroke-linecap="round" fill="none"/>
+<ellipse cx="286" cy="45" rx="7" ry="2.5" fill="var(--surface)" stroke="var(--fg-dim)" stroke-width="1.2"/>
+<ellipse cx="314" cy="45" rx="7" ry="2.5" fill="var(--surface)" stroke="var(--fg-dim)" stroke-width="1.2"/>
+<circle cx="300" cy="51" r="4" fill="var(--optical)" stroke="var(--optical)" stroke-width="1"/>
+<line x1="176" y1="155" x2="204" y2="155" stroke="var(--fg)" stroke-width="2" stroke-linecap="round" fill="none"/>
+<ellipse cx="176" cy="150" rx="7" ry="2.5" fill="var(--surface)" stroke="var(--fg-dim)" stroke-width="1.2"/>
+<ellipse cx="204" cy="150" rx="7" ry="2.5" fill="var(--surface)" stroke="var(--fg-dim)" stroke-width="1.2"/>
+<circle cx="190" cy="156" r="4" fill="var(--optical)" stroke="var(--optical)" stroke-width="1"/>
+<line x1="60" y1="128" x2="140" y2="68" stroke="var(--optical)" stroke-width="1.5" stroke-dasharray="5 4" fill="none"/>
+<line x1="140" y1="68" x2="300" y2="58" stroke="var(--optical)" stroke-width="1.5" stroke-dasharray="5 4" fill="none"/>
+<line x1="230" y1="118" x2="190" y2="163" stroke="var(--optical)" stroke-width="1.5" stroke-dasharray="5 4" fill="none"/>
+</g>
+<g transform="translate(410,940)">
+<rect x="0" y="0" width="360" height="186" rx="14" fill="var(--surface-2)" stroke="var(--line)" stroke-width="1.5"/>
+<rect x="12" y="12" width="336" height="10" rx="3" fill="var(--surface)" stroke="var(--fg-dim)" stroke-width="1.5"/>
+<line x1="40" y1="22" x2="40" y2="100" stroke="var(--fg-faint)" stroke-width="1.5" fill="none"/>
+<line x1="100" y1="22" x2="100" y2="150" stroke="var(--fg-faint)" stroke-width="1.5" fill="none"/>
+<line x1="160" y1="22" x2="160" y2="70" stroke="var(--fg-faint)" stroke-width="1.5" fill="none"/>
+<line x1="220" y1="22" x2="220" y2="100" stroke="var(--fg-faint)" stroke-width="1.5" fill="none"/>
+<line x1="280" y1="22" x2="280" y2="150" stroke="var(--fg-faint)" stroke-width="1.5" fill="none"/>
+<line x1="330" y1="22" x2="330" y2="70" stroke="var(--fg-faint)" stroke-width="1.5" fill="none"/>
+<line x1="40" y1="100" x2="220" y2="100" stroke="var(--optical)" stroke-width="1.5" stroke-dasharray="5 4" fill="none"/>
+<line x1="100" y1="150" x2="280" y2="150" stroke="var(--optical)" stroke-width="1.5" stroke-dasharray="5 4" fill="none"/>
+<circle cx="40" cy="100" r="6" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="100" cy="150" r="6" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="160" cy="70" r="6" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="220" cy="100" r="6" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="280" cy="150" r="6" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="330" cy="70" r="6" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<path d="M94 94 L106 106 M106 94 L94 106" stroke="var(--warn)" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+</g>
+<g transform="translate(796,940)">
+<rect x="0" y="0" width="360" height="186" rx="14" fill="url(#fl)" stroke="var(--line)" stroke-width="1.5"/>
+<path d="M14 28 q22 -12 44 0 t44 0 t44 0 t44 0 t44 0 t44 0 t44 0 t44 0" fill="none" stroke="var(--optical)" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="50" cy="60" r="7" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="120" cy="100" r="7" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="190" cy="70" r="7" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="250" cy="140" r="7" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="300" cy="90" r="7" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<circle cx="330" cy="150" r="7" fill="var(--surface)" stroke="var(--optical)" stroke-width="2"/>
+<line x1="140" y1="84" x2="140" y2="116" stroke="var(--fg)" stroke-width="2" fill="none" marker-start="url(#arr)" marker-end="url(#arr)"/>
+<line x1="270" y1="124" x2="270" y2="156" stroke="var(--fg)" stroke-width="2" fill="none" marker-start="url(#arr)" marker-end="url(#arr)"/>
+</g>
+<text x="204.0" y="1150" text-anchor="middle" font-family="var(--font-sans)" font-size="11" fill="var(--fg-dim)" letter-spacing="0.1em">air</text>
+<text x="590.0" y="1150" text-anchor="middle" font-family="var(--font-sans)" font-size="11" fill="var(--fg-dim)" letter-spacing="0.1em">suspended</text>
+<text x="976.0" y="1150" text-anchor="middle" font-family="var(--font-sans)" font-size="11" fill="var(--fg-dim)" letter-spacing="0.1em">fluid</text>
+</svg>
