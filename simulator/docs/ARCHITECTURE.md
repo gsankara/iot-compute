@@ -123,6 +123,10 @@ hides the recovery paths:
   worse than a dead laser because the sender believes it is transmitting
 - store lockout — brown-out, latched with hysteresis
 
+The position held in `Device` is also the problem's state, not merely the node's
+location; `STATE.md` sets out what that memory costs to write, to read and to
+keep.
+
 ## Scaling
 
 High fidelity is the default.  `ChannelSurrogate` memoizes the geometry-dependent

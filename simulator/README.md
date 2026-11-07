@@ -213,6 +213,7 @@ rather than assuming it is free.
 - `docs/ARCHITECTURE.md` — the engine, the plugin slots, and how data flows
 - `docs/PHYSICS.md` — every equation, its assumptions and its validity range
 - `docs/PLUGINS.md` — adding a channel model or a topology law
+- `docs/STATE.md` — position as state: what the machine's memory costs to write, read and keep
 - `docs/ROADMAP.md` — what Phases B and C add
 
 ## Reproducing the results
