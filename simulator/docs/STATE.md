@@ -26,7 +26,7 @@ about where the bodies are.
 ## The measured instance: B10
 
 Verifying a 16-clique costs **120 pairwise adjacency tests** conventionally and
-**one broadcast round** physically, whatever k is.
+**one broadcast round** physically, whatever k is -- `k(k-1)/2` against 1.
 
 Under the attraction weight `W[i,j] = |N(i) ∩ N(j)| + A[i,j]`, converted by
 `d = W_max / W`, a dense region contracts.  In a planted 7-clique on 26 vertices
@@ -39,6 +39,13 @@ against 4.8x for greedy degeneracy, 7.9x for the colour bound and 9.1x for
 Bron-Kerbosch.  Broadcast rounds are **constant at 36** regardless of problem
 size.
 
+Those are two different counts and the distinction matters.  **One** round
+verifies a single candidate set, which is the collapse the architecture argues
+for.  **36** is what the whole solve spends -- the embedding, the LSH probing
+and the convergence of every candidate ball it nominates.  The first number is
+the mechanism; the second is the bill, and the point is that the bill does not
+grow with n.
+
 ## Positional state is a strange memory
 
 Five properties, all measured.
@@ -47,7 +54,7 @@ Five properties, all measured.
 
 Writing positional state means moving a body.  Per-axis write cost:
 
-| platform | lateral | vertical | anisotropy |
+| platform | lateral | vertical | reach ratio (z / xy) |
 |---|---|---|---|
 | float | 1.065 J/m | **0.000 J/m** | 231.01 |
 | drone | 0.180 J/m | 0.221 J/m | 0.82 |
@@ -56,6 +63,14 @@ Writing positional state means moving a body.  Per-axis write cost:
 A float's ballast sets a trim once and the body coasts to depth, so depth is
 bounded by *time* rather than energy.  One axis of its positional state is free
 to write.
+
+The last column is a *reach* ratio, not a cost ratio: `MotionBudget.anisotropy`
+is `z_reach / xy_reach`, how much further the budget allows the cheap axis to go
+than the rationed one.  That is why the tethered head reads 0.06 while both its
+write costs are zero -- its wire caps depth at 30 m where the gantry spans
+480 m, so the numerator and denominator come from mechanical limits rather than
+from joules.  Read the two halves of the table separately: the J/m columns say
+what a metre costs, the ratio says how many metres are available.
 
 ### 2. Free to read, but conditionally
 
@@ -67,8 +82,10 @@ vertical, at both ends of the link**.
 ### 3. Write cost and read feasibility are anti-correlated
 
 The free-to-write axis lies inside the blind cone.  B3 spends it and returns a
-0.4 x 0.4 x 81.0 m column, an aspect ratio of **202** against a legal ceiling of
-**3.73**, exceeding it **54x**.  B5 then measures **96.5% of its links
+0.351 x 0.351 x 80.995 m column -- an aspect ratio of **230.9** against a legal
+ceiling of **3.73**, exceeding it **62x**.  (Dividing the rounded extents
+published in `RESULTS.md` gives 81.0/0.4 = 202; the measured extents give
+230.9, and that is the figure to quote.)  B5 then measures **96.5% of its links
 unaimable**.  The framing predicts this: a pass that minimises write cost will
 drive the formation into the read-blind direction.
 
