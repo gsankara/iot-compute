@@ -545,31 +545,34 @@ python -m iotc.cli beam
 ```
 
 ```
-workload    platform assigner         B3 fix  tx  over  rounds  1st traffic  rejected  loss dB
-----------------------------------------------------------------------------------------------
-stencil3d   float    heaviest_first       no   2   6.5       1        5.5%     96.5%     0.05
-stencil3d   float    heaviest_first      yes   2   6.5       7       48.1%      3.5%     0.07
-stencil3d   float    lightest_first      yes   2   6.5       7        6.9%      3.5%     0.07
-stencil3d   drone    heaviest_first       no   2   6.5       7       48.7%      4.7%     0.15
-stencil3d   drone    heaviest_first      yes   2   6.5       7       48.7%      2.4%     0.07
-stencil3d   relay    heaviest_first      yes   6   2.2       3       90.1%      0.0%     0.00
+workload    platform   assigner         B3 fix  tx  over  rounds  1st traffic  rejected  loss dB
+------------------------------------------------------------------------------------------------
+stencil3d   float      heaviest_first       no   2   6.5       1        5.5%     96.5%     0.05
+stencil3d   float      heaviest_first      yes   2   6.5       7       48.1%      3.5%     0.07
+stencil3d   float      lightest_first      yes   2   6.5       7        6.9%      3.5%     0.07
+stencil3d   float-hemi heaviest_first       no   2   6.5       7       48.7%      0.0%     0.11
+stencil3d   drone      heaviest_first       no   2   6.5       7       48.7%      4.7%     0.15
+stencil3d   drone      heaviest_first      yes   2   6.5       7       48.7%      2.4%     0.07
+stencil3d   relay      heaviest_first      yes   6   2.2       3       90.1%      0.0%     0.00
 ```
 
 ```
-demand exceeds transceivers by 3.8x on average -- the graph cannot be a topology,
+demand exceeds transceivers by 3.9x on average -- the graph cannot be a topology,
 only a sequence of them
 drone: B3's placement leaves 2.6% of links unaimable; after the refinement
 iteration, 0.8%
 float: B3's placement leaves 97.8% of links unaimable; after the refinement
 iteration, 9.4%
+float-hemi: B3's placement leaves 0.0% of links unaimable; after the refinement
+iteration, 0.0%
 relay: B3's placement leaves 0.0% of links unaimable; after the refinement
 iteration, 0.0%
 tether: B3's placement leaves 0.0% of links unaimable; after the refinement
 iteration, 0.0%
-ordering the b-matching by payload puts 57.6% of the traffic in the opening round
-against 33.9% reversed -- same rounds, different bytes
+ordering the b-matching by payload puts 55.1% of the traffic in the opening round
+against 30.8% reversed -- same rounds, different bytes
 rounds against heads: 2 heads 4.9 rounds, 6 heads 2.0 rounds
-assignments exceeding a device's head count: 0 of 72 -- every assignment is realisable
+assignments exceeding a device's head count: 0 of 90 -- every assignment is realisable
 ```
 
 **The energy-optimal placement cannot be aimed.**  This is the sharpest
@@ -585,8 +588,41 @@ the wire caps depth while the gantry does not): 74.1 x 74.1 x 4.6 m for stencil3
 against the float's 0.4 x 0.4 x 81.0 m column.  A slab's bearings are
 near-horizontal, exactly what a +/-75 deg gimbal wants, so **0.0% of its links are
 unaimable before any feedback iteration runs** and all seven rounds schedule
-where the float raw managed one.  The 96.5% figure is a property of *columns*,
-not of gimbals.
+where the float raw managed one.  That reads as "96.5% is a property of
+columns" -- but the next paragraph shows the column is only half of it.
+
+**The 96.5% is the +/-75 deg limit, not the column -- and lifting it is not
+free.**  The `float-hemi` row is a single-variable control: the float's
+platform with the standard gimbal in every respect except `el_limits`, which
+become +/-90 deg.  Same placement, workload and partition; the column is 230.9x
+in every case.
+
+| gimbal | el limit | step | slew | raw unaimable |
+|---|---|---|---|---|
+| standard | +/-75 deg | 0.10 deg | 200 deg/s | 96.5% |
+| standard but +/-90 | +/-90 deg | 0.10 deg | 200 deg/s | **0.0%** |
+| fine | +/-90 deg | 0.02 deg | 120 deg/s | **0.0%** |
+
+The step contributes nothing; the limit is the whole effect.  Across workloads
+raw unaimable goes standard -> hemispherical: stencil3d 96.5% -> 0.0%,
+stencil2d 97.0% -> 0.0%, spmv 100.0% -> 0.0%.  So a column is unaimable *for a
++/-75 deg gimbal*, and the tether's slab is merely a shape that does not reach
+the limit.  The cost shows up in B6 (stencil3d/float):
+
+| gimbal | rounds | rejected | frame | link efficiency |
+|---|---|---|---|---|
+| standard | 7 | 3.5% | 4446.37 ms | 0.32% |
+| +/-90 standard | 7 | 0.0% | 5762.37 ms | 0.25% |
+| fine | 7 | 0.0% | 9904.37 ms | 0.15% |
+
+Two costs.  First, **the +/-75 deg limit was hiding work**: the 3.5% of links it
+rejected were never in the schedule, and once they are legal the frame has to
+carry them -- about 30% longer, with efficiency down from 0.32% to 0.25%.
+Second, a true fine gimbal slews 1.67x slower and costs 3.0x the retarget energy
+per degree (a 60 deg retarget: standard 300.50 ms / 2995.0 uJ against fine
+500.33 ms / 8997.0 uJ), which is why the fine row's frame is 2.2x the standard
+one.  An apparent aimability win is paid for in schedule time.
+
 Two caveats keep this honest.  The tether's mean loss reads 0.14 dB raw against
 the float's 0.05 dB, but that is not a like-for-like comparison: the float's
 figure is averaged over the 3.5% of links it did not reject, so it is a mean over
@@ -602,13 +638,13 @@ as feeding back the *snap residual*; the residual turned out to be the minor
 term.  Note also that minimising raw residual makes the loss **worse** — loss is
 quadratic in the residual, so the objective has to be the loss itself.
 
-**Demand exceeds supply by 3.8×, so the topology is a sequence.**  A mote has two
+**Demand exceeds supply by 3.9×, so the topology is a sequence.**  A mote has two
 heads and wants up to thirteen neighbours.  A relay's six heads cut the rounds
 from 4.9 to 2.0 and let one round carry 90% of the traffic — the clearest
 argument yet for heterogeneity in the swarm.
 
 **Ordering the b-matching is the only thing this pass chooses**, and it is worth
-57.6% of traffic in the opening round against 33.9% reversed, at identical round
+55.1% of traffic in the opening round against 30.8% reversed, at identical round
 count.  Since each round costs every device in it a ~0.5 s retarget, front-loading
 the heavy edges is what B6 will have to exploit.
 

@@ -230,7 +230,7 @@ which is gitignored.  The curated versions are committed in `docs/RESULTS.md`.
 python -m pytest -q
 ```
 
-593 tests.  They are written as invariants rather than golden values — monotonic
+596 tests.  They are written as invariants rather than golden values — monotonic
 link budgets, unit-mean fading, energy conservation, quantization bounds, seeded
 determinism, five-point and seven-point stencil neighbourhoods, surface-to-volume
 scaling, FLOP and external-traffic conservation under tiling, embedded distance

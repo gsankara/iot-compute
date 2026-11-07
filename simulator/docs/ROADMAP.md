@@ -206,16 +206,25 @@ Bench: `iotc beam` (`iotc/bench/beam_bench.py`).  Its results:
   locally right and the composition was unusable;
 - **the feedback iteration recovers it** — widening the column to 20 m drops
   rejection to 3.5% and takes first-round traffic from 5.5% to 48.1%;
-- **but 96.5% is a property of columns, not of gimbals** — the tethered head's
-  slab placement (74.1 × 74.1 × 4.6 m, anisotropy 0.06) is **0.0% unaimable with
-  no feedback iteration at all**, since a slab's bearings are near-horizontal.
-  B5 does not charge for occlusion, though, so this says the slab is *pointable*,
-  not that the beams arrive — and horizontal beams are the ones the wires block;
-- demand exceeds transceivers by **3.8×** on average; a relay's six heads cut
+- **the tethered head is the first hint it is about shape** — its slab placement
+  (74.1 × 74.1 × 4.6 m, anisotropy 0.06) is **0.0% unaimable with no feedback
+  iteration at all**, since a slab's bearings are near-horizontal.  B5 does not
+  charge for occlusion, though, so this says the slab is *pointable*, not that
+  the beams arrive — and horizontal beams are the ones the wires block;
+- **but the 96.5% is the ±75° elevation limit, not the column** — the
+  `float-hemi` control (standard gimbal, only `el_limits` set to ±90°) takes the
+  same 230.9× column to **0.0%** unaimable, and the 0.02° fine gimbal gives the
+  same 0.0%, so step size contributes nothing (stencil2d 97.0% → 0.0%, spmv
+  100.0% → 0.0%).  **Lifting the limit is not free:** through B6 on
+  stencil3d/float the frame grows from 4446.37 ms to 5762.37 ms (~30%) and link
+  efficiency falls 0.32% → 0.25%, because the limit was concealing work — the
+  rejected links were never scheduled.  A true fine gimbal is worse (9904.37 ms,
+  0.15%): it slews 1.67× slower and costs 3.0× the retarget energy per degree;
+- demand exceeds transceivers by **3.9×** on average; a relay's six heads cut
   rounds from 4.9 to 2.0 and let one round carry 90% of the traffic, which is
   the strongest argument yet for heterogeneity;
-- ordering by payload puts **57.6%** of traffic in the opening round against
-  33.9% reversed, at identical round count.
+- ordering by payload puts **55.1%** of traffic in the opening round against
+  30.8% reversed, at identical round count.
 
 Two corrections to the original framing.  The roadmap asks for the *snap
 residual* to be fed back into B3; the residual is the minor term, and the sweep

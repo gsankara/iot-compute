@@ -27,6 +27,7 @@ this pass actually chooses.
 from __future__ import annotations
 
 import json
+from dataclasses import replace
 from pathlib import Path
 
 import numpy as np
@@ -35,11 +36,19 @@ from ..compiler import build_workload
 from ..compiler.beam import assign_beams, refine_positions
 from ..compiler.partition import partition
 from ..compiler.place import place
-from ..devices import MOTE_C, RELAY, aerial, aquatic, tethered
+from ..devices import MOTE_C, RELAY, STANDARD_GIMBAL, aerial, aquatic, tethered
+from ..units import deg
 from ..registry import create
 from .sim_bench import write_csv
 
 DEFAULT_ASSIGNERS = ("heaviest_first", "lightest_first", "arbitrary")
+
+def _hemispherical(cls):
+    """``cls`` with its gimbal's elevation limit lifted to +/-90 deg, nothing else."""
+    grid = replace(STANDARD_GIMBAL.grid, el_limits=(-90 * deg, 90 * deg))
+    gimbal = replace(cls.optical.gimbal, grid=grid)
+    return cls.variant(f"{cls.name}-hemi", optical=replace(cls.optical, gimbal=gimbal))
+
 
 PLATFORMS = {
     "float": (lambda: aquatic(MOTE_C), "water"),
@@ -50,6 +59,12 @@ PLATFORMS = {
     # wraps first: the modifier order decides whether the head is on blue-green
     # or still on 850 nm, and the wrong order silently reports a 1.75 m reach.
     "tether": (lambda: tethered(aquatic(MOTE_C)), "water"),
+    # A single-variable control.  Identical to ``float`` -- same placement, same
+    # blue-green optics, same step, slew, settle and energy -- except the
+    # gimbal's elevation limit is +/-90 deg instead of +/-75.  FINE_GIMBAL is
+    # deliberately not used: it also changes the step, the slew rate and the
+    # retarget energy, so it could not say which one removed the rejections.
+    "float-hemi": (lambda: _hemispherical(aquatic(MOTE_C)), "water"),
 }
 
 QUALITY_PARAMS = {
@@ -113,13 +128,13 @@ def run(
 
 def report(rows: list[dict]) -> str:
     head = (
-        f"{'workload':11s} {'platform':8s} {'assigner':15s} {'B3 fix':>7s} {'tx':>3s} "
+        f"{'workload':11s} {'platform':10s} {'assigner':15s} {'B3 fix':>7s} {'tx':>3s} "
         f"{'over':>5s} {'rounds':>7s} {'1st traffic':>12s} {'rejected':>9s} {'loss dB':>8s}"
     )
     lines = [head, "-" * len(head)]
     for r in rows:
         lines.append(
-            f"{r['workload']:11s} {r['platform']:8s} {r['assigner']:15s} "
+            f"{r['workload']:11s} {r['platform']:10s} {r['assigner']:15s} "
             f"{'yes' if r['refined'] else 'no':>7s} {r['transceivers']:3d} "
             f"{r['oversubscription']:5.1f} {r['rounds']:7d} "
             f"{r['first_round_traffic']:11.1%} {r['rejected_fraction']:9.1%} "

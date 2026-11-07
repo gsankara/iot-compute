@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+from dataclasses import replace
 
 import numpy as np
 import pytest
@@ -18,6 +19,7 @@ from iotc.compiler.beam import (
 from iotc.compiler.ir import TaskGraph
 from iotc.compiler.partition import partition
 from iotc.compiler.place import place
+from iotc.compiler.schedule import build_schedule
 from iotc.devices import MOTE_C, RELAY, aerial, aquatic
 from iotc.registry import available, create
 
@@ -171,3 +173,56 @@ def test_an_edgeless_graph_refines_to_itself():
 
 def test_the_assigners_are_registered():
     assert {"heaviest_first", "lightest_first", "arbitrary"} <= set(available("assigner"))
+
+
+# ------------------------------------------- the elevation limit, not the column
+
+def _hemispherical(cls, step_deg=None):
+    """``cls`` with only the elevation limit lifted (and, optionally, the step)."""
+    grid = cls.optical.gimbal.grid
+    changes = {"el_limits": (-math.pi / 2, math.pi / 2)}
+    if step_deg is not None:
+        changes.update(step_az=math.radians(step_deg), step_el=math.radians(step_deg))
+    gimbal = replace(cls.optical.gimbal, grid=replace(grid, **changes))
+    return cls.variant(f"{cls.name}-hemi", optical=replace(cls.optical, gimbal=gimbal))
+
+
+def test_the_elevation_limit_alone_flips_the_columns_aimability():
+    """96.5% unaimable is a property of the +/-75 deg limit, not of columns.
+
+    One placement, one workload, one partition; the two classes differ in
+    ``el_limits`` and nothing else.  The column is just as tall in both.
+    """
+    std = aquatic(MOTE_C)
+    hemi = _hemispherical(std)
+    devices, pos = _scenario(std, WATER)
+    extent = np.ptp(pos, axis=0)
+    assert extent[2] > 50 * max(extent[0], extent[1])
+    assert std.optical.gimbal.grid.el_limits != hemi.optical.gimbal.grid.el_limits
+    assert replace(hemi.optical.gimbal.grid, el_limits=std.optical.gimbal.grid.el_limits) \
+        == std.optical.gimbal.grid
+    assert assign_beams(devices, pos, std).rejected_fraction > 0.9
+    assert assign_beams(devices, pos, hemi).rejected_fraction == 0.0
+
+
+def test_step_size_does_not_move_the_unaimable_fraction():
+    """The limit is the whole effect: a 5x finer step changes nothing."""
+    base = aquatic(MOTE_C)
+    devices, pos = _scenario(base, WATER)
+    coarse = assign_beams(devices, pos, _hemispherical(base, 0.10)).rejected_fraction
+    fine = assign_beams(devices, pos, _hemispherical(base, 0.02)).rejected_fraction
+    assert coarse == fine == 0.0
+
+
+def test_lifting_the_limit_lengthens_the_frame_because_it_was_hiding_work():
+    """Rejected links were never scheduled; once legal, the frame must carry them."""
+    std = aquatic(MOTE_C)
+    hemi = _hemispherical(std)
+    devices, pos = _scenario(std, WATER)
+    pos = refine_positions(devices, pos, std)       # same refined placement for both
+    a_std = assign_beams(devices, pos, std)
+    a_hemi = assign_beams(devices, pos, hemi)
+    assert a_std.rejected_fraction > 0.0 and a_hemi.rejected_fraction == 0.0
+    p_std = build_schedule(devices, a_std, pos, std).period
+    p_hemi = build_schedule(devices, a_hemi, pos, hemi).period
+    assert p_hemi > p_std

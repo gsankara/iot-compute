@@ -25,7 +25,7 @@ Start at [`simulator/README.md`](simulator/README.md).
 
 ## Status
 
-**Phases A and B are complete, and Phase C has its first cut**: 593 tests passing.
+**Phases A and B are complete, and Phase C has its first cut**: 596 tests passing.
 Sequencing follows the project plan — simulator first, then the compiler built
 pass by pass with each pass shipping its own testbench and evaluation, then the
 large-scale testbench.  B0 (the compiler IR and its twelve workload frontends),
